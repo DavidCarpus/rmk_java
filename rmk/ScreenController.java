@@ -100,6 +100,7 @@ public class ScreenController{
 
 			Desktop.getInstance().add(screen);
 			screen.setData(model);
+			System.out.println(this.getClass().getName() + ":DispInv:" + selectedInvoice);
 			select(screen);
 
 //			screen.setVisible(true);
@@ -261,6 +262,7 @@ public class ScreenController{
 			title += ((rmk.database.dbobjects.InvoiceEntries)invoiceItem.get(0)).getInvoiceEntryID();
 			int year = sys.invoiceInfo.getPricingYear((rmk.database.dbobjects.Invoice)invoice.get(0));
 			title += " Year-" + year;
+			System.out.println(this.getClass().getName() + ":DispInvItem:" + invoiceItem);
 	    }
 
 	    screen.setTitle(title);
