@@ -60,7 +60,7 @@ public class Processing {
                         if (!invoiceInList(invoicesProcessed, invoice))
                                 invoicesProcessed.add(invoice);
                     } else {
-                        System.out.println("Dupe shipping:" + invoice);
+                        System.out.println(this.getClass().getName() + "Dupe shipping:" + invoice);
                     }
                 }
             }
@@ -183,7 +183,7 @@ public class Processing {
         // Customer Details Screen?
         screen = rmk.ScreenController.getInstance().getCustomerScreen(invoice);
         if (screen != null) {
-            //  	    System.out.println("updateScreens_Shipping:"+ "Updating:" +
+            //  	    System.out.println(this.getClass().getName() + "updateScreens_Shipping:"+ "Updating:" +
             // title);
             model = ((rmk.gui.CustomerScreen) screen).getModel();
             model = updateModelsInvoice(model, invoice);
@@ -192,7 +192,7 @@ public class Processing {
         // Payments Screen?
         screen = rmk.ScreenController.getInstance().getPaymentsScreen(invoice);
         if (screen != null) {
-            //  	    System.out.println("updateScreens_Shipping:"+ "Updating:" +
+            //  	    System.out.println(this.getClass().getName() + "updateScreens_Shipping:"+ "Updating:" +
             // title);
             model = ((rmk.gui.InvoicePaymentsScreen) screen).getModel();
             model = updateModelsInvoice(model, invoice);

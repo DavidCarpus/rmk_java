@@ -32,9 +32,9 @@ public class Delimited{
 		    data = data.substring(data.indexOf("\"")+1);
 		    part += part2;
 		}
-		System.out.println("P2:" + part2);
+		System.out.println("Delimited:P2:" + part2);
 	    }
-	    System.out.println("|" + part + "|");
+	    System.out.println("Delimited:|" + part + "|");
 
 	    if(part.startsWith("\"")) part=part.substring(1);
 	    if(part.endsWith("\"")) part=part.substring(0,part.lastIndexOf("\""));
@@ -58,7 +58,7 @@ public class Delimited{
 	while((currString = in.readLine())!=null && row < 10){
 	    if(row == 1){
 		lst = delimited.getArray(currString, "\t");
-		System.out.println(currString);
+		System.out.println("Delimited:"+currString);
 		for(int i=0; i< lst.length; i++)
 		    System.out.println((i+1) + "|" + lst[i] + "|");
 		

@@ -74,7 +74,7 @@ public class InvoiceWorker extends DBObjectLoader implements IDBObjectLoader{
 	    lst = fixed.getArray(currString,rmk.database.dbobjects.Invoice.lengths);
 	    rmk.database.dbobjects.Invoice invoice = new rmk.database.dbobjects.Invoice(lst);
 	    outputLst.add(invoice);
-//  	    System.out.println(invoice.saveSql((int)invoice.getInvoice()));
+//  	    System.out.println(this.getClass().getName() + invoice.saveSql((int)invoice.getInvoice()));
 
 	    row++;
 	}

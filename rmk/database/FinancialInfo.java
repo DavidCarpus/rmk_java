@@ -88,7 +88,7 @@ public class FinancialInfo {
         price =  partPrices.getPartPrice(priceYear, (int) entry.getPartID());
 
         entryRetail += price;
-        System.out.println("Base :" + entry + ": " + price);
+        System.out.println(this.getClass().getName() + "Base :" + entry + ": " + price);
         //    	System.out.println(this.getClass().getName() + ":"+ price);
 
         Vector additions = entry.getFeatures();
@@ -107,7 +107,7 @@ public class FinancialInfo {
                     .getPartID());
             if (updateFeaturePrices && price != feature.getPrice() && price > 0) {
                 feature.setPrice(price);
-                System.out.println("Feature :" + feature + ": " + price);
+                System.out.println(this.getClass().getName() + "Feature :" + feature + ": " + price);
             }
             entryRetail += feature.getPrice();
         }

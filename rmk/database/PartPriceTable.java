@@ -46,8 +46,10 @@ public class PartPriceTable{
 	String key = year + ":" + partID + ":";
 	PartPrices partPrice = (PartPrices)prices.get(key);
 
-	if(partPrice != null) return partPrice;
-//    	System.out.println("load price table:" + year);
+	if(partPrice != null && partPrice.getYear() == year) 
+		return partPrice;
+
+	System.out.println(this.getClass().getName() + "load price table:" + year);
 //    	System.out.println(rmk.ErrorLogger.getInstance().stkTrace("PartPriceTable"));
 	
 	Vector lst;
@@ -55,7 +57,7 @@ public class PartPriceTable{
 	    lst = db.getItems("PartPrices", "year=" + year);
 	}
 	if(lst == null) return null;
-//  	System.out.println("lst size:" + lst.size());
+//  	System.out.println(this.getClass().getName() + "lst size:" + lst.size());
 	for(Enumeration items = lst.elements(); items.hasMoreElements();){
 	    partPrice = (PartPrices)items.nextElement();
 	    key = year + ":" + partPrice.getPartID()+ ":";
@@ -70,6 +72,8 @@ public class PartPriceTable{
 
 	PartPrices partPrice = getPartPriceObject(year, partID);
 	if(partPrice != null){
+	    rmk.ErrorLogger.getInstance().logMessage("Got " + year +
+			     " price for:" + partID + ":$" + partPrice.getPrice());
 	    results = partPrice.getPrice();
 	} else {
 	    rmk.ErrorLogger.getInstance().logMessage("Unable to determine " + year +
@@ -85,7 +89,7 @@ public class PartPriceTable{
 	if(partPrice != null){
 	    results = partPrice.getPrice();
 	    if(partPrice.isDiscountable())
-		results *= (1.0 - discount);
+    		results *= (1.0 - discount);
 	}
 
 	return results;
@@ -110,7 +114,10 @@ public class PartPriceTable{
 
    public static void main(String args[]) throws Exception{
        PartPriceTable p = rmk.DataModel.getInstance().pricetable;
-//         System.out.println(p.getPartPrice(2001,204));
+       System.out.println(p.getPartPrice(2001,204));
+       System.out.println(p.getPartPrice(2002,204));
+       System.out.println(p.getPartPrice(2003,204));
+       System.out.println(p.getPartPrice(2002,204));
        System.out.println(PartPriceTable.getMaxYear());
 //         System.out.println(p.getPartPriceDiscounted(2003,22, .15));
     }

@@ -332,7 +332,7 @@ public class InvoiceInfo {
 		}
 
 		int year = date.get(Calendar.YEAR);
-		System.out.println("Inv (" + invoice.getInvoice() + ") year:" + year + " Dealer?:" + dealer + " date used=" + dateUsed);
+		System.out.println("InvoiceInfo" + "Inv (" + invoice.getInvoice() + ") year:" + year + " Dealer?:" + dealer + " date used=" + dateUsed);
 		return year;
 	}
 

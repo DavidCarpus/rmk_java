@@ -43,7 +43,7 @@ public class Cleanup {
 				System.out.print("\n" + i);
 
         }
-        System.out.println("\nBad CheckNumbers?:");
+        System.out.println(this.getClass().getName() + "\nBad CheckNumbers?:");
         for(Enumeration enum = badNums.elements(); enum.hasMoreElements();){
             System.out.println(enum.nextElement());
         }
@@ -66,7 +66,7 @@ public class Cleanup {
                 if(number != null && number.length() > 0){
                     number = FinancialInfo.removeCardNumberDashes(number);
                     payment.setCheckNumber(number);
-                    System.out.println(payment);
+                    System.out.println(this.getClass().getName() + payment);
                 }
                 
             } else if(paymentType == 5){ // cash, ignore

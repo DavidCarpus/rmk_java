@@ -37,7 +37,7 @@ public class AddressWorker extends DBObjectLoader implements IDBObjectLoader {
     // moved to superclass
 
     public String lookup(Connection  cx, String field, String keyValue) throws Exception{
-	System.out.println(TABLE_NAME + " Lookup");
+	System.out.println(this.getClass().getName() + TABLE_NAME + " Lookup");
 	String qry = "Select " + field + " from "+ TABLE_NAME +" where " + ID_FIELD + " = " + keyValue ;
 
 	Statement stmt  = cx.createStatement();

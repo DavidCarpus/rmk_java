@@ -362,7 +362,7 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
 //            paper.setImageableArea((int) dim.getX(), (int) dim.getY(),
 //                    (int) dim.getWidth(), (int) dim.getHeight());
             if(printDestination == ReportInterface.PRINT_TO_SCREEN){
-//                System.out.println("Print To Screen...");
+//                System.out.println(this.getClass().getName() + "Print To Screen...");
                 Rectangle dim = getDisplayDim();
                 g.clearRect((int) dim.getX(), (int) dim.getY(), (int) dim
                         .getWidth() + 100, (int) dim.getHeight() + 100);
@@ -371,7 +371,7 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
                         (int) dim.getWidth(), (int) dim.getHeight());
                 
             } else if(printDestination == ReportInterface.PRINT_TO_PRINTER){
-                System.out.println("Print To Printer...");
+                System.out.println(this.getClass().getName() + "Print To Printer...");
                 MediaPrintableArea area = Printing.getPrintArea();
                 double convRate = 1.0/72.0;
                 paper.setImageableArea(0.5*convRate, 0.5*convRate,
@@ -626,7 +626,7 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
 				else if(currSegment.indexOf("I")  > 0)
 					styleMod = ITALIC;
 				else
-					System.out.println("Unknown format" + currSegment);
+					System.out.println("BaseReport:" + "Unknown format" + currSegment);
     			
     			if(currSegment.indexOf("/") > 0){ // end format
     				styleMod = -styleMod;

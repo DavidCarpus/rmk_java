@@ -324,7 +324,7 @@ public class PartInfo {
 		String seperator = ".";
 		Vector partCodes = new Vector();
 		String partCode = "";
-		//  	System.out.println("enteredString:" + enteredString);
+		//  	System.out.println(this.getClass().getName() + "enteredString:" + enteredString);
 		if (enteredString.indexOf(",") > 0)
 			seperator = ",";
 

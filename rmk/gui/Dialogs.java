@@ -125,7 +125,7 @@ public class Dialogs {
 
         double diff = oldRate - newRate;
         diff = Math.floor(diff * 100 + 0.5) / 100;
-        if (diff != 0) System.out.println(question);
+        if (diff != 0) System.out.println("Dialogs:taxRateChange:" + question);
 
         if (diff == 0) return false; // obviously no change
 
@@ -608,14 +608,14 @@ public class Dialogs {
                 .removeCardNumberDashes(cardNumber);
         cardNumber = rmk.database.FinancialInfo.addCardNumberDashes(cardNumber);
 
-        //  	System.out.println("cardNumber:"+ cardNumber);
+        //  	System.out.println(this.getClass().getName() + ":" + "cardNumber:"+ cardNumber);
 
         boolean sameCard = false;
         validEntry = false;
         while (!validEntry) {
             reply = JOptionPane.showInputDialog("Check/Card Number?",
                     cardNumber);
-            //  	    System.out.println( ":"+ reply);
+            //  	    System.out.println(this.getClass().getName() + ":" +  ":"+ reply);
             if (reply == null) return null; //canceled
             if (reply.length() >= 1) {
                 if (FinancialInfo.isValidCCNumber(reply)) {
@@ -648,7 +648,7 @@ public class Dialogs {
             }
             cardNumber = FinancialInfo.removeCardNumberDashes(cardNumber);
             //  	    if(sameCard){
-            System.out.println("lookup" + customerID + "," + cardNumber);
+            System.out.println("Dialogs:getPayments:" + "lookup" + customerID + "," + cardNumber);
 
             expirationDate = sys.financialInfo.getCardExpiration(customerID,
                     cardNumber + "*" + vcode);
@@ -899,7 +899,7 @@ public class Dialogs {
         }
         if (qry != null) {
             boolean addNew = yesConfirm("Add new Customer");
-            System.out.println("addNew:" + addNew);
+            System.out.println("Dialogs:addNew:" + addNew);
             if (addNew) rmk.ScreenController.getInstance().newCustomer();
         }
         return results;

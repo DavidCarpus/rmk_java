@@ -246,7 +246,7 @@ public class CustomerScreen extends Screen{
             Vector invList = model.getInvoiceData();
             if (invList == null) invList = new Vector();
             invList.add(inv);
-            System.out.println(invList.size() + ":"
+            System.out.println(this.getClass().getName() + ":" + invList.size() + ":"
                     + ((Invoice) invList.get(invList.size() - 1)).getInvoice());
 
             model.setInvoiceData(invList);

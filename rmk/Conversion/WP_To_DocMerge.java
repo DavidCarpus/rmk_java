@@ -18,7 +18,7 @@ public class WP_To_DocMerge{
 //  	if(line.trim().length() > 1)
   	outfile.write(line);
 	outfile.newLine();
-//    	System.out.println(line);
+//    	System.out.println(this.getClass().getName() + line);
     }
     
     public void closeFiles() throws Exception{

@@ -232,7 +232,7 @@ public class ReportData {
                 results += "  "
                         + expiredDateFormatter.format(expDate.getTime());
             }
-            //	    System.out.println("CC#" + ":"+ results);
+            //	    System.out.println(this.getClass().getName() + "CC#" + ":"+ results);
 
         }
         return results;
@@ -477,7 +477,7 @@ public class ReportData {
             txtRows += commentLines;
         }
 
-        //      	System.out.println("txtRows:"+ txtRows);
+        //      	System.out.println(this.getClass().getName() + "txtRows:"+ txtRows);
 
         String results[][] = new String[txtRows][5];
 

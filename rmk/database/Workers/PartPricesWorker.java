@@ -38,7 +38,7 @@ public class PartPricesWorker extends DBObjectLoader implements IDBObjectLoader{
     // moved to superclass
 
     public String lookup(Connection  cx, String field, String keyValue) throws Exception{
-	System.out.println(TABLE_NAME + " Lookup");
+	System.out.println(this.getClass().getName() + TABLE_NAME + " Lookup");
 	String qry = "Select " + field + " from "+ TABLE_NAME +" where " + ID_FIELD + " = " + keyValue ;
 
 	Statement stmt  = cx.createStatement();
@@ -71,7 +71,7 @@ public class PartPricesWorker extends DBObjectLoader implements IDBObjectLoader{
 	    lst = fixed.getArray(currString,rmk.database.dbobjects.PartPrices.lengths);
 	    rmk.database.dbobjects.PartPrices item = new rmk.database.dbobjects.PartPrices(lst);
 	    outputLst.add(item);
-//  	    System.out.println(item.saveSql((int)item.getPartPriceID()));
+//  	    System.out.println(this.getClass().getName() + item.saveSql((int)item.getPartPriceID()));
 
 	    row++;
 	}

@@ -101,10 +101,10 @@ public class Fixed{
 //  //  		if(item.getPrice() == 0 && 
 		if(item.getID().longValue() == 1005){
 //  		    System.out.println(item + ":" + item.getPrice());
-		    System.out.println( currString);
+		    System.out.println("Fixed:" + currString);
 		    
 		    lst = fixed.getArrayUntrimed(currString,lengths);
-		    System.out.println(fixed.list(lst));
+		    System.out.println("Fixed:" + fixed.list(lst));
 		}
   	    row++;
   	}

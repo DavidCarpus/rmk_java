@@ -157,7 +157,7 @@ public class AcknowledgeReport extends BaseReport implements ReportInterface {
         int lstHt = 0;
         if (data.getInvoice() != null) {
             listRows = data.getTotalListRows();
-            //  	    System.out.println("getNumberOfPages:listRows:" + listRows);
+            //  	    System.out.println(this.getClass().getName() + "getNumberOfPages:listRows:" + listRows);
             if (listRows <= ONE_PAGE_ROWS) { // only 1 page?
                 return 0; }
             

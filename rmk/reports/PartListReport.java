@@ -292,7 +292,7 @@ public class PartListReport extends BaseReport implements ReportInterface {
         while (currentPage-- > 0)
             results += OTHER_PAGE_ROWS;
         
-        //    	System.out.println("rowsRendered:"+ results + ": P"+currentPage);
+        //    	System.out.println(this.getClass().getName() + "rowsRendered:"+ results + ": P"+currentPage);
         return results;
     }
 
@@ -305,7 +305,7 @@ public class PartListReport extends BaseReport implements ReportInterface {
         int lstHt = 0;
         if (data.getPartsList() != null) {
             listRows = data.getTotalListRows();
-            //  	    System.out.println("getNumberOfPages:listRows:" + listRows);
+            //  	    System.out.println(this.getClass().getName() + "getNumberOfPages:listRows:" + listRows);
             if (listRows <= ONE_PAGE_ROWS) { // only 1 page?
                 return 0; }
             

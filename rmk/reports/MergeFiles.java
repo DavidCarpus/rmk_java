@@ -109,7 +109,7 @@ public class MergeFiles{
 	int col=0;
 	results[col++] = ""+inv.getInvoice();	
 	Date estDate = inv.getDateEstimated().getTime();
-	System.out.println(DataModel.db.dateStr(inv.getDateEstimated()));
+	System.out.println("MergeFiles:getDealerRow:"+DataModel.db.dateStr(inv.getDateEstimated()));
 	results[col++] = dateFormatter.format(estDate);
 
 	try {
@@ -271,8 +271,8 @@ public class MergeFiles{
     //--------------------------------------------------------------------------------
     public static void main(String args[]) throws Exception{
 //  //  	getDealerSpecRequestList();
-//      	System.out.println(getDealerSpecRequestList());
-        	System.out.println(getBalanceDueList());
+//      	System.out.println("MergeFiles:main:"+getDealerSpecRequestList());
+        	System.out.println("MergeFiles:main:"+getBalanceDueList());
 
   	generateMergeFile(MERGE_TYPE_WIERD_BALANCE_DUE, 
   			  Configuration.Config.getMergeFileLocation() + "WierdBalanceDue.txt");

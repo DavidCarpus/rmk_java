@@ -23,7 +23,7 @@ public class HistoryItemsWorker extends DBObjectLoader implements IDBObjectLoade
 		qry += criteria;
 	    }	
 	    Statement stmt  = cx.createStatement();
-	    System.out.println(qry);
+	    System.out.println(this.getClass().getName() + qry);
 	    ResultSet rs = stmt.executeQuery(qry);
 	    rmk.database.dbobjects.HistoryItems object;
 	    while(rs.next()){
@@ -42,7 +42,7 @@ public class HistoryItemsWorker extends DBObjectLoader implements IDBObjectLoade
     // moved to superclass
 
     public String lookup(Connection  cx, String field, String keyValue) throws Exception{
-	System.out.println(TABLE_NAME + " Lookup");
+	System.out.println(this.getClass().getName() + TABLE_NAME + " Lookup");
 	String qry = "Select " + field + " from "+ TABLE_NAME +" where " + ID_FIELD + " = " + keyValue ;
 
 	Statement stmt  = cx.createStatement();
@@ -76,7 +76,7 @@ public class HistoryItemsWorker extends DBObjectLoader implements IDBObjectLoade
 	    lst = fixed.getArray(currString,rmk.database.dbobjects.HistoryItems.lengths);
 	    rmk.database.dbobjects.HistoryItems item = new rmk.database.dbobjects.HistoryItems(lst);
 	    outputLst.add(item);
-//  	    System.out.println(item.saveSql((int)item.getHistoryItemID()));
+//  	    System.out.println(this.getClass().getName() + item.saveSql((int)item.getHistoryItemID()));
 
 	    row++;
 	}

@@ -120,7 +120,7 @@ public class CustomerSelectionFrame extends JInternalFrame implements ActionList
 		}
 	    }
         } else {
-	    System.out.println(command);
+	    System.out.println(this.getClass().getName() + ":" + command);
 	}
 	
     }

@@ -28,7 +28,7 @@ public class FirstCharUpperCaseField extends JTextField {
 	    
 	    char[] upper = str.toCharArray();
 	    String original=getText(0,offs);
-//  	    System.out.println(offs + ":" + original + ":" + str);
+//  	    System.out.println(this.getClass().getName() + ":" + offs + ":" + original + ":" + str);
 	    if(offs == 0)
 		upper[0] = Character.toUpperCase(upper[0]);
 	    super.insertString(offs, new String(upper), a);

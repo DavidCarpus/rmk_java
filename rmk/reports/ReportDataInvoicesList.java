@@ -195,9 +195,9 @@ public class ReportDataInvoicesList {
 			listData = new Vector();
 		//  	Vector minis = sys.invoiceInfo.getMiniInvoices();
 		//  	Vector miniCust = getMiniCustomers(minis);
-		System.out.println("Get mini Customers.");
+		System.out.println(this.getClass().getName() + "Get mini Customers.");
 		Vector miniCust = sys.customerInfo.getMiniCustomers();
-		System.out.println("Got mini Customers.");
+		System.out.println(this.getClass().getName() + "Got mini Customers.");
 		//  	Object inv[] = minis.toArray();
 		//  	Arrays.sort(inv, new rmk.comparators.RptTaxOrdered());
 		//  	int lastCustID=0;
@@ -539,7 +539,7 @@ public class ReportDataInvoicesList {
 		this.endDate = new java.util.GregorianCalendar(year, month, 1);
 		endDate.add(Calendar.MONTH, 1);
 		endDate.add(Calendar.DAY_OF_MONTH, -1);
-		System.out.println("Ordered:" + DataModel.db.dateStr(startDate) + ":"
+		System.out.println(this.getClass().getName() + "Ordered:" + DataModel.db.dateStr(startDate) + ":"
 				+ DataModel.db.dateStr(endDate));
 		invoices = sys.invoiceInfo.getInvoicesByDate("dateOrdered", startDate,
 				endDate);
@@ -556,7 +556,7 @@ public class ReportDataInvoicesList {
 		this.endDate = new java.util.GregorianCalendar(year, month, 1);
 		endDate.add(Calendar.MONTH, 1);
 		endDate.add(Calendar.DAY_OF_MONTH, -1);
-		System.out.println("Shipped:" + DataModel.db.dateStr(startDate) + ":"
+		System.out.println(this.getClass().getName() + "Shipped:" + DataModel.db.dateStr(startDate) + ":"
 				+ DataModel.db.dateStr(endDate));
 		invoices = sys.invoiceInfo.getInvoicesByDate("DateShipped", startDate,
 				endDate);

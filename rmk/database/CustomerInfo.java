@@ -45,7 +45,7 @@ public class CustomerInfo{
     }
     //==========================================================
     public void setCustCCNumber(long custID, String num, java.util.GregorianCalendar exp){
-	System.out.println("setCustCCNumber():"+  num);
+	System.out.println(this.getClass().getName() + "setCustCCNumber():"+  num);
 	try { // first try to get CC # from customer data
 	    Customer cust = getCustomerByID(custID);
 	    if(num.endsWith("*"))

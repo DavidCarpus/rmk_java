@@ -138,7 +138,7 @@ public class ReportDataCust{
 	if(comment != null)  txtRows++;
 
 	String results[][] = new String[txtRows][5];
-//    	System.out.println("txtRows:"+ txtRows);
+//    	System.out.println(this.getClass().getName() + "txtRows:"+ txtRows);
 
 	int col=0;
 	int row=0;
@@ -200,7 +200,7 @@ public class ReportDataCust{
 	String comment = entry.getComment();
 	if(comment != null && comment.trim().length() == 0) comment = null;
 	if(comment != null)  txtRows++;
-//      	System.out.println("txtRows:"+ txtRows);
+//      	System.out.println(this.getClass().getName() + "txtRows:"+ txtRows);
 
 	String results[][] = new String[txtRows][5];
 	

@@ -198,7 +198,7 @@ public class Processing{
 		results += " " + partField + " in ";
 
 		Vector partCodes = sys.partInfo.getPartCodesFromString(value);
-		System.out.println(partCodes);
+		System.out.println("Processing:entriesFeaturesCriteria:" + partCodes);
 		Vector parts = sys.partInfo.getPartsFromPartCodeVector(partCodes);
 
 		results += "(";
