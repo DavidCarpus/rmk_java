@@ -1,6 +1,8 @@
 package rmk;
+import java.util.Enumeration;
 import java.util.Vector;
 
+import rmk.database.dbobjects.Invoice;
 import rmk.gui.*;
 
 import java.awt.*;
@@ -245,22 +247,33 @@ public class ScreenController{
 	} // end of try-catch
 	return null;
     }
-    public IScreen invoiceItem(DBGuiModel data){
+    public IScreen invoiceItem(long invoiceNum, long itemNum, DBGuiModel data){
 //      public void invoiceItem(DBGuiModel data, ActionListener parent){
 	 InvoiceItemScreen screen = null;
 	 Desktop.getInstance().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	try {
 	    screen = new InvoiceItemScreen();
-	    Vector invoice = data.getInvoiceData();
+	    Vector invoiceLst = data.getInvoiceData();
+	    Invoice inv = null;
+	    if(invoiceNum > 0){
+	    for(Enumeration lst	 = invoiceLst.elements(); lst.hasMoreElements();){
+	    	inv = (Invoice) lst.nextElement();
+	    		if(invoiceNum == inv.getInvoice())
+	    			break;
+	    	}
+	    }
+	    if(invoiceNum != inv.getInvoice())
+	    	inv=null;
+	    
 	    String title = "Invoice : ";
-	    if(invoice != null)
-			title += ((rmk.database.dbobjects.Invoice)invoice.get(0)).getInvoice();
+	    if(inv != null)
+			title += inv.getInvoice();
 
 	    title += " Item: " ;
 	    Vector invoiceItem = data.getKnifeData();
 	    if(invoiceItem != null){
 			title += ((rmk.database.dbobjects.InvoiceEntries)invoiceItem.get(0)).getInvoiceEntryID();
-			int year = sys.invoiceInfo.getPricingYear((rmk.database.dbobjects.Invoice)invoice.get(0));
+			int year = sys.invoiceInfo.getPricingYear(inv.getInvoice());
 			title += " Year-" + year;
 			System.out.println(this.getClass().getName() + ":DispInvItem:" + invoiceItem);
 	    }

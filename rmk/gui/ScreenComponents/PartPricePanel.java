@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.border.EtchedBorder;
+
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Parts;
 import rmk.database.dbobjects.PartPrices;
 
@@ -62,20 +64,28 @@ public class PartPricePanel
 
 //-----------------------------------------------------------------
     public void setData(Parts part){
-	this.part = part;
-	loading = true;
-
-	for(int year = endYear; year >= startYear; year--){
-	    double price = year;
-	    try{
-		price =  rmk.DataModel.getInstance().pricetable.getPartPrice(year, (int)part.getPartID());
-	    } catch (Exception e){
-	    }
-	    pastPrices[endYear - year].setText(""+price);
-	}
-	
-	setEdited(false);
-	loading = false;
+    	this.part = part;
+    	loading = true;
+    	int year=0;
+    	double price =0;
+    	try{
+    	for(year = endYear; year >= startYear; year--){
+    		price = year;
+    		try{
+    			price =  rmk.DataModel.getInstance().pricetable.getPartPrice(year, (int)part.getPartID());
+    		} catch (Exception e){
+    		}
+    		int index=endYear - year;
+    		if(index>=0 && index < pastPrices.length)
+    			pastPrices[index].setText(""+price);
+    		else
+    			ErrorLogger.getInstance().logWarning("Invalid index" + index);
+    	}
+    	} catch (Exception e) {
+			ErrorLogger.getInstance().logError("Setting PartPricePanel Data", e);
+		}
+    	setEdited(false);
+    	loading = false;
     }
 	public PartPrices getPriceChange() {
 		//	rmk.database.PartPriceTable priceTable = rmk.database.PartPriceTable.getInstance();

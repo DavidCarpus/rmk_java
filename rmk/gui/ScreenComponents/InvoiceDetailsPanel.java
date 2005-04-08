@@ -629,27 +629,10 @@ implements ActionListener
 //      shippAddressPanel.setVisible(!sameShippingAddress.isSelected());
 //      txtFields[i++].setValue(""+invoice.get());
     }
-    
-//  public void stateChanged(javax.swing.event.ChangeEvent e){
-//  boolean addressVisible = shippAddressPanel.isVisible();
-//  addressVisible = !(shopSale.isSelected() || sameShippingAddress.isSelected());
-//  shippAddressPanel.setVisible(addressVisible);
-    
-//  if(!loading){
-//  setEdited(true);
-//  //    	    System.out.println(this.getClass().getName() + ":"+ "changed state");	    
-//  notifyListeners(new ActionEvent(this, 1, "INVOICECHANGED"));
-//  }
-//  }
-    
+        
     public double getTaxChange(){
         return taxChange;
-    }
-    
-    //========================================================
-    public static void main(String args[]) throws Exception{
-        rmk.gui.Application.main(args);
-    }
+    }    
 }
 class EstimatedDateKeyCheck extends KeyAdapter{
     String msg="";

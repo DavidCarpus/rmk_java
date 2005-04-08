@@ -10,6 +10,7 @@ import java.util.Vector;
 import java.util.GregorianCalendar;
 
 import rmk.DataModel;
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
@@ -388,8 +389,8 @@ public class InvoiceDetailsScreen extends Screen {
 						"Model,feature,feature,...?");
 				if (newEntries == null) {
 					model.setKnifeData(null);
-					IScreen itemScreen = rmk.ScreenController.getInstance()
-							.invoiceItem(model);
+					IScreen itemScreen = rmk.ScreenController.getInstance().invoiceItem(
+							inv.getInvoice(), 0, model);
 					itemScreen.addActionListener(this);
 				} else if (((InvoiceEntries) newEntries.get(0)).getPartID() == 0) {
 					model.addActionListener(this);
@@ -444,11 +445,11 @@ public class InvoiceDetailsScreen extends Screen {
 	//----------------------------------------------------------
 	void editEntry(long entryID) {
 		model.removeActionListener(this);
-
+		InvoiceEntries item=null;
 		Vector invoicesItems = model.getInvoiceItemsData();
 		for (int invoicesItemsIndex = 0; invoicesItemsIndex < invoicesItems
 				.size(); invoicesItemsIndex++) {
-			InvoiceEntries item = (InvoiceEntries) invoicesItems
+			item = (InvoiceEntries) invoicesItems
 					.get(invoicesItemsIndex);
 			if (item.getInvoiceEntryID() == entryID) {
 				Vector data = new Vector();
@@ -461,10 +462,14 @@ public class InvoiceDetailsScreen extends Screen {
 
 		//  	    addEntry(((Invoice)outputList.get(0)).getInvoice());
 		//    	rmk.ScreenController.getInstance().invoiceItem(model);
-		IScreen itemScreen = rmk.ScreenController.getInstance().invoiceItem(
-				model);
-		itemScreen.addActionListener(this);
-		model.addActionListener(this);
+		if(item != null){
+			IScreen itemScreen = rmk.ScreenController.getInstance().invoiceItem(
+					(long)item.getInvoice(), item.getInvoiceEntryID(), model);
+			itemScreen.addActionListener(this);
+			model.addActionListener(this);
+		} else{ 
+			ErrorLogger.getInstance().logError("Unknown Invoice item #:" + entryID, new Exception());
+		}
 	}
 
 	void removeEntry(long entryID) {
@@ -567,12 +572,14 @@ public class InvoiceDetailsScreen extends Screen {
 					+ "Invoicechanged");
 			editedInvoice = true;
 			buttonBar.enableButton(0, true);
+			return;
 			//-----------------------------
 		} else if (command.equals("INFOCHANGED")) { //Customer CHANGED
 			System.out.println(this.getClass().getName() + ":"
 					+ "CustomerChanged");
 			editedCustomer = true;
 			buttonBar.enableButton(0, true);
+			return;
 			//-----------------------------
 		} else if (command.equals("ADDINVOICEENTRY")) { // ADD INVOICE ENTRY
 			addEntry();

@@ -377,8 +377,9 @@ public class FinancialInfo {
             String cc = invoice.getCreditCardNumber();
             return addCardNumberDashes(removeCardNumberDashes(cc));
         }
-        
-        return ((Payments) getLastCCPayment(customerID)).getCheckNumber();
+        lastCCPayment = getLastCCPayment(customerID);
+        if(lastCCPayment == null) return null;
+        return lastCCPayment.getCheckNumber();
     }
     
     public String getLastCreditCard(long customerID) {

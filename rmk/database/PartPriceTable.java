@@ -31,7 +31,7 @@ public class PartPriceTable{
 
     
     public static int getMinYear(){
-	return 2001;
+	return 2002;
     }
     public static int getMaxYear(){
 	GregorianCalendar now = new GregorianCalendar();
@@ -49,7 +49,7 @@ public class PartPriceTable{
 	if(partPrice != null && partPrice.getYear() == year) 
 		return partPrice;
 
-	System.out.println(this.getClass().getName() + "load price table:" + year);
+//	System.out.println(this.getClass().getName() + " load price table:" + year);
 //    	System.out.println(rmk.ErrorLogger.getInstance().stkTrace("PartPriceTable"));
 	
 	Vector lst;
@@ -72,8 +72,8 @@ public class PartPriceTable{
 
 	PartPrices partPrice = getPartPriceObject(year, partID);
 	if(partPrice != null){
-	    rmk.ErrorLogger.getInstance().logMessage("Got " + year +
-			     " price for:" + partID + ":$" + partPrice.getPrice());
+//	    rmk.ErrorLogger.getInstance().logMessage("Got " + year +
+//			     " price for:" + partID + ":$" + partPrice.getPrice());
 	    results = partPrice.getPrice();
 	} else {
 	    rmk.ErrorLogger.getInstance().logMessage("Unable to determine " + year +

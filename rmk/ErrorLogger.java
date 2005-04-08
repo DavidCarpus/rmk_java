@@ -4,6 +4,7 @@ package rmk;
 
 //  import java.sql.*;
 import java.io.*;
+import java.util.Date;
 
 import Configuration.Config;
 
@@ -52,34 +53,33 @@ public class ErrorLogger implements carpus.util.LoggerInterface{
 	    ""
 //  	    "-----------------\n"
 	    + "Error:\n" + msg 
-	    + "(" + (new java.util.Date()) + ")"
+	    + "(" + timestamp() + ")"
 	    + "\n"
 	    + e + "\n"
 	    + stkTrace(e) + "\n"
 	    + "-----------------";
 	log(message);
-	
-//    	log("-----------------\n"
-//  	    + "Error:\n" + msg + "\n"
-//  	    + e + "\n"
-//  	    + stkTrace(e) + "\n"
-//  	    + "-----------------"
-//  	    );
     }
     public void logWarning(String msg){
   	log(
 	    ""
 //  	    "-----------------\n"
-	    + "Warning:\n" + msg + "\n"
-	    + "-----------------"
-	    );
+//	    + "Warning:\n" + msg + "\n"
+//	    + "-----------------"
+	    + "Warning:  "
+	    + "(" + timestamp() + ")"
+		+ "[" + msg + "]"
+		);
     }
     public void logMessage(String msg){
   	log(
 	    ""
 //  	    "-----------------\n"
-	    + "Message:\n" + msg + "\n"
-	    + "-----------------"
+	    + "Message:  "
+	    + "(" + timestamp() + ")"
+	    + "-" + getCaller() + "-"
+		+ "[" + msg + "]"
+//	    + "-----------------"
 	    );
     }
     public String stkTrace(String delClass){
@@ -100,6 +100,29 @@ public class ErrorLogger implements carpus.util.LoggerInterface{
 	return results;
     }
 
+    String timestamp(){
+    	String results="";
+    	Date currDate = new java.util.Date();
+    	results += currDate.getMonth()+1 + "/" + currDate.getDate();
+    	results += " " + (currDate.getHours()) + ":";
+    	results += currDate.getMinutes() + ":";
+    	results += currDate.getSeconds();
+    	return results;
+    }
+    public String getCaller(){
+    	String results="";
+    	Exception e = new Exception();
+    	StackTraceElement[] trace = e.getStackTrace();
+    	for(int i=2; i< 3; i++){
+    	    String item = ""+trace[i];
+    	    if(!(item.startsWith("java.") || item.startsWith("javax.")  || item.startsWith("sun.")))
+      		if(!(item.startsWith("rmk.DBModel."))){
+    			results += " " + trace[i];
+    		}
+    	}
+    	return results.substring(results.indexOf("("));
+    }
+    
     public String stkTrace(Exception e){
 	String results="";
 	StackTraceElement[] trace = e.getStackTrace();

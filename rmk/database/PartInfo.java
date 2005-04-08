@@ -15,30 +15,6 @@ public class PartInfo {
 //		(new java.util.GregorianCalendar()).get(
 //			java.util.GregorianCalendar.YEAR);
 	static rmk.DataModel sys = rmk.DataModel.getInstance();
-
-	//==========================================================
-	//==========================================================
-	//==========================================================
-	public static void main(String args[]) throws Exception {
-//		PartInfo info = DataModel.partInfo;
-
-		//  	System.out.println(info.getClass().getName() + ":"+ info.largestPartID());
-		//  	System.out.println(info.getClass().getName() + ":"+ info.getPart(81));
-		//  	System.out.println(info.getClass().getName() + ":"+ info.getPartCodeFromID(81));
-		//  	double price = prices.getPartPrice(47, 2003);
-		//  	System.out.println(price);
-//		System.out.println(
-//			info.getClass().getName() + ":" + info.getPartTypeDesc(33));
-//		System.out.println(
-//			info.getClass().getName() + ":" + info.getPartTypeID("Spacers"));
-//		System.out.println(
-//			info.getClass().getName() + ":" + info.getPartTypes());
-
-	}
-	//==========================================================
-	//==========================================================
-	//==========================================================
-
 	//==========================================================
 	//==========================================================
 	public PartInfo(carpus.database.DBInterface dbase) {
@@ -71,10 +47,7 @@ public class PartInfo {
 		}
 		return 0;
 	}
-	//      //==========================================================
-	//      public double getPartPrice(int partID, int year){
-	//  	return prices.getPartPrice(year, partID);
-	//      }
+
 	//=============================================PartPriceTable =============
 	public Parts getPart(long id) {
 		getParts();

@@ -319,6 +319,10 @@ public class InvoiceInfo {
 	public int getPricingYear(Invoice invoice) {
 		return getPricingYear(invoice, isDealerInvoice(invoice));
 	}
+	public int getPricingYear(long invoiceNumber) {
+		Invoice invoice = getInvoice(invoiceNumber);
+		return getPricingYear(invoice, isDealerInvoice(invoice));
+	}
 
 	public static int getPricingYear(Invoice invoice, boolean dealer) {
 		String dateUsed="Ordered";
