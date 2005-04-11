@@ -539,6 +539,7 @@ public class InvoiceDetailsScreen extends Screen {
 	//==========================================================
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand().toUpperCase().trim();
+		boolean inShippingAddressField=false;
 		//  	System.out.println(this.getClass().getName() + ":" + command + "|");
 
 		//-----------------------------
@@ -715,12 +716,22 @@ public class InvoiceDetailsScreen extends Screen {
 		} else if (command.equals("LISTEXPAND")) {
 			expandedList = !expandedList;
 			//-----------------------------
+		} else if (command.equals("ENTERKEY")) {
+			Component currFocus = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+			inShippingAddressField = invoiceDetailPnl.isShippingAddressField(currFocus);
+			//-----------------------------
 		} else { // Undefined
 			System.out.println(this.getClass().getName() + ":UndefinedAction:"
 					+ command + "|");
 		}
 		invoiceEntriesList.expand(expandedList);
 		invoiceDetailPnl.setVisible(!expandedList);
+		
+		if(inShippingAddressField){
+			Component currFocus = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+			currFocus.requestFocus();
+			System.out.println(this.getClass().getName() + ":Move back to AddressField???");
+		}
 
 	}
 }

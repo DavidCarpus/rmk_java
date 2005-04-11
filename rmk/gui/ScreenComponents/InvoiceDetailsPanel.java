@@ -56,7 +56,7 @@ implements ActionListener
     ButtonGroup group = new ButtonGroup();
     JPanel shipAddressPanel = new JPanel();
     JPanel shippingPanel = new JPanel();
-    
+    JTextArea shippingAddress = new JTextArea();
 //  LabeledTextField[] txtFields = new LabeledTextField[10];
     JComponent[] txtFields = new JComponent[10];
     JFormattedTextField orderedField;
@@ -249,15 +249,15 @@ implements ActionListener
         c.gridwidth = 3;
         c.fill = GridBagConstraints.BOTH;
 //      JTextPane pane = new JTextPane();
-        JTextArea pane = new JTextArea();
-        pane.setFont(new Font("Serif", Font.BOLD, 14));
         
-        pane.setPreferredSize(new Dimension(320,80));
+        shippingAddress.setFont(new Font("Serif", Font.BOLD, 14));
+        
+        shippingAddress.setPreferredSize(new Dimension(320,80));
 //      pane.setMaximumSize(new Dimension(120,70));
 //      pane.setPreferredSize(new Dimension(100,50));
 //      field = new LabeledTextField("Shipping Address",pane,"");
         
-        JScrollPane  shippingPane = new JScrollPane(pane);
+        JScrollPane  shippingPane = new JScrollPane(shippingAddress);
         
 //      JPanel pnl = new JPanel();
         shippingPanel.setLayout(new BoxLayout(shippingPanel,BoxLayout.X_AXIS));
@@ -288,7 +288,7 @@ implements ActionListener
 //      txtFields[FIELD_SHIPPINGINFO] = field;
 //      gridbag.setConstraints(shippingPane, c);
 //      add(shippingPane);
-        txtFields[FIELD_SHIPPINGINFO] = pane;
+        txtFields[FIELD_SHIPPINGINFO] = shippingAddress;
         gridbag.setConstraints(shippingPanel, c);
         add(shippingPanel);
         //------------------
@@ -346,6 +346,9 @@ implements ActionListener
     }
     public void processFocusEvent(FocusEvent e){
         txtFields[FIELD_DATEESTIMATED].grabFocus();
+    }
+    public boolean isShippingAddressField(Component cmpt){
+    	return cmpt == shippingAddress;
     }
     //========================================================
     public void actionPerformed(ActionEvent e){

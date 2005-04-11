@@ -277,7 +277,9 @@ public class ScreenController{
 			title += " Year-" + year;
 			System.out.println(this.getClass().getName() + ":DispInvItem:" + invoiceItem);
 	    }
-
+	    invoiceLst.remove(inv);
+	    invoiceLst.insertElementAt(inv,0);
+	    
 	    screen.setTitle(title);
 
 	    Desktop.getInstance().add(screen);
