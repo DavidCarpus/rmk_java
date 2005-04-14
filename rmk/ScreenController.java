@@ -285,10 +285,6 @@ public class ScreenController{
 	    Desktop.getInstance().add(screen);
 	    screen.setData(data);
 		select(screen);
-//	    screen.setVisible(true);
-//	    screen.toFront();
-//		screen.grabFocus();
-
 //  	    screen.addActionListener(parent);
 	} catch (Exception e){
 	    ErrorLogger.getInstance().logError("ScreenController:invoiceItem", e);
@@ -382,7 +378,8 @@ public class ScreenController{
 	void select(IScreen screen){
 		screen.setVisible(true);
 		screen.toFront();
-		screen.grabFocus();		
+		screen.grabFocus();	
+		screen.bringToFront();
 	}
 
 }

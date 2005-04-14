@@ -48,7 +48,7 @@ public class PartInfo {
 		return 0;
 	}
 
-	//=============================================PartPriceTable =============
+	//=============================================PartTable =============
 	public Parts getPart(long id) {
 		getParts();
 		return (Parts) parts.get(new Long(id));

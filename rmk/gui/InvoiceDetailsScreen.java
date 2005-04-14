@@ -467,11 +467,13 @@ public class InvoiceDetailsScreen extends Screen {
 					(long)item.getInvoice(), item.getInvoiceEntryID(), model);
 			itemScreen.addActionListener(this);
 			model.addActionListener(this);
+			itemScreen.bringToFront();
+			itemScreen.grabFocus();
 		} else{ 
 			ErrorLogger.getInstance().logError("Unknown Invoice item #:" + entryID, new Exception());
 		}
 	}
-
+//------------------------------------------------------
 	void removeEntry(long entryID) {
 		Vector outputList = model.getInvoiceData();
 		Invoice inv = null;
@@ -588,6 +590,7 @@ public class InvoiceDetailsScreen extends Screen {
 		} else if (command.equals("EDITINVOICEENTRY")) {
 			//  	    System.out.println(this.getClass().getName() + ": Edit: "+ e.getID());
 			editEntry(e.getID());
+			return;
 			//-----------------------------
 		} else if (command.equals("REMOVEINVOICEENTRY")) {
 			removeEntry(e.getID());

@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
 
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Parts;
 import rmk.database.dbobjects.PartPrices;
 
@@ -151,6 +152,10 @@ public class PartsScreen extends Screen{
 	    int partID= e.getID();
 	    partPnl.setEnabled(true);
 	    part = sys.partInfo.getPart(partID);
+	    if(part == null){
+	    	ErrorLogger.getInstance().logError("**** Unable to retrieve part: "+ partID, new Exception());
+	    	return;
+	    }
 	    partPnl.setData(part);
 
 	//-----------------------------

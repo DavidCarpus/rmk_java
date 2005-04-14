@@ -70,7 +70,7 @@ public class PartPricePanel
     	double price =0;
     	try{
     	for(year = endYear; year >= startYear; year--){
-    		price = year;
+    		price = 0;
     		try{
     			price =  rmk.DataModel.getInstance().pricetable.getPartPrice(year, (int)part.getPartID());
     		} catch (Exception e){
