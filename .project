@@ -14,11 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>Build</name>
-			<type>2</type>
-			<location>H:/code/rmk</location>
-		</link>
-	</linkedResources>
 </projectDescription>

@@ -17,6 +17,7 @@ public class Application extends JFrame implements ActionListener {
     Desktop desktop;
     rmk.DataModel sys;
     BasicToolBar toolbar;
+    public static final String version="1.0.1";
 
     //============================================================================
     public Application() throws Exception{
@@ -261,7 +262,7 @@ public class Application extends JFrame implements ActionListener {
 	catch (Exception e) {}
 //	if(Configuration.Config.IDE)
 //	    app.test();	
-	ErrorLogger.getInstance().logMessage("App Started:" + new Date() );
+	ErrorLogger.getInstance().logMessage("App Version " + version + " Started:" + new Date() );
 
 	Desktop.getInstance().repaint();
 	//  	Desktop.getInstance().paintComponent(Desktop.getInstance().getGraphics());
