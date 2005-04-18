@@ -816,9 +816,10 @@ public class Dialogs {
         }
         try {
             Customer correctCustomer = getMergeCustomer();
-            // merge
-            sys.invoiceInfo.mergeCustomers(correctCustomer, incorrectCustomer);
-            
+            if(correctCustomer != null){
+            	// 	merge
+            	sys.invoiceInfo.mergeCustomers(correctCustomer, incorrectCustomer);
+            }
         } catch (Exception e) {
             ErrorLogger.getInstance().logError("Retrieving customer:" + id, e);
             return;
@@ -829,7 +830,7 @@ public class Dialogs {
         Customer mergeCustomer =null;
         long id=0;
         // get old customer ID/cust
-        String msg = "Old Customer ID to merge into ";
+        String msg = "Old Customer ID to merge into selected customer:";
         String reply = JOptionPane.showInputDialog(msg, "");
         if(reply == null || reply.length() == 0)
             return null;

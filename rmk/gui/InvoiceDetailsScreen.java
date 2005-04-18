@@ -33,6 +33,8 @@ public class InvoiceDetailsScreen extends Screen {
 	long invoiceNumber;
 
 	long lastItemID = 0;
+	
+	String lastComment="";
 
 	//    double originalInvoiceTaxes=0;
 
@@ -526,13 +528,16 @@ public class InvoiceDetailsScreen extends Screen {
 			}
 			if (invoice != null) {
 				String comment = sys.financialInfo.substituteInCCNum(invoice);
-
 				String dispStr = "";
 				int currIndex = 30;
 				dispStr = comment;
 
-				if (dispStr != null && dispStr.length() > 0)
+				if (dispStr != null && dispStr.length() > 0){
+					if(dispStr.equals(lastComment))
+						return;
 					JOptionPane.showMessageDialog(this, dispStr);
+					lastComment = dispStr;
+				}
 			}
 		}
 		//  	("Internal frame activated", e);
