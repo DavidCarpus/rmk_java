@@ -304,14 +304,11 @@ public class ScreenController{
 	    Desktop.getInstance().add(screen);
 	    screen.setData(model);
 		select(screen);
-//	    screen.setVisible(true);
-//	    screen.toFront();
-//		screen.grabFocus();
-
 	} catch (Exception e){
 	    ErrorLogger.getInstance().logError("ScreenController:newCustomer", e);
 	} // end of try-catch
     }
+    
     public void invoicePayments(DBGuiModel data){
 	try {
 	    InvoicePaymentsScreen screen = new InvoicePaymentsScreen();
@@ -333,6 +330,23 @@ public class ScreenController{
 	    ErrorLogger.getInstance().logError("ScreenController:invoicePayments", e);
 	} // end of try-catch
     }
+    
+    public void invoiceSearch(){
+    	try {
+    		InvoiceSearchScreen screen = new InvoiceSearchScreen();
+    		DBGuiModel model = new DBGuiModel();
+	    	rmk.DataModel sys = rmk.DataModel.getInstance();
+		    screen.setTitle("Invoice Query");
+
+		    Desktop.getInstance().add(screen);
+		    screen.setData(model);
+			select(screen);
+	    
+    	} catch (Exception e){
+    	    ErrorLogger.getInstance().logError("ScreenController:invoiceSearch", e);
+    	} // end of try-catch
+    }
+    
     public rmk.gui.IScreen getInvoiceScreen(rmk.database.dbobjects.Invoice invoice){
 	rmk.gui.IScreen screen;
 	String title="";

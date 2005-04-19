@@ -9,6 +9,7 @@ import java.awt.event.*;
 import java.util.*;
 import carpus.gui.BasicToolBar;
 import rmk.ErrorLogger;
+import rmk.ScreenController;
 import rmk.database.dbobjects.Customer;
 import rmk.database.dbobjects.Invoice;
 import rmk.reports.MergeFiles;
@@ -134,7 +135,9 @@ public class Application extends JFrame implements ActionListener {
     	    Dialogs.taxShippedReport();
         } else if (command.equals("PARTLISTREPORT")){
     	    Dialogs.partListReport();
-    	    
+        } else if (command.equals("INVOICE_SEARCH")){
+        	ScreenController.getInstance().invoiceSearch();
+        	
         } else if (command.equals("SPEC_REQUEST")){
     	    String location = Configuration.Config.getMergeFileLocation() + "DealerSpec.txt";
     	    String message = "No data to save to:\n" + location;

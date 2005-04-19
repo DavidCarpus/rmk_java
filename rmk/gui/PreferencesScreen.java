@@ -52,7 +52,7 @@ public class PreferencesScreen extends Screen {
 		setFields(Config.p);
 
 		getContentPane().add(buttonBar);
-	  	setPreferredSize(new Dimension(200,320));
+	  	setPreferredSize(new Dimension(400,320));
     	pack();
 
 	}
