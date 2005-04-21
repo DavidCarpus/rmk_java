@@ -80,9 +80,12 @@ public class PreferencesScreen extends Screen {
 			prop.setProperty("faxNumber", txtFields[FIELD_FAX_NUMBER].getValue());
 			prop.setProperty("monthsBacklogged", txtFields[FIELD_BACKLOG].getValue());
 			String fileName = Config.getPropFileName();
+			ErrorLogger.getInstance().logMessage("Saving Preferences to:" + fileName);
 			FileOutputStream propFile = new FileOutputStream(fileName);
 			prop.store(propFile, "RMK Settings");
 			propFile.close();
+			ErrorLogger.getInstance().logMessage(""+prop);
+			ErrorLogger.getInstance().logMessage("Saved Preferences to:" + fileName);
 		}
 
 	}

@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
@@ -248,7 +249,7 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 	}
 
 	//-----------------------------------------------------------------
-	public void setData(DBGuiModel model) {
+	public void setData(DBGuiModel model) {		
 		InvoiceEntries currKnife = knife;
 		loading = true;
 		Vector entries = model.getKnifeData();
@@ -257,7 +258,9 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 
 		if (currKnife == null)
 			currKnife = new InvoiceEntries(0);
-
+		else
+			ErrorLogger.getInstance().logMessage("setting ItemDetailPanel:" + currKnife);
+		
 		Vector invoices = model.getInvoiceData();
 		invoice = (Invoice) invoices.get(invoices.size() - 1);
 
@@ -265,6 +268,7 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 		if (currKnife.getFeatures() != null) {
 			features = (Vector) currKnife.getFeatures();
 		}
+		ErrorLogger.getInstance().logMessage("Updating ItemDetailFeatures:" + features);
 		model.setInvoiceItemAttributesData(features);
 		selectionPanel.setData(model);
 
