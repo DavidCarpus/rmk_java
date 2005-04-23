@@ -18,6 +18,8 @@ import java.awt.geom.Rectangle2D;
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterException;
 
+import rmk.ErrorLogger;
+
 /**
  * @author dcarpus
  *
@@ -72,7 +74,7 @@ public class PartListReport extends BaseReport implements ReportInterface {
         - pageFormat.getImageableY();
         int column = 0;
         
-        //    	System.out.println(this.getClass().getName() + ":"+ width + ":"+
+        //    	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ width + ":"+
         // height);
         
         g2.setFont(infoFont);
@@ -125,7 +127,7 @@ public class PartListReport extends BaseReport implements ReportInterface {
             }
         }
         //  	g2.setFont(new Font ("serif", Font.BOLD, 10));
-        //  	System.out.println(this.getClass().getName() + ":"+ width);
+        //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ width);
         
         if (lastPage) g2.translate(120, 10); // translate to start
         //  	width += 100;
@@ -292,7 +294,7 @@ public class PartListReport extends BaseReport implements ReportInterface {
         while (currentPage-- > 0)
             results += OTHER_PAGE_ROWS;
         
-        //    	System.out.println(this.getClass().getName() + "rowsRendered:"+ results + ": P"+currentPage);
+        //    	ErrorLogger.getInstance().logMessage(this.getClass().getName() + "rowsRendered:"+ results + ": P"+currentPage);
         return results;
     }
 
@@ -305,7 +307,7 @@ public class PartListReport extends BaseReport implements ReportInterface {
         int lstHt = 0;
         if (data.getPartsList() != null) {
             listRows = data.getTotalListRows();
-            //  	    System.out.println(this.getClass().getName() + "getNumberOfPages:listRows:" + listRows);
+            //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + "getNumberOfPages:listRows:" + listRows);
             if (listRows <= ONE_PAGE_ROWS) { // only 1 page?
                 return 0; }
             
@@ -317,7 +319,7 @@ public class PartListReport extends BaseReport implements ReportInterface {
                 listRows -= OTHER_PAGE_ROWS;
             }
         } else {
-            System.out.println(this.getClass().getName() + ":"
+            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"
                     + "No Parts???:");
         }
         return pages;

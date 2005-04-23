@@ -6,6 +6,7 @@ import java.awt.event.*;
 import carpus.gui.BasicToolBar;
 //import javax.print.*;
 
+import rmk.ErrorLogger;
 import rmk.reports.BaseReport;
 
 public class HtmlReportDialog extends JDialog implements ActionListener{
@@ -137,7 +138,7 @@ public class HtmlReportDialog extends JDialog implements ActionListener{
             setFormat(rptFormat);
             pack();
         }catch (Exception e){
-//          System.out.println(e);	    
+//          ErrorLogger.getInstance().logMessage(e);	    
         }
     }
     //-----------------------------------------------------------------------
@@ -189,7 +190,7 @@ public class HtmlReportDialog extends JDialog implements ActionListener{
                 JOptionPane.showMessageDialog(null, e1);
             }
         } else {  // Undefined
-            System.out.println(this.getClass().getName() + ":" + command + "|");
+            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
         }
     }
     
@@ -201,7 +202,7 @@ public class HtmlReportDialog extends JDialog implements ActionListener{
         rmk.gui.HtmlReportDialog rpt = new rmk.gui.HtmlReportDialog();
         rpt.exitOnCancel=true;
         rmk.reports.InvoiceReport tst = new rmk.reports.InvoiceReport(42496);
-        System.out.println(tst.getInvoice());
+        ErrorLogger.getInstance().logMessage(""+tst.getInvoice());
         rpt.setReport(tst);
 //      rpt.setInvoice(60001); // 42496, 42683, 50000, 42684
         rpt.setVisible(true);

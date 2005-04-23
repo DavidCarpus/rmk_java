@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import rmk.DataModel;
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
@@ -86,10 +87,10 @@ implements ActionListener,  ListSelectionListener
             setEdited(true);
             notifyListeners(e);
         } else if (command.equals("ENTERKEY")) { // ENTER KEY
-            System.out.println(this.getClass().getName() + ":" + command);
+            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command);
             // ignore for now
         } else{
-            System.out.println(this.getClass().getName() + ":" + command);
+            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command);
         }
     }
 //  -----------------------------------------------------------------

@@ -2,6 +2,8 @@ package rmk.Conversion;
 
 import java.io.*;
 
+import rmk.ErrorLogger;
+
 public class WP_To_DocMerge{
 //      DataInputStream in=null;
 //      DataOutputStream out=null;
@@ -18,7 +20,7 @@ public class WP_To_DocMerge{
 //  	if(line.trim().length() > 1)
   	outfile.write(line);
 	outfile.newLine();
-//    	System.out.println(this.getClass().getName() + line);
+//    	ErrorLogger.getInstance().logMessage(this.getClass().getName() + line);
     }
     
     public void closeFiles() throws Exception{
@@ -35,7 +37,7 @@ public class WP_To_DocMerge{
 	    row += line.substring(0,line.length()-1);
 	    rowCnt++;
 	    if((int)line.charAt(line.length()-1) != 18){
-		System.out.println(this.getClass().getName() + ":"+ rowCnt);
+	    	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ rowCnt);
 		if(row.length() <= 1)
 		    return null;
 		return row.substring(0,row.length()-1);
@@ -65,7 +67,7 @@ public class WP_To_DocMerge{
 	line +=  "Address4|Address5|Address6|City|State|Zip|||Due|HoldDate";
 	merge.write(line);
 	while((line = merge.read()) != null){
-//  	    System.out.println(line);	    
+//  	    ErrorLogger.getInstance().logMessage(line);	    
 	    merge.write(line);
 	}
 	merge.closeFiles();

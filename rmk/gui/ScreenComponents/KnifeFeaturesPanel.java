@@ -1,6 +1,8 @@
 package rmk.gui.ScreenComponents;
 
 import javax.swing.*;
+
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Parts;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
 
@@ -30,7 +32,7 @@ implements ActionListener
 	    fields[fieldIndex].setVisibleRowCount(6);
 	    SingleSelectionModel selectionModel = new SingleSelectionModel(fieldIndex) {
 		    public void updateSingleSelection(int oldIndex, int newIndex) {
-//  			System.out.println(index + ":" + newIndex);
+//  			ErrorLogger.getInstance().logMessage(index + ":" + newIndex);
 			ListObject item = ((ListObject)options[id].get(newIndex));
 			notifyListeners(new ActionEvent(item.getAddition(),
 							(int)item.getID(),
@@ -66,7 +68,7 @@ implements ActionListener
   	} else if (command.startsWith("INVOICEFEATURECHANGE")){
 	    // ignore this message
   	} else {
-	    System.out.println(this.getClass().getName() + ":" + command);
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command);
   	}
     }
 //-----------------------------------------------------------------
@@ -76,7 +78,7 @@ implements ActionListener
     }
 //-----------------------------------------------------------------
     public void setKnifeModel(int model, int year){
-//  	System.out.println(this.getClass().getName() + ":setKnifeModel(int model, int year)"+ model + ":" + year);
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":setKnifeModel(int model, int year)"+ model + ":" + year);
 	for (int type = 1; type < options.length; type++){
 	    loadFeatureField(model, year, options[type], type*10);
 	}
@@ -98,7 +100,7 @@ implements ActionListener
 	if(type == 10) type++;
 	int endType = type+10;
 	while (endType%10 > 0) endType--;
-//  	System.out.println(this.getClass().getName() + ":"+ type + "," + endType);
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ type + "," + endType);
 	for(int i=type ; i< endType; i++){
 	    typeLst = sys.partInfo.getParts(i);
 	    parts.addAll(typeLst);

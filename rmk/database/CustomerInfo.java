@@ -1,5 +1,6 @@
 package rmk.database;
 
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.*;
 
 import java.util.Vector;
@@ -24,7 +25,7 @@ public class CustomerInfo{
     //==========================================================
     public Vector validate(Customer cust){ // returns errors
 	Vector errors = new Vector();
-//  	System.out.println(this.getClass().getName() + ":"+ inv.lst());
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ inv.lst());
 	String ccNum = cust.getCreditCardNumber();
 	if(ccNum != null) ccNum = ccNum.trim();	
 	else ccNum = "";
@@ -45,7 +46,7 @@ public class CustomerInfo{
     }
     //==========================================================
     public void setCustCCNumber(long custID, String num, java.util.GregorianCalendar exp){
-	System.out.println(this.getClass().getName() + "setCustCCNumber():"+  num);
+	ErrorLogger.getInstance().logMessage(this.getClass().getName() + "setCustCCNumber():"+  num);
 	try { // first try to get CC # from customer data
 	    Customer cust = getCustomerByID(custID);
 	    if(num.endsWith("*"))
@@ -84,7 +85,7 @@ public class CustomerInfo{
 	if(results == null || results.trim().length() == 0){
 	    return false;
 	}
-//  	System.out.println(this.getClass().getName() + ":currentTaxIDonFile->"+ results);
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":currentTaxIDonFile->"+ results);
 	return true;
     }
     
@@ -112,7 +113,7 @@ public class CustomerInfo{
 	dbCriteria += "lastname " + db.likeCriteria(last);
 	dbCriteria += " and ";
 	dbCriteria += "firstname " + db.likeCriteria(first);
-//  	System.out.println(this.getClass().getName() + ":"+ dbCriteria);
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ dbCriteria);
 	
 	return db.getItems("Customers", dbCriteria);
     }
@@ -177,7 +178,7 @@ public class CustomerInfo{
 //  	criteria += "or PONumber = '%'";
 	criteria += ")";
 
-  	System.out.println(this.getClass().getName() + ":"+ criteria);
+  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ criteria);
 	
 	results = db.getItems("Customers", criteria);
 	return results;
@@ -224,29 +225,4 @@ public class CustomerInfo{
 	}
 	return null;
     }
-    //==========================================================
-
-
-
-    public static void main(String args[]) throws Exception{
-	carpus.database.DBInterface db = Configuration.Config.getDB();
-	CustomerInfo test = new CustomerInfo(db);
-  	System.out.println(test.getCustomersByName("sullivan's"));	
-//  	System.out.println(test.getCustomersFromPhone("4578"));
-
-//  	String expiration = "12/04";
-//  	System.out.println(expiration);
-//        	java.text.DateFormat format = new java.text.SimpleDateFormat("MM/yyyy");
-//  	format.setLenient(true);
-	
-//  	System.out.println(":formatted:"+ format.parse(expiration));
-
-//  	Vector data = test.getMiniCustomers();
-
-//  	for(Enumeration enum = data.elements(); enum.hasMoreElements();){
-//  	    Customer item = (Customer )enum.nextElement();
-//  	    System.out.println(item);
-//  	}
-    }
-
 }

@@ -114,7 +114,7 @@ public class InvoiceEntries extends DBObject{
 	    results +=  "**" + getComment() + "**";
 	if(items != null)
 	    for(int lineNumber=0; lineNumber < items.size(); lineNumber++){
-		results += (InvoiceEntryAdditions)items.get(lineNumber);
+		results += (InvoiceEntryAdditions)items.get(lineNumber) + ",";
 	    }
 	return "(" + results + ")";
     }

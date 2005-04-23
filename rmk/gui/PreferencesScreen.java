@@ -125,7 +125,7 @@ public class PreferencesScreen extends Screen {
 			}
 			//-----------------------------
 		} else {  // Undefined
-		    System.out.println(this.getClass().getName() + ":Undefined:" + command + "|");
+		    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
 		}
 
 	}
@@ -165,8 +165,8 @@ public class PreferencesScreen extends Screen {
 	    	    notifyListeners(new ActionEvent(this,0,"PrefChange"));
 	    	else
 //	    	    notifyListeners(e);
-	      	System.out.println(this.getClass().getName() + ":Undefined:" + command + "|");
-//	      	System.out.println(e);   
+	      	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
+//	      	ErrorLogger.getInstance().logMessage(e);   
 	        }
 	    void setValues(String[] values){
 			txtFields[FIELD_BUSINESS_NUMBER].setValue(values[0]);

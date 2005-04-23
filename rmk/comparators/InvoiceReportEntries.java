@@ -20,8 +20,8 @@ public class InvoiceReportEntries
     
     diff = getDescDiff(entry1, entry2);
 //      if(diff != 0){
-//  	System.out.print(entry1.getPartDescription() + ":" + entry2.getPartDescription());
-//  	System.out.println("  ***" + diff);
+//  	ErrorLogger.getInstance().logMessage(entry1.getPartDescription() + ":" + entry2.getPartDescription());
+//  	ErrorLogger.getInstance().logMessage("  ***" + diff);
 //      }
 
     if(diff != 0) return diff;
@@ -42,7 +42,7 @@ public class InvoiceReportEntries
 	
 	int index1 = desc1.indexOf("-"); 
 	int index2 = desc2.indexOf("-"); 
-//  	System.out.println(index1 + ":" + index2);
+//  	ErrorLogger.getInstance().logMessage(index1 + ":" + index2);
 	if(index1 > 0 && index2 < 0){
 	    return -1;
 	}
@@ -73,7 +73,7 @@ public class InvoiceReportEntries
 
 	int diff = mod1-mod2;
 	if(diff != 0) return diff;
-//    	System.out.println(desc1 + "(" + mod1 + "):" + desc2 +"(" + mod2 + ")");
+//    	ErrorLogger.getInstance().logMessage(desc1 + "(" + mod1 + "):" + desc2 +"(" + mod2 + ")");
 
 	return (int)(entry1.getInvoiceEntryID() - entry2.getInvoiceEntryID());
     }

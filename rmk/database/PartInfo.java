@@ -191,7 +191,7 @@ public class PartInfo {
 					enum.hasMoreElements();
 					) {
 					PartTypes type = (PartTypes) enum.nextElement();
-					//  		System.out.println(this.getClass().getName() + ":"+ type);
+					//  		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ type);
 
 					partTypes.put(type.getID(), type);
 				}
@@ -297,12 +297,12 @@ public class PartInfo {
 		String seperator = ".";
 		Vector partCodes = new Vector();
 		String partCode = "";
-		//  	System.out.println(this.getClass().getName() + "enteredString:" + enteredString);
+		//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + "enteredString:" + enteredString);
 		if (enteredString.indexOf(",") > 0)
 			seperator = ",";
 
 		while (enteredString != null && enteredString.indexOf(seperator) > 0) {
-			//  	    System.out.println("enteredString:" + enteredString);
+			//  	    ErrorLogger.getInstance().logMessage("enteredString:" + enteredString);
 			partCode =
 				enteredString.substring(0, enteredString.indexOf(seperator));
 			enteredString =

@@ -23,7 +23,7 @@ public class InvoiceWorker extends DBObjectLoader implements IDBObjectLoader{
 	    }
 	    qry += criteria;
 	}
-//  	System.out.println(this.getClass().getName() + ":"+ qry);
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ qry);
 	
 	Statement stmt  = cx.createStatement();
 	ResultSet rs = stmt.executeQuery(qry);
@@ -74,7 +74,7 @@ public class InvoiceWorker extends DBObjectLoader implements IDBObjectLoader{
 	    lst = fixed.getArray(currString,rmk.database.dbobjects.Invoice.lengths);
 	    rmk.database.dbobjects.Invoice invoice = new rmk.database.dbobjects.Invoice(lst);
 	    outputLst.add(invoice);
-//  	    System.out.println(this.getClass().getName() + invoice.saveSql((int)invoice.getInvoice()));
+//  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + invoice.saveSql((int)invoice.getInvoice()));
 
 	    row++;
 	}

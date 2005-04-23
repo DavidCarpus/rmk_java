@@ -31,10 +31,6 @@ public class SystemPrefrences{
 
 	return results;
     }
-    public static void main(String args[])
-	throws Exception
-    {
-	System.out.println(getName());	
-    }
+
 
 }

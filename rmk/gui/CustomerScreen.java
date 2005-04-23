@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
 import java.util.Vector;
+
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Customer;
 import rmk.database.dbobjects.Address;
 import rmk.database.dbobjects.Invoice;
@@ -91,10 +93,10 @@ public class CustomerScreen extends Screen{
 
 	if(editedInfo || editedDetail){
 //  	    if(editedDetail){
-//  		System.out.println(this.getClass().getName() + ":"+ "merging detailInfo");
+//  		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "merging detailInfo");
 		
 		Customer cust2 = (Customer)detailPanel.getData();
-		System.out.println(this.getClass().getName() + ":terms:"+ cust2.getTerms());
+		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":terms:"+ cust2.getTerms());
 		
 		cust.setFlag(cust2.isFlag());
 		cust.setDealer(cust2.isDealer()?1:0);
@@ -116,7 +118,7 @@ public class CustomerScreen extends Screen{
 		editedInfo = false;
 		editedDetail = false;
 		rmk.ErrorLogger.getInstance().logMessage("Saved CustomerInfo" + outputLst);
-//  		System.out.println(this.getClass().getName() + ":"+ cust.getEMailAddress());
+//  		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ cust.getEMailAddress());
 		
 	    } catch (java.lang.Exception excep){
 		rmk.ErrorLogger.getInstance().logError("ScreenController:displayInvoiceDetails", excep);
@@ -154,7 +156,7 @@ public class CustomerScreen extends Screen{
     //==========================================================
 	public void internalFrameActivated(
 		javax.swing.event.InternalFrameEvent e) {
-//			System.out.println(
+//			ErrorLogger.getInstance().logMessage(
 //				this.getClass().getName() + ":" + "Window Activated.");
 			int id = (int) ((Customer) custPanel.getData()).getCustomerID();
 			if (id == 0)
@@ -172,7 +174,7 @@ public class CustomerScreen extends Screen{
     //==========================================================
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand().toUpperCase().trim();
-        //      	System.out.println(this.getClass().getName() + ":" + command + "|");
+        //      	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
 
         if (command.equals("CANCEL")) { //cancel
             Vector invList = model.getInvoiceData();
@@ -191,7 +193,7 @@ public class CustomerScreen extends Screen{
             custPanel.requestFocus();
         } else if (command.equals("F2")) { //F2 - Panel2
             custAddPanel.requestFocus();
-            System.out.println(this.getClass().getName() + ":" + "F2????");
+            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + "F2????");
         } else if (command.equals("F3")) { //F3 - Panel3
             invoicePanel.grabFocus();
         } else if (command.equals("F11")) { //F11 - Toggle address/detail panel visibilities
@@ -246,8 +248,8 @@ public class CustomerScreen extends Screen{
             Vector invList = model.getInvoiceData();
             if (invList == null) invList = new Vector();
             invList.add(inv);
-            System.out.println(this.getClass().getName() + ":" + invList.size() + ":"
-                    + ((Invoice) invList.get(invList.size() - 1)).getInvoice());
+//            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + invList.size() + ":"
+//                    + ((Invoice) invList.get(invList.size() - 1)).getInvoice());
 
             model.setInvoiceData(invList);
             model.setInvoiceItemsData(null);
@@ -296,7 +298,7 @@ public class CustomerScreen extends Screen{
             invoicePanel.setData(model);
             // -------------------------
         } else { // Undefined, as yet
-            System.out.println(this.getClass().getName() + ":" + command + "|");
+            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
 
             //  	    parentFrame.actionPerformed(e);
         }

@@ -29,7 +29,7 @@ public class Processing {
         String reply = "";
         Vector invoicesProcessed = new Vector();
         rmk.DataModel sys = rmk.DataModel.getInstance();
-        System.out.println(this.getClass().getName() + ":" + "shipInvoice");
+        ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + "shipInvoice");
 
         validEntry = false;
         shipDate = rmk.gui.Dialogs.getDate("Shipping Date",
@@ -60,7 +60,7 @@ public class Processing {
                         if (!invoiceInList(invoicesProcessed, invoice))
                                 invoicesProcessed.add(invoice);
                     } else {
-                        System.out.println(this.getClass().getName() + "Dupe shipping:" + invoice);
+                    	ErrorLogger.getInstance().logMessage(this.getClass().getName() + "Dupe shipping:" + invoice);
                     }
                 }
             }
@@ -183,7 +183,7 @@ public class Processing {
         // Customer Details Screen?
         screen = rmk.ScreenController.getInstance().getCustomerScreen(invoice);
         if (screen != null) {
-            //  	    System.out.println(this.getClass().getName() + "updateScreens_Shipping:"+ "Updating:" +
+            //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + "updateScreens_Shipping:"+ "Updating:" +
             // title);
             model = ((rmk.gui.CustomerScreen) screen).getModel();
             model = updateModelsInvoice(model, invoice);
@@ -192,7 +192,7 @@ public class Processing {
         // Payments Screen?
         screen = rmk.ScreenController.getInstance().getPaymentsScreen(invoice);
         if (screen != null) {
-            //  	    System.out.println(this.getClass().getName() + "updateScreens_Shipping:"+ "Updating:" +
+            //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + "updateScreens_Shipping:"+ "Updating:" +
             // title);
             model = ((rmk.gui.InvoicePaymentsScreen) screen).getModel();
             model = updateModelsInvoice(model, invoice);

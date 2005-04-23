@@ -25,7 +25,8 @@ public class ScreenController{
     public static ScreenController getInstance(){
         long mem1 = Runtime.getRuntime().freeMemory();
 		Runtime.getRuntime().gc();
-//		System.out.println(cntr++ + " FreeMem " + mem1 +" -> " + Runtime.getRuntime().freeMemory());
+		
+//		ErrorLogger.getInstance().logMessage(cntr++ + " FreeMem " + mem1 +" -> " + Runtime.getRuntime().freeMemory());
 		return instance;
     }
 	public rmk.gui.IScreen bringToFront(String title) {
@@ -49,11 +50,11 @@ public class ScreenController{
 			Vector invoices = model.getInvoiceData();
 			
 			if (invoices == null) {
-				System.out.println(
+				ErrorLogger.getInstance().logMessage(
 					this.getClass().getName() + ":New inv Vector - null");
 				invoices = new Vector();
 			} else if (invoices.size() == 0) {
-				System.out.println(
+				ErrorLogger.getInstance().logMessage(
 					this.getClass().getName()
 						+ ":New inv Vector - size() = 0");
 				invoices = new Vector();
@@ -68,7 +69,7 @@ public class ScreenController{
 					}
 				}
 				if (!found) {
-					System.out.println(
+					ErrorLogger.getInstance().logMessage(
 						this.getClass().getName()
 							+ ":"
 							+ "New inv Vector - non matched inv#");
@@ -102,7 +103,7 @@ public class ScreenController{
 
 			Desktop.getInstance().add(screen);
 			screen.setData(model);
-			System.out.println(this.getClass().getName() + ":DispInv:" + selectedInvoice);
+			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":DispInv:" + selectedInvoice);
 			select(screen);
 
 //			screen.setVisible(true);
@@ -120,7 +121,7 @@ public class ScreenController{
     public void displayCustomer(long customerID){
 	Desktop.getInstance().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 	try {
-//  	    System.out.println(this.getClass().getName() + ":"+ "Disp cust:" + customerID);
+//  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Disp cust:" + customerID);
 	    
 	    DBGuiModel model = new DBGuiModel();
 	    rmk.DataModel sys = rmk.DataModel.getInstance();
@@ -275,7 +276,7 @@ public class ScreenController{
 			title += ((rmk.database.dbobjects.InvoiceEntries)invoiceItem.get(0)).getInvoiceEntryID();
 			int year = sys.invoiceInfo.getPricingYear(inv.getInvoice());
 			title += " Year-" + year;
-			System.out.println(this.getClass().getName() + ":DispInvItem:" + invoiceItem);
+			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":DispInvItem:" + invoiceItem);
 	    }
 	    invoiceLst.remove(inv);
 	    invoiceLst.insertElementAt(inv,0);

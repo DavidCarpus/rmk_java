@@ -16,6 +16,7 @@ import javax.swing.KeyStroke;
 import javax.swing.WindowConstants;
 import javax.swing.event.InternalFrameEvent;
 
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Invoice;
 import rmk.gui.ScreenComponents.InvoiceHistoryListPanel;
 
@@ -71,7 +72,7 @@ public class InvoiceHistoryScreen extends Screen {
 			rmk.ScreenController.getInstance().displayInvoiceDetails(inv, model);
 
 		} else {  // Undefined
-			System.out.println(this.getClass().getName() + ":UndefinedAction:" + command + "|");
+			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":UndefinedAction:" + command + "|");
 		}
 		// TODO Finish actionPerformed function (Filter?)
 	}

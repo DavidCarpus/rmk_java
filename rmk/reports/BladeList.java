@@ -2,6 +2,8 @@ package rmk.reports;
 import java.awt.print.*;
 import java.awt.*;
 import java.awt.geom.*;
+
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Invoice;
 import java.util.*;
 public class BladeList extends BaseReport implements ReportInterface {
@@ -117,7 +119,7 @@ public class BladeList extends BaseReport implements ReportInterface {
 				listRows -= OTHER_PAGE_ROWS;
 			}
 		} else {
-			System.out.println(this.getClass().getName() + ":"
+			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"
 					+ "No Invoice???:");
 		}
 		return pages;
@@ -299,7 +301,7 @@ public class BladeList extends BaseReport implements ReportInterface {
 		//  //  	java.util.GregorianCalendar date = new java.util.GregorianCalendar(2003, 5, 5);
 		//    	rmk.reports.BladeList tst = new rmk.reports.BladeList(date);
 		//    	rpt.setReport(tst);
-		//  //    	System.out.println(tst.getInvoice());
+		//  //    	ErrorLogger.getInstance().logMessage(tst.getInvoice());
 		//  //    	rpt.setInvoice(60001); // 42496, 42683, 50000, 42684
 		//    	rpt.setVisible(true);
 	}

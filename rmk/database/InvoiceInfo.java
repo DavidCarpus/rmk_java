@@ -1,6 +1,7 @@
 package rmk.database;
 
 import rmk.DataModel;
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.*;
 
 import java.util.Calendar;
@@ -64,7 +65,7 @@ public class InvoiceInfo {
 		if (logHistory && inv.getInvoice() > 0) {
 			HistoryItems hist = new HistoryItems(0);
 			hist.setInvoice(inv.getInvoice());
-			//  	    System.out.println(this.getClass().getName() + ":"+ hist);
+			//  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ hist);
 			Vector lst = new Vector();
 			lst.add(hist);
 			db.saveItems("HistoryItems", lst);
@@ -133,7 +134,7 @@ public class InvoiceInfo {
 				+ db.dateStr(end)
 				+ " and customerID in (Select customerid from Customers where dealer <> 0)"
 				+ " and totalRetail = 0 order by " + dateField + ", Invoice";
-		System.out.println(this.getClass().getName() + ":" + criteria);
+		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + criteria);
 
 		Vector results = new Vector();
 		results = db.getItems("Invoice", criteria);
@@ -167,7 +168,7 @@ public class InvoiceInfo {
 				+ db.dateStr(date)
 				+ " and CustomerID in (Select CustomerID from Customers where Terms = '"
 				+ terms + "')";
-		System.out.println(this.getClass().getName() + ":" + criteria);
+		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + criteria);
 
 		Vector results = db.getItems("Invoice", criteria);
 		return results;
@@ -336,7 +337,7 @@ public class InvoiceInfo {
 		}
 
 		int year = date.get(Calendar.YEAR);
-		System.out.println("InvoiceInfo" + "Inv (" + invoice.getInvoice() + ") year:" + year + " Dealer?:" + dealer + " date used=" + dateUsed);
+		ErrorLogger.getInstance().logMessage("InvoiceInfo" + "Inv (" + invoice.getInvoice() + ") year:" + year + " Dealer?:" + dealer + " date used=" + dateUsed);
 		return year;
 	}
 
@@ -344,7 +345,7 @@ public class InvoiceInfo {
 		String lookup = db.lookup("Invoices", "DateOrdered", "" + invoice);
 		if (lookup != null) {
 			lookup = lookup.substring(0, 4);
-			//  	    System.out.println(this.getClass().getName() +
+			//  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() +
 			// ":getInvoiceYearOrdered()"+ lookup);
 			return Integer.parseInt(lookup);
 		}
@@ -381,7 +382,7 @@ public class InvoiceInfo {
 
 	public Vector getInvoicesByDate(String dateField, GregorianCalendar start,
 			GregorianCalendar end) {
-		System.out.println(this.getClass().getName() + ":" + dateField + ":"
+		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + dateField + ":"
 				+ db.dateStr(start));
 		String whereClause = dateField + " >= " + db.dateStr(start) + " and "
 				+ dateField + " <= " + db.dateStr(end);
@@ -399,7 +400,7 @@ public class InvoiceInfo {
 			}
 			inv.setItems(entries);
 		}
-		//  	System.out.println(this.getClass().getName() + ":"+ results.size());
+		//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ results.size());
 
 		return results;
 	}
@@ -433,7 +434,7 @@ public class InvoiceInfo {
 							 // Shop Meet Wed, 14 Jul 2004
 			return null;
 
-		//  	System.out.println(this.getClass().getName() + ":"+ inv.lst());
+		//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ inv.lst());
 		//  	if(inv.getDateEstimated() == null) errors.add("Missing
 		// DateEstimated.");
 		GregorianCalendar today = new GregorianCalendar();
@@ -487,7 +488,7 @@ public class InvoiceInfo {
 	//==========================================================
 	public Vector getInitialInvoices(Customer customer) {
 		Vector results = null;
-		//  	System.out.println(this.getClass().getName() + ":"+
+		//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+
 		// "getInitialInvoices");
 
 		//  	if(customerInvoices == null ||
@@ -514,24 +515,24 @@ public class InvoiceInfo {
 	//==========================================================
 	public static void main(String args[]) throws Exception {
 		rmk.DataModel sys = rmk.DataModel.getInstance();
-		//  	System.out.println(sys.invoiceInfo.getLastShippedInvoices(7,2));
-		//  	System.out.println(sys.invoiceInfo.getShippedInvoices(7));
-		//  	System.out.println(sys.invoiceInfo.getInvoiceEntryAdditions(112952));
-		//  	System.out.println(sys.invoiceInfo.getKnifeCount(50004));
+		//  	ErrorLogger.getInstance().logMessage(sys.invoiceInfo.getLastShippedInvoices(7,2));
+		//  	ErrorLogger.getInstance().logMessage(sys.invoiceInfo.getShippedInvoices(7));
+		//  	ErrorLogger.getInstance().logMessage(sys.invoiceInfo.getInvoiceEntryAdditions(112952));
+		//  	ErrorLogger.getInstance().logMessage(sys.invoiceInfo.getKnifeCount(50004));
 		Invoice inv = sys.invoiceInfo.getInvoice(41859);
 		// 41859, 42496, 50101, 50111 42514, 42511, 60001
-		//  	System.out.println(sys.invoiceInfo.isDealerInvoice(inv));
-		//  	System.out.println(sys.invoiceInfo.getPricingYear(inv,true));
+		//  	ErrorLogger.getInstance().logMessage(sys.invoiceInfo.isDealerInvoice(inv));
+		//  	ErrorLogger.getInstance().logMessage(sys.invoiceInfo.getPricingYear(inv,true));
 
-		//  	System.out.println(sys.invoiceInfo.getPricingYear(inv));
+		//  	ErrorLogger.getInstance().logMessage(sys.invoiceInfo.getPricingYear(inv));
 
 		java.util.GregorianCalendar date = new java.util.GregorianCalendar();
 		while (date.get(Calendar.DAY_OF_WEEK) != Calendar.THURSDAY)
 			date.add(Calendar.DATE, 1);
-		//  	System.out.println(date);
+		//  	ErrorLogger.getInstance().logMessage(date);
 		//  	date.add(date.DATE,14);
 		date.add(Calendar.MONTH, 4);
-		//  	System.out.println(sys.invoiceInfo.getInvoicesByDate("dateestimated",
+		//  	ErrorLogger.getInstance().logMessage(sys.invoiceInfo.getInvoicesByDate("dateestimated",
 		// date, date));
 		//  	Vector data = sys.invoiceInfo.getDealerSpecInvoices(date);
 
@@ -545,10 +546,10 @@ public class InvoiceInfo {
 
 		for (Enumeration enum = data.elements(); enum.hasMoreElements();) {
 			//  	    Invoice invoice = (Invoice )enum.nextElement();
-			//  	    System.out.println(invoice + ":" + invoice.getCustomerID());
+			//  	    ErrorLogger.getInstance().logMessage(invoice + ":" + invoice.getCustomerID());
 			InvoiceEntryAdditions item = (InvoiceEntryAdditions) enum
 					.nextElement();
-			System.out.println(item + ":" + item.getPartType() + " : "
+			ErrorLogger.getInstance().logMessage(item + ":" + item.getPartType() + " : "
 					+ sys.partInfo.getPartDescFromID(item.getPartID()));
 		}
 

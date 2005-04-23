@@ -1,6 +1,9 @@
 package rmk.gui;
 
 import javax.swing.*;
+
+import rmk.ErrorLogger;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -40,7 +43,7 @@ public class CustomerSelectionScreen extends Screen{
 
     //==========================================================
     public void internalFrameActivated(javax.swing.event.InternalFrameEvent e) {
-//  	System.out.println(this.getClass().getName() + ":"+ "Window Activated.");
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Window Activated.");
 //  	("Internal frame activated", e);
     }
 
@@ -62,7 +65,7 @@ public class CustomerSelectionScreen extends Screen{
 	    Dialogs.mergeIntoCustomer(customerListPanel.getSelectedItemID());
 	    return;	    
 	} else {
-	    System.out.println(this.getClass().getName() + ":" + command + "|");
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
 	}
 	
     }

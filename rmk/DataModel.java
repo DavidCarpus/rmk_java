@@ -25,27 +25,27 @@ public class DataModel{
     {
 	DataModel sys = DataModel.getInstance();
 
-//  	System.out.println(sys.getClass().getName() + ":"+ sys.partInfo.largestPartID());
-//  	System.out.println(sys.getClass().getName() + ":"+ sys.partInfo.getCurrentPartPrices());
-//  	System.out.println(sys.getClass().getName() + ":"
+//  	ErrorLogger.getInstance().logMessage(sys.getClass().getName() + ":"+ sys.partInfo.largestPartID());
+//  	ErrorLogger.getInstance().logMessage(sys.getClass().getName() + ":"+ sys.partInfo.getCurrentPartPrices());
+//  	ErrorLogger.getInstance().logMessage(sys.getClass().getName() + ":"
 //  			   + sys.customerInfo.getCustomersFromPhone(getFixedPhoneNumber("4074361113")));
 
-//  	System.out.println(sys.getClass().getName() + ":"+ sys.invoiceInfo.getInitialInvoices(7));
+//  	ErrorLogger.getInstance().logMessage(sys.getClass().getName() + ":"+ sys.invoiceInfo.getInitialInvoices(7));
 	
 //    	sys.customerInfo.getCustomersByLastName("sportsman");
-//  	System.out.println(sys.partInfo.getPart(47));
-//  	System.out.println(sys.customerInfo.isDealer(7));
-//  	System.out.println(sys.customerInfo.isDealer(80000));
+//  	ErrorLogger.getInstance().logMessage(sys.partInfo.getPart(47));
+//  	ErrorLogger.getInstance().logMessage(sys.customerInfo.isDealer(7));
+//  	ErrorLogger.getInstance().logMessage(sys.customerInfo.isDealer(80000));
 	
 //  	double price = sys.partInfo.getPartPrice(47, 2003);
-//  	System.out.println("47  :" + price);
+//  	ErrorLogger.getInstance().logMessage("47  :" + price);
 //  	price = sys.partInfo.getPartPrice(79, 2003);
-//  	System.out.println("79  :" + price);
+//  	ErrorLogger.getInstance().logMessage("79  :" + price);
 //  	price = sys.partInfo.getPartPrice(75, 2003);
-//  	System.out.println("75  :" + price);
+//  	ErrorLogger.getInstance().logMessage("75  :" + price);
 //  	price = sys.partInfo.getPartPrice(135, 2003);
-//  	System.out.println("135 :" + price);
-//  	System.out.println(sys.invoiceInfo.getInvoiceEntryAdditions(112952));
+//  	ErrorLogger.getInstance().logMessage("135 :" + price);
+//  	ErrorLogger.getInstance().logMessage(sys.invoiceInfo.getInvoiceEntryAdditions(112952));
     }
     //==========================================================
     //==========================================================

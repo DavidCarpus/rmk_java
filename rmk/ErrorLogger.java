@@ -109,7 +109,7 @@ public class ErrorLogger implements carpus.util.LoggerInterface{
     	results += currDate.getSeconds();
     	return results;
     }
-    public String getCaller(){
+    public static String getCaller(){
     	String results="";
     	Exception e = new Exception();
     	StackTraceElement[] trace = e.getStackTrace();
@@ -153,9 +153,9 @@ public class ErrorLogger implements carpus.util.LoggerInterface{
 	    
 	}
     }
-    public static void main(String args[])
-	throws Exception
-    {
-	ErrorLogger.getInstance().logError("TestError", new Exception("Test"));
+    public void logDebug(String msg){
+    	String mesg = "Debug:" + getCaller() + ":" +  msg ;
+    	log(mesg);
     }
+    
 }

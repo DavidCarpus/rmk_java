@@ -1,6 +1,9 @@
 package rmk.gui.search;
 
 import javax.swing.*;
+
+import rmk.ErrorLogger;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
@@ -61,7 +64,7 @@ public class ReportSearchPanel
 	    selectPanel(rpts.getSelectedIndex());
 
 	} else{
-	    System.out.println(this.getClass().getName() + ":Undefined:" + command + "|");
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
 	}
     }
     public Vector getCriteria(){
@@ -80,16 +83,4 @@ public class ReportSearchPanel
     public String getType(){
 	return (String)rpts.getSelectedItem();
     }
-    //--------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------
-    public static void main(String args[]) throws Exception{
-	ReportSearchScreen dial = new ReportSearchScreen();
-        dial.setVisible(true);
-  	System.out.println(dial.getCriteria());
-  	System.out.println(dial.getType());
-
-  	System.exit(0);
-    }
-
 }

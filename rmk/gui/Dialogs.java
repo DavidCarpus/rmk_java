@@ -100,7 +100,7 @@ public class Dialogs {
             }
             msg = "*****Not fully implimeted!!!**** \n" + msg;
 
-            System.out.println(msg);
+            ErrorLogger.getInstance().logMessage(msg);
             JOptionPane.showMessageDialog(null, msg, "UnImplemented:",
                     JOptionPane.WARNING_MESSAGE);
             return null;
@@ -125,7 +125,7 @@ public class Dialogs {
 
         double diff = oldRate - newRate;
         diff = Math.floor(diff * 100 + 0.5) / 100;
-        if (diff != 0) System.out.println("Dialogs:taxRateChange:" + question);
+        if (diff != 0) ErrorLogger.getInstance().logMessage("Dialogs:taxRateChange:" + question);
 
         if (diff == 0) return false; // obviously no change
 
@@ -146,7 +146,7 @@ public class Dialogs {
             rpt.setFormat(format);
             rpt.setVisible(true);
         } catch (Exception ex) {
-            System.out.println(rmk.ErrorLogger.getInstance().stkTrace(ex));
+            ErrorLogger.getInstance().logMessage(rmk.ErrorLogger.getInstance().stkTrace(ex));
         }
     }
     //--------------------------------------------------------------------------------
@@ -200,7 +200,7 @@ public class Dialogs {
             else
                 rpt.setFormat(0); // dealer
 
-            //  	    System.out.println(invoice);
+            //  	    ErrorLogger.getInstance().logMessage(invoice);
             //      	    if(cnt < 2){
             try {
                 rmk.reports.Printing.printReport(rpt);
@@ -290,7 +290,7 @@ public class Dialogs {
             rpt.setReport(tst);
             rpt.setVisible(true);
         } catch (Exception ex) {
-            System.out.println(rmk.ErrorLogger.getInstance().stkTrace(ex));
+            ErrorLogger.getInstance().logMessage(rmk.ErrorLogger.getInstance().stkTrace(ex));
         }
     }
     //--------------------------------------------------------------------------------
@@ -307,7 +307,7 @@ public class Dialogs {
             rpt.setReport(tst);
             rpt.setVisible(true);
         } catch (Exception ex) {
-            System.out.println(rmk.ErrorLogger.getInstance().stkTrace(ex));
+            ErrorLogger.getInstance().logMessage(rmk.ErrorLogger.getInstance().stkTrace(ex));
         }
     }
     //--------------------------------------------------------------------------------
@@ -324,7 +324,7 @@ public class Dialogs {
             rpt.setReport(tst);
             rpt.setVisible(true);
         } catch (Exception ex) {
-            System.out.println(rmk.ErrorLogger.getInstance().stkTrace(ex));
+            ErrorLogger.getInstance().logMessage(rmk.ErrorLogger.getInstance().stkTrace(ex));
         }
     }
     //--------------------------------------------------------------------------------
@@ -335,7 +335,7 @@ public class Dialogs {
             rptDialog.setReport(rpt);
             rptDialog.setVisible(true);
         } catch (Exception ex) {
-            System.out.println(rmk.ErrorLogger.getInstance().stkTrace(ex));
+            ErrorLogger.getInstance().logMessage(rmk.ErrorLogger.getInstance().stkTrace(ex));
         }
     }
     //--------------------------------------------------------------------------------
@@ -391,7 +391,7 @@ public class Dialogs {
         int year = rmk.database.InvoiceInfo.getPricingYear(inv, cust.isDealer());
 
         Vector partCodes = sys.partInfo.getPartCodesFromString(modelCode);
-//        System.out.println(partCodes);
+//        ErrorLogger.getInstance().logMessage(partCodes);
         Vector parts = sys.partInfo.getPartsFromPartCodeVector(partCodes);
 
         //-- model
@@ -608,14 +608,14 @@ public class Dialogs {
                 .removeCardNumberDashes(cardNumber);
         cardNumber = rmk.database.FinancialInfo.addCardNumberDashes(cardNumber);
 
-        //  	System.out.println(this.getClass().getName() + ":" + "cardNumber:"+ cardNumber);
+        //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + "cardNumber:"+ cardNumber);
 
         boolean sameCard = false;
         validEntry = false;
         while (!validEntry) {
             reply = JOptionPane.showInputDialog("Check/Card Number?",
                     cardNumber);
-            //  	    System.out.println(this.getClass().getName() + ":" +  ":"+ reply);
+            //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" +  ":"+ reply);
             if (reply == null) return null; //canceled
             if (reply.length() >= 1) {
                 if (FinancialInfo.isValidCCNumber(reply)) {
@@ -648,7 +648,7 @@ public class Dialogs {
             }
             cardNumber = FinancialInfo.removeCardNumberDashes(cardNumber);
             //  	    if(sameCard){
-            System.out.println("Dialogs:getPayments:" + "lookup" + customerID + "," + cardNumber);
+            ErrorLogger.getInstance().logMessage("Dialogs:getPayments:" + "lookup" + customerID + "," + cardNumber);
 
             expirationDate = sys.financialInfo.getCardExpiration(customerID,
                     cardNumber + "*" + vcode);
@@ -857,7 +857,7 @@ public class Dialogs {
 
         boolean found = false;
         while (qry != null && qry.length() != 0) {
-            //  	    System.out.println("generalSearch:" + qry);
+            //  	    ErrorLogger.getInstance().logMessage("generalSearch:" + qry);
             if(qry.startsWith("*")){
                 results = sys.customerInfo.getCustomersByID(qry);
             } else if (qry.indexOf(",") > 0) { // Name??
@@ -876,7 +876,7 @@ public class Dialogs {
                         results.add(sys.invoiceInfo.getInvoice(id));
                     }
                     if (results.size() == 0) { // short name?
-                    //  			System.out.println("By short Name?");
+                    //  			ErrorLogger.getInstance().logMessage("By short Name?");
                         results = sys.customerInfo.getCustomersByName(qry);
                     }
                 } else { // qry length >= 7
@@ -900,7 +900,7 @@ public class Dialogs {
         }
         if (qry != null) {
             boolean addNew = yesConfirm("Add new Customer");
-            System.out.println("Dialogs:addNew:" + addNew);
+            ErrorLogger.getInstance().logMessage("Dialogs:addNew:" + addNew);
             if (addNew) rmk.ScreenController.getInstance().newCustomer();
         }
         return results;
@@ -974,7 +974,7 @@ public class Dialogs {
 //                .getCustomerByID(inv.getCustomerID());
 //        Vector entry = initialNewInvoiceEntry(null, inv, cust,
 //                "Model,feature,feature,...?");
-//        if (entry != null) System.out.println(entry.get(0));
+//        if (entry != null) ErrorLogger.getInstance().logMessage(entry.get(0));
 //    	
         System.exit(0);
     }

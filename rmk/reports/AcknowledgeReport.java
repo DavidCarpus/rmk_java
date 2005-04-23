@@ -4,6 +4,7 @@ import java.awt.print.*;
 import java.awt.*;
 import java.awt.geom.*;
 
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Customer;
 import rmk.database.dbobjects.Invoice;
 import Configuration.Config;
@@ -157,7 +158,7 @@ public class AcknowledgeReport extends BaseReport implements ReportInterface {
         int lstHt = 0;
         if (data.getInvoice() != null) {
             listRows = data.getTotalListRows();
-            //  	    System.out.println(this.getClass().getName() + "getNumberOfPages:listRows:" + listRows);
+            //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + "getNumberOfPages:listRows:" + listRows);
             if (listRows <= ONE_PAGE_ROWS) { // only 1 page?
                 return 0; }
             
@@ -169,7 +170,7 @@ public class AcknowledgeReport extends BaseReport implements ReportInterface {
                 listRows -= OTHER_PAGE_ROWS;
             }
         } else {
-            System.out.println(this.getClass().getName() + ":"
+            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"
                     + "No Invoice???:");
         }
         return pages;

@@ -81,16 +81,4 @@ public class InvoicesSearchPanel
 
 	return results;
     }
-    //--------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------
-    public static void main(String args[]) throws Exception{
-	ReportSearchScreen dial = new ReportSearchScreen();
-        dial.setVisible(true);
-//  	System.out.println(dial.getText());
-	System.out.println(dial.getCriteria());
-
-  	System.exit(0);
-    }
-
 }

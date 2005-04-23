@@ -2,6 +2,8 @@ package rmk.gui.ScreenComponents;
 
 import javax.swing.*;
 import java.awt.event.*;
+
+import rmk.ErrorLogger;
 import rmk.gui.DBGuiModel;
 
 //===============================================================
@@ -44,7 +46,7 @@ public class InvoiceItemFeatureEntryPanel
 	    field.setText("");
 	    notifyListeners(event);
 	} else{
-	    System.out.println(this.getClass().getName() + ":Undefined:" + command + "|");
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
 	}
     }
 //-----------------------------------------------------------------

@@ -1,6 +1,8 @@
 package rmk.database.dbobjects;
 import java.sql.*;
 
+import rmk.ErrorLogger;
+
 import carpus.database.Fixed;
 
 public class Address extends DBObject{
@@ -159,7 +161,7 @@ public class Address extends DBObject{
 
 	lst = db.getItems("Address", "customerid = " + 10);
 	Address item = (Address)lst.get(0);
-	System.out.println(item.getIDSQL());
+	ErrorLogger.getInstance().logMessage(item.getIDSQL());
 
 //  	for(int cust=0; cust<10000; cust++){
 //  	    lst = db.getItems("Address", "customerid = " + cust);
@@ -174,9 +176,9 @@ public class Address extends DBObject{
 //  		System.out.print(formatter.textSizer(item.getAddress0(),32));
 //  		System.out.print(formatter.textSizer(item.getAddress1(),32));
 //  		System.out.print(item.getAddress2());
-//  		System.out.println();
+//  		ErrorLogger.getInstance().logMessage();
 //  	    }
-//  	    System.out.println();
+//  	    ErrorLogger.getInstance().logMessage();
 //  	}
     }
 

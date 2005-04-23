@@ -35,6 +35,7 @@ public class PartPriceTable{
     }
     public static int getMaxYear(){
 	GregorianCalendar now = new GregorianCalendar();
+	now.add(GregorianCalendar.MONTH, Configuration.Config.getMonthsBacklogged());
 	if(now.get(Calendar.MONTH) == 11)
 	    return now.get(Calendar.YEAR) +1;
 	else
@@ -49,15 +50,15 @@ public class PartPriceTable{
 	if(partPrice != null && partPrice.getYear() == year) 
 		return partPrice;
 
-//	System.out.println(this.getClass().getName() + " load price table:" + year);
-//    	System.out.println(rmk.ErrorLogger.getInstance().stkTrace("PartPriceTable"));
+//	ErrorLogger.getInstance().logMessage(this.getClass().getName() + " load price table:" + year);
+//    	ErrorLogger.getInstance().logMessage(rmk.ErrorLogger.getInstance().stkTrace("PartPriceTable"));
 	
 	Vector lst;
 	synchronized(db){
 	    lst = db.getItems("PartPrices", "year=" + year);
 	}
 	if(lst == null) return null;
-//  	System.out.println(this.getClass().getName() + "lst size:" + lst.size());
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + "lst size:" + lst.size());
 	for(Enumeration items = lst.elements(); items.hasMoreElements();){
 	    partPrice = (PartPrices)items.nextElement();
 	    key = year + ":" + partPrice.getPartID()+ ":";
@@ -106,21 +107,4 @@ public class PartPriceTable{
 
 	return results;
     }
-//    public double getPartPrice(Invoice invoice, int partID){
-//    	InvoiceInfo invoiceInfo = new InvoiceInfo(db);
-//    	int year = invoiceInfo.getPricingYear(invoice);
-//    	return getPartPrice(year, partID);
-//    }
-
-   public static void main(String args[]) throws Exception{
-       PartPriceTable p = rmk.DataModel.getInstance().pricetable;
-       System.out.println(p.getPartPrice(2001,204));
-       System.out.println(p.getPartPrice(2002,204));
-       System.out.println(p.getPartPrice(2003,204));
-       System.out.println(p.getPartPrice(2002,204));
-       System.out.println(PartPriceTable.getMaxYear());
-//         System.out.println(p.getPartPriceDiscounted(2003,22, .15));
-    }
-
-
 }

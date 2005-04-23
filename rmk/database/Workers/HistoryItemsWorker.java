@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.*;
 
 import java.io.*;
+
+import rmk.ErrorLogger;
 import carpus.database.*;
 
 public class HistoryItemsWorker extends DBObjectLoader implements IDBObjectLoader{
@@ -23,7 +25,7 @@ public class HistoryItemsWorker extends DBObjectLoader implements IDBObjectLoade
 		qry += criteria;
 	    }	
 	    Statement stmt  = cx.createStatement();
-	    System.out.println(this.getClass().getName() + qry);
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + qry);
 	    ResultSet rs = stmt.executeQuery(qry);
 	    rmk.database.dbobjects.HistoryItems object;
 	    while(rs.next()){
@@ -42,7 +44,7 @@ public class HistoryItemsWorker extends DBObjectLoader implements IDBObjectLoade
     // moved to superclass
 
     public String lookup(Connection  cx, String field, String keyValue) throws Exception{
-	System.out.println(this.getClass().getName() + TABLE_NAME + " Lookup");
+	ErrorLogger.getInstance().logMessage(this.getClass().getName() + TABLE_NAME + " Lookup");
 	String qry = "Select " + field + " from "+ TABLE_NAME +" where " + ID_FIELD + " = " + keyValue ;
 
 	Statement stmt  = cx.createStatement();
@@ -76,7 +78,7 @@ public class HistoryItemsWorker extends DBObjectLoader implements IDBObjectLoade
 	    lst = fixed.getArray(currString,rmk.database.dbobjects.HistoryItems.lengths);
 	    rmk.database.dbobjects.HistoryItems item = new rmk.database.dbobjects.HistoryItems(lst);
 	    outputLst.add(item);
-//  	    System.out.println(this.getClass().getName() + item.saveSql((int)item.getHistoryItemID()));
+//  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + item.saveSql((int)item.getHistoryItemID()));
 
 	    row++;
 	}

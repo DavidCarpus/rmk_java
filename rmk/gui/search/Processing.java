@@ -4,6 +4,7 @@ import java.util.Vector;
 import java.util.GregorianCalendar;
 
 import rmk.DataModel;
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.*;
 
 public class Processing{
@@ -13,11 +14,11 @@ public class Processing{
 	Vector results = null;
 	results = new Vector();
 	if(criteria != null){
-	    System.out.println(criteria);
-	    System.out.println(type);
+	    ErrorLogger.getInstance().logMessage(""+criteria);
+	    ErrorLogger.getInstance().logMessage(type);
 	    if(type.equals("InvoiceEntries")){
 //  		String dbCriteria = getEntriesCriteriaString(criteria);
-//      		System.out.println(dbCriteria);
+//      		ErrorLogger.getInstance().logMessage(dbCriteria);
 //  		results = sys.db.getItems("InvoiceEntries", getEntriesCriteriaString(criteria));
   	    } else if(type.equals("Invoices")){
 		return getInvoices(criteria);
@@ -42,7 +43,7 @@ public class Processing{
 	    invCriteria += " invoice in (select invoice from invoiceentries where " + partCriteria + ")";
 	}
 
-//  	System.out.println(invCriteria);
+//  	ErrorLogger.getInstance().logMessage(invCriteria);
 	Vector invoices = DataModel.db.getItems("Invoices", invCriteria);
 	// now have invoices that match invoice info and model #, if entered
 	if(invoices == null) return null;
@@ -59,16 +60,16 @@ public class Processing{
 //  	Vector results = null;
 //  	results = new Vector();
 //  	if(criteria != null){
-//  	    System.out.println(criteria);
-//  	    System.out.println(type);
+//  	    ErrorLogger.getInstance().logMessage(criteria);
+//  	    ErrorLogger.getInstance().logMessage(type);
 //  	    if(type.equals("InvoiceEntries")){
 //  		String dbCriteria = getEntriesCriteriaString(criteria);
-//      		System.out.println(dbCriteria);
+//      		ErrorLogger.getInstance().logMessage(dbCriteria);
 //  		results = sys.db.getItems("InvoiceEntries", getEntriesCriteriaString(criteria));
 //  	    }
 //  	    if(type.equals("Invoices")){
 //  		String dbCriteria = getInvoicesCriteriaString(criteria);
-//      		System.out.println(dbCriteria);
+//      		ErrorLogger.getInstance().logMessage(dbCriteria);
 //      		results = sys.db.getItems("Invoices", dbCriteria);
 //  	    }
 //  	    return results;
@@ -88,7 +89,7 @@ public class Processing{
 //  	    results += "invoice in (select invoice from invoices where " + dateCriteria + ")";
 //  	}
 
-//  	System.out.println(results);	    
+//  	ErrorLogger.getInstance().logMessage(results);	    
 //  	return results;
 //      }
     //===============================================================
@@ -133,7 +134,7 @@ public class Processing{
 //  	}
 
 
-//  	System.out.println(results);	    
+//  	ErrorLogger.getInstance().logMessage(results);	    
 //  	return results;
 //      }
 
@@ -198,7 +199,7 @@ public class Processing{
 		results += " " + partField + " in ";
 
 		Vector partCodes = sys.partInfo.getPartCodesFromString(value);
-		System.out.println("Processing:entriesFeaturesCriteria:" + partCodes);
+		ErrorLogger.getInstance().logMessage("Processing:entriesFeaturesCriteria:" + partCodes);
 		Vector parts = sys.partInfo.getPartsFromPartCodeVector(partCodes);
 
 		results += "(";
@@ -265,7 +266,7 @@ public class Processing{
 //  	Vector data = rmk.gui.Dialogs.getSearchResults();
 	if(data != null){
 	    for(java.util.Enumeration enum = data.elements(); enum.hasMoreElements();){	    
-		System.out.println(enum.nextElement());
+		ErrorLogger.getInstance().logMessage(""+enum.nextElement());
 	    }
 	}
     	System.exit(0);

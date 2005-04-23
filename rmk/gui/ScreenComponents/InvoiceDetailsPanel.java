@@ -14,6 +14,7 @@ import java.util.GregorianCalendar;
 
 import carpus.gui.*;
 import carpus.util.DateFunctions;
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Invoice;
 
 public class InvoiceDetailsPanel 
@@ -355,7 +356,7 @@ implements ActionListener
         String command = e.getActionCommand().toUpperCase();
         boolean optionChanged = false;
         ActionEvent event=null;
-//      System.out.println(this.getClass().getName() + ":"+ command);
+//      ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ command);
         
         if(command.equals("EDIT NOTES") || command.equals("ADD NOTES")){
             String text = rmk.gui.Dialogs.getEditNote(currentNotes, "Notes", rmk.gui.Dialogs.MAX_LEN_INVOICE_NOTES, true);
@@ -370,7 +371,7 @@ implements ActionListener
             if(reply == null || reply.equals("")) return;  // NO change	    
             try {
                 newDisc = Double.parseDouble(reply);
-                System.out.println(this.getClass().getName() + ":"+ "newDisc:" + newDisc);
+                ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "newDisc:" + newDisc);
                 
                 if(discountPercentage != newDisc){
                     discountPercentage = newDisc;
@@ -400,7 +401,7 @@ implements ActionListener
                 difference = invoice.getDateEstimated().getTimeInMillis()
                 - (new java.util.GregorianCalendar()).getTimeInMillis();
             long days = difference / (1000 * 60 * 60 * 24);
-            System.out.println(this.getClass().getName() + ":"+ difference + ":" + days);
+            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ difference + ":" + days);
             if(days > 7){
                 invoice.setDateEstimated(new java.util.GregorianCalendar());
                 ((LabeledTextField)txtFields[FIELD_DATEESTIMATED]).setValue(
@@ -428,7 +429,7 @@ implements ActionListener
             try {
                 taxRate = Double.parseDouble(reply);
                 manuallyChangedTax=true;
-                System.out.println(this.getClass().getName() + ":"+ "newTaxRate:" + taxRate);
+                ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "newTaxRate:" + taxRate);
             } catch (Exception err){
             } // end of try-catch
             if(taxRate > 1) taxRate /= 100.0;
@@ -446,7 +447,7 @@ implements ActionListener
                     dateFormatter.format(date.getTime()));
             event = new ActionEvent(this, 1, "INVOICECHANGED");
         } else {
-            System.out.println(this.getClass().getName() + ":" + command + "|");
+            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
         }
         notifyListeners(event);
     }
@@ -485,13 +486,13 @@ implements ActionListener
         if(currentNotes != null)
             currentNotes =  currentNotes.replace('\n', '|');
         invoice.setComment(currentNotes);
-//        System.out.println(this.getClass().getName() + ":"+ "discountPercentage:" + discountPercentage);
+//        ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "discountPercentage:" + discountPercentage);
         
         invoice.setDiscountPercentage(discountPercentage);
         invoice.setTaxPercentage(taxRate);
         invoice.setShopSale(shopSale.isSelected());
         
-//        System.out.println(this.getClass().getName() + ":"+ group.getSelection());
+//        ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ group.getSelection());
         
         return invoice;
     }
@@ -616,7 +617,7 @@ implements ActionListener
         discountPercentage = invoice.getDiscountPercentage();
         
         if(invoice.isShopSale()){
-//          System.out.println(this.getClass().getName() + ":"+ "shopSale");	    
+//          ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "shopSale");	    
             shopSale.setSelected(true);
             shipAddressPanel.setVisible(false);
         } else if(shipAddress.length() > 0){ // there is a shipping address

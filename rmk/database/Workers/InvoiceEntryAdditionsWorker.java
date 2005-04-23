@@ -3,6 +3,8 @@ package rmk.database.Workers;
 import java.sql.*;
 import java.util.*;
 
+import rmk.ErrorLogger;
+
 import carpus.database.*;
 
 public class InvoiceEntryAdditionsWorker extends DBObjectLoader implements IDBObjectLoader{
@@ -39,7 +41,7 @@ public class InvoiceEntryAdditionsWorker extends DBObjectLoader implements IDBOb
     // moved to superclass
 
     public String lookup(Connection  cx, String field, String keyValue) throws Exception{
-	System.out.println(this.getClass().getName() + TABLE_NAME + " Lookup");
+	ErrorLogger.getInstance().logMessage(this.getClass().getName() + TABLE_NAME + " Lookup");
 	String qry = "Select " + field + " from "+ TABLE_NAME +" where " + ID_FIELD + " = " + keyValue ;
 
 	Statement stmt  = cx.createStatement();

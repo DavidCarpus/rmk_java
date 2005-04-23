@@ -11,6 +11,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.border.EtchedBorder;
 
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Customer;
 import rmk.gui.Dialogs;
 
@@ -132,7 +133,7 @@ public class CustomerListPanel extends JPanel implements ActionListener{
 	    	// TODO: handle exception
 	    }
 	} else {
-	    System.out.println(this.getClass().getName() + ":" + command + "?");
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "?");
 	}
 
 	if(event != null && listeners != null){

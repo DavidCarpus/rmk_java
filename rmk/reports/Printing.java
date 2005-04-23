@@ -60,10 +60,10 @@ public class Printing {
         
 //        Object lst[] = service.getAttributes().toArray();
 //        for(int i=0; i< lst.length; i++)
-//            System.out.println(
+//            ErrorLogger.getInstance().logMessage(
 //                    ((javax.print.attribute.Attribute)lst[i]).getName());
 //        
-//        System.out.println(service.getSupportedAttributeValues(MediaPrintableArea.class,
+//        ErrorLogger.getInstance().logMessage(service.getSupportedAttributeValues(MediaPrintableArea.class,
 //                null, pras));
 //        
 //        service=null;
@@ -121,7 +121,7 @@ public class Printing {
         rmk.gui.HtmlReportDialog rpt = new rmk.gui.HtmlReportDialog();
         rpt.exitOnCancel = true;
         rmk.reports.InvoiceReport tst = new rmk.reports.InvoiceReport(53163);
-        System.out.println(tst.getInvoice());
+        ErrorLogger.getInstance().logMessage(""+tst.getInvoice());
         rpt.setReport(tst);
         //    	rpt.setInvoice(60001); // 42496, 42683, 50000, 42684, 44732
         rpt.setVisible(true);

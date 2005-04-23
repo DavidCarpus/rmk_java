@@ -160,7 +160,7 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 					feature.setPrice(0);
 				if (knife != null) {
 					feature.setEntryID(knife.getInvoiceEntryID());
-					//  		    System.out.println(this.getClass().getName() +
+					//  		    ErrorLogger.getInstance().logMessage(this.getClass().getName() +
 					// ":feature:"+ feature);
 					Vector features = knife.getFeatures();
 					if (features == null) {
@@ -178,9 +178,8 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 		} else if (command.equals("INVOICEFEATUREEDITED")) { // price edited
 			featureChange();
 		} else {
-			System.out.println(this.getClass().getName() + ":Undefined:"
-					+ command + "|");
-			System.out.println(e);
+			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:"
+					+ command + "|" + e);
 		}
 	}
 

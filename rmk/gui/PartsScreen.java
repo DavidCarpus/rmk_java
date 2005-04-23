@@ -59,7 +59,7 @@ public class PartsScreen extends Screen{
 	setData(data);
     }
 //      public void processKeyEvent(KeyEvent e){
-//  	System.out.println(this.getClass().getName() + ":"+ e);
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ e);
 	
 //      }
     //==========================================================
@@ -105,7 +105,7 @@ public class PartsScreen extends Screen{
 	Configuration.Config.getDB().saveItems("Parts", lst);
 	if(priceChange){
 	    PartPrices newPrice = partPnl.getPriceChange();
-//  	    System.out.println(this.getClass().getName() + ":"+ newPrice);
+//  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ newPrice);
 	    lst = new Vector();
 	    lst.add(newPrice);
 	    Configuration.Config.getDB().saveItems("PartPrices", lst);
@@ -119,7 +119,7 @@ public class PartsScreen extends Screen{
     }
     //==========================================================
     public void internalFrameActivated(InternalFrameEvent e) {
-//    	System.out.println(this.getClass().getName() + ":"+ "Window Activated.");
+//    	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Window Activated.");
     }
     //==========================================================
     public void actionPerformed(ActionEvent e) {
@@ -166,7 +166,7 @@ public class PartsScreen extends Screen{
   	} else if (command.equals("PRICING")) { //Yearly Price edit/change
   		Dialogs.updatePricing();
   	} else {  // Undefined
-  		System.out.println(this.getClass().getName() + ":Undefined:" + command + "|");
+  		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
   	}
 
 	buttonBar.enableButton(3, (part != null && part.getPartType() == sys.partInfo.getPartTypeID("Knives")));

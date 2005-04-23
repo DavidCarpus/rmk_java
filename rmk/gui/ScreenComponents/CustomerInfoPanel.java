@@ -6,6 +6,7 @@ import java.awt.event.*;
 import javax.swing.border.EtchedBorder;
 
 import carpus.gui.*;
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Customer;
 
 public class CustomerInfoPanel extends carpus.gui.DataEntryPanel{
@@ -132,7 +133,7 @@ public class CustomerInfoPanel extends carpus.gui.DataEntryPanel{
 //  	setMaximumSize(new Dimension(975,150));
     }
     public void processFocusEvent(FocusEvent e){
-//    	System.out.println(this.getClass().getName() + ":"+ e);
+//    	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ e);
 	if(customer == null || customer.getCustomerID() == 0){
 	    txtFields[FIELD_PREFIX].requestFocus();
 	} else{
@@ -178,7 +179,7 @@ public class CustomerInfoPanel extends carpus.gui.DataEntryPanel{
 	    if(!rmk.gui.Dialogs.yesConfirm("Confirm Changing CUSTOMER Discount from %" 
 				  +  savedDiscount
 				  + " to %" + newDiscount )){
-	    System.out.println(this.getClass().getName() + ":"+ "NOT changing discount");
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "NOT changing discount");
 	    newDiscount = savedDiscount;
 	}
   	customer.setDiscount(newDiscount);

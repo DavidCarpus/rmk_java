@@ -18,7 +18,7 @@ public class Application extends JFrame implements ActionListener {
     Desktop desktop;
     rmk.DataModel sys;
     BasicToolBar toolbar;
-    public static final String version="2005_04_20 B";
+    public static final String version="2005_04_22";
 
     //============================================================================
     public Application() throws Exception{
@@ -82,7 +82,7 @@ public class Application extends JFrame implements ActionListener {
 	parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
         if (type == rmk.database.dbobjects.Customer.class){ // customer
-	    System.out.println(this.getClass().getName() + ":"+ "customer");
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "customer");
 	    if(items.size() == 1){
 		rmk.ScreenController.getInstance().displayCustomer(((Customer)items.get(0)).getCustomerID());
 	    } else {
@@ -180,8 +180,7 @@ public class Application extends JFrame implements ActionListener {
 
 	//-------------------------------
 	}else{
-	    System.out.println("Application:actionPerformed():" + command);
-	    System.out.println(e);
+	    ErrorLogger.getInstance().logMessage("Application:actionPerformed():" + command);
 	}
     }
     //============================================================================

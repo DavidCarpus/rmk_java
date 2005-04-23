@@ -22,7 +22,7 @@ public class CustomersWorker  extends DBObjectLoader implements IDBObjectLoader{
 	    }
 	    qry += criteria;
 	}	
-//        	System.out.println(this.getClass().getName() + qry);
+//        	ErrorLogger.getInstance().logMessage(this.getClass().getName() + qry);
 	
 	try {
 	    Statement stmt  = cx.createStatement();
@@ -44,7 +44,7 @@ public class CustomersWorker  extends DBObjectLoader implements IDBObjectLoader{
     // moved to superclass
 
     public String lookup(Connection  cx, String field, String keyValue) throws Exception{
-//  	System.out.println(this.getClass().getName() + TABLE_NAME + " Lookup");
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + TABLE_NAME + " Lookup");
 	String qry = "Select " + field + " from "+ TABLE_NAME +" where " + ID_FIELD + " = " + keyValue ;
 
 	Statement stmt  = cx.createStatement();
@@ -78,7 +78,7 @@ public class CustomersWorker  extends DBObjectLoader implements IDBObjectLoader{
 	    lst = fixed.getArray(currString,rmk.database.dbobjects.Customer.lengths);
 	    rmk.database.dbobjects.Customer customer = new rmk.database.dbobjects.Customer(lst);
 	    outputLst.add(customer);
-//  	    System.out.println(this.getClass().getName() + customer.saveSql((int)customer.getCustomerID()));
+//  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + customer.saveSql((int)customer.getCustomerID()));
 
 	    row++;
 	}

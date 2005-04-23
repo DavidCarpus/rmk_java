@@ -54,7 +54,7 @@ public abstract class DBObject extends carpus.database.DBObject{
 	baseQry += ")";
 	dataQry = dataQry.substring(1);
 
-//	System.out.println(this.getClass().getName() + ":"+ baseQry + " Select " + dataQry);
+//	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ baseQry + " Select " + dataQry);
 	
 	return baseQry + " Select " + dataQry;
     }

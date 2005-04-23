@@ -15,6 +15,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.event.InternalFrameEvent;
 
+import rmk.ErrorLogger;
+
 import carpus.gui.FormattedTextFields;
 import carpus.gui.LabeledTextField;
 
@@ -62,7 +64,7 @@ public class InvoiceSearchScreen extends Screen {
 		if (command.equals("CANCEL")) { //cancel
 		    defaultCancelAction();
 		} else {  // Undefined
-		    System.out.println(this.getClass().getName() + ":Undefined:" + command + "|");
+		    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
 		}
 
 	}

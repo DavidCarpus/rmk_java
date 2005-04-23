@@ -1,7 +1,9 @@
 package carpus.database;
 import java.sql.*;
 import java.util.*;
+
 import Configuration.Config;
+
 public class AccessDB extends DBAccess implements DBInterface {
 	public AccessDB() {
         super();
@@ -42,25 +44,25 @@ public class AccessDB extends DBAccess implements DBInterface {
 					+ Configuration.Config.databaseName(), e);
 		}
 		//  	} catch (java.lang.ClassNotFoundException e) { 
-		//  	    System.out.println("Err connecting to database" + e);	    
+		//  	    ErrorLogger.getInstance().logMessage("Err connecting to database" + e);	    
 		//  	}	
 	}
 	public static void main(String args[]) throws Exception {
 		AccessDB db = new AccessDB();
-		//  	System.out.println(db.dateStr(new GregorianCalendar()));
+		//  	ErrorLogger.getInstance().logMessage(db.dateStr(new GregorianCalendar()));
 		System.out.println(db.table_fieldName("test.me"));
-		//  	System.out.println("connecting");
+		//  	ErrorLogger.getInstance().logMessage("connecting");
 		//  	db.connect("ordrc", "duntyr","Test");
 		//  // 	ArrayList lst = db.getItems("OldPart", "");
-		//  // 	System.out.println(lst);
+		//  // 	ErrorLogger.getInstance().logMessage(lst);
 		//  	Statement stmt = db.cx.createStatement();
 		//  	ResultSet tables = stmt.executeQuery("Select * from Parts");   
 		//  	ResultSetMetaData tst = tables.getMetaData();
 		//  	while (tables.next()){
 		//  	    String tableName =  tables.getString(3); //column 3 is tableName
-		//  	    System.out.println("Table name: " + tableName);		
+		//  	    ErrorLogger.getInstance().logMessage("Table name: " + tableName);		
 		//  	}
-		//  // 	System.out.println(db.getDBOptions("Customers","job_customerID",0));    
+		//  // 	ErrorLogger.getInstance().logMessage(db.getDBOptions("Customers","job_customerID",0));    
 	}
 	public String cleanTEXT(String txt) {
 		if (txt == null || txt.indexOf("'") <= 0)

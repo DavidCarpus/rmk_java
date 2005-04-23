@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.*;
 
 import java.io.*;
+
+import rmk.ErrorLogger;
 import carpus.database.*;
 
 public class InvoiceEntriesWorker  extends DBObjectLoader implements IDBObjectLoader{
@@ -40,7 +42,7 @@ public class InvoiceEntriesWorker  extends DBObjectLoader implements IDBObjectLo
     // moved to superclass
 
     public String lookup(Connection  cx, String field, String keyValue) throws Exception{
-	System.out.println(this.getClass().getName() + TABLE_NAME + " Lookup");
+	ErrorLogger.getInstance().logMessage(this.getClass().getName() + TABLE_NAME + " Lookup");
 	String qry = "Select " + field + " from "+ TABLE_NAME +" where " + ID_FIELD + " = " + keyValue ;
 
 	Statement stmt  = cx.createStatement();
@@ -92,7 +94,7 @@ public class InvoiceEntriesWorker  extends DBObjectLoader implements IDBObjectLo
 	    throw e;
 	}
 	catch (Exception e){
-	    System.out.println(this.getClass().getName() + ":"+ e);	    
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ e);	    
 	    throw e;
 	}
     }
@@ -123,7 +125,7 @@ public class InvoiceEntriesWorker  extends DBObjectLoader implements IDBObjectLo
 	    lst = fixed.getArray(currString,rmk.database.dbobjects.InvoiceEntries.lengths);
 	    rmk.database.dbobjects.InvoiceEntries item = new rmk.database.dbobjects.InvoiceEntries(lst);
 	    outputLst.add(item);
-//  	    System.out.println(item.saveSql((int)item.getInvoiceEntryID()));
+//  	    ErrorLogger.getInstance().logMessage(item.saveSql((int)item.getInvoiceEntryID()));
 
 	    row++;
 	}

@@ -6,6 +6,8 @@ import carpus.util.DateFunctions;
 
 import java.util.Vector;
 
+import rmk.ErrorLogger;
+
 public class Invoice extends DBObject{
     Vector items=null;
     Boolean dealer=null;
@@ -205,7 +207,7 @@ public class Invoice extends DBObject{
     public void setValues(ResultSet  recordSet) throws Exception{
     	if(getInvoice() == 0)
         	setInvoice(recordSet.getInt("Invoice"));
-// 	System.out.println(recordSet.getString("DateOrdered"));
+// 	ErrorLogger.getInstance().logMessage(recordSet.getString("DateOrdered"));
 	carpus.util.DateFunctions dte = new carpus.util.DateFunctions();
 	setDateOrdered(DateFunctions.gregorianFromString(recordSet.getString("DateOrdered")));
 	setDateEstimated(DateFunctions.gregorianFromString(recordSet.getString("DateEstimated")));
@@ -233,7 +235,7 @@ public class Invoice extends DBObject{
     public static void main(String args[]) throws Exception{
 	int startRow = 0;
 	String fileName=Configuration.Config.getDataFileLocation("Invoices");
-	System.out.println("\nXFer: " + fileName);	
+	ErrorLogger.getInstance().logMessage("\nXFer: " + fileName);	
 
 	carpus.database.Fixed fixed = new carpus.database.Fixed();
 	BufferedInputStream in = (new BufferedInputStream( new FileInputStream(fileName)));
@@ -246,7 +248,7 @@ public class Invoice extends DBObject{
 		lst = fixed.getArray(new String(currInput),Invoice.lengths);
 		Invoice invoice = new Invoice(lst);
 		if(invoice.getComment() != null){
-		    System.out.println(invoice.getComment());
+		    ErrorLogger.getInstance().logMessage(invoice.getComment());
 		}
 //  		java.util.Vector outputLst = new java.util.Vector();
 //      		outputLst.add(invoice);
@@ -261,7 +263,7 @@ public class Invoice extends DBObject{
 
 //        for(int i=0; i < lst.size(); i++){
 //  	  Invoice item = (Invoice)lst.get(i);
-//  	  System.out.println(item);      
+//  	  ErrorLogger.getInstance().logMessage(item);      
 //        }
 
     }   

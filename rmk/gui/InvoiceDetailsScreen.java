@@ -85,7 +85,7 @@ public class InvoiceDetailsScreen extends Screen {
 
 	//----------------------------------------------------------
 	//      public void processKeyEvent(KeyEvent e){
-	//  	System.out.println(this.getClass().getName() + ":"+ e);
+	//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ e);
 	//      }
 	//==========================================================
 	public boolean isEdited() {
@@ -116,9 +116,9 @@ public class InvoiceDetailsScreen extends Screen {
 		}
 
 		//        originalInvoiceTaxes = sys.financialInfo.getInvoiceTaxes(invoice);
-		//      System.out.println(this.getClass().getName() + ":"+ "originalInvoiceTaxes:" + originalInvoiceTaxes);
+		//      ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "originalInvoiceTaxes:" + originalInvoiceTaxes);
 
-		//      System.out.println(model);
+		//      ErrorLogger.getInstance().logMessage(model);
 		customerPnl.setData(model);
 		//      double totalPayments = sys.financialInfo.getTotalInvoicePayments(invoiceNum);
 
@@ -228,7 +228,7 @@ public class InvoiceDetailsScreen extends Screen {
 
 			Vector outputList = model.getInvoiceData();
 			if (outputList == null || outputList.size() == 0) {
-				System.out.println(this.getClass().getName() + ":"
+				ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"
 						+ "Generate new InvoiceDataVector ***");
 				outputList = new Vector();
 			}
@@ -260,7 +260,7 @@ public class InvoiceDetailsScreen extends Screen {
 			//  	    double taxChange = newTaxes-originalInvoiceTaxes;
 			//  	    taxChange = Math.floor(taxChange*100+0.5)/100;
 
-			//  	    System.out.println(this.getClass().getName() + ":tax Change"+ ":" + 
+			//  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":tax Change"+ ":" + 
 			//  			       taxChange);
 			if (newInv)
 				addEntry();
@@ -283,18 +283,18 @@ public class InvoiceDetailsScreen extends Screen {
 				if (!Dialogs
 						.yesConfirm("Confirm Changing INVOICE Discount from %"
 								+ invDiscount + " to %" + custDiscount)) {
-					System.out.println(this.getClass().getName() + ":"
+					ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"
 							+ "NOT changing discount");
 
 				} else {
 					//  		    invoiceDetailPnl.setDiscount(custDiscount);
 					inv.setDiscountPercentage(custDiscount);
-					System.out.println(this.getClass().getName()
+					ErrorLogger.getInstance().logMessage(this.getClass().getName()
 							+ ":disc now %" + inv.getDiscountPercentage());
 
 					outputList = model.getInvoiceData();
 					if (outputList == null || outputList.size() == 0) {
-						System.out.println(this.getClass().getName() + ":"
+						ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"
 								+ "Generate new InvoiceDataVector ***");
 						outputList = new Vector();
 					}
@@ -458,7 +458,7 @@ public class InvoiceDetailsScreen extends Screen {
 				data.add(item);
 				model.setKnifeData(data);
 				break;
-				//  		System.out.println(this.getClass().getName() + " edit:"+ data);
+				//  		ErrorLogger.getInstance().logMessage(this.getClass().getName() + " edit:"+ data);
 			}
 		}
 
@@ -515,7 +515,7 @@ public class InvoiceDetailsScreen extends Screen {
 
 	//==========================================================
 	public void internalFrameActivated(InternalFrameEvent e) {
-		//    	System.out.println(this.getClass().getName() + ":"+ "Window Activated.");
+		//    	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Window Activated.");
 		if (invoiceNumber == 0)
 			invoiceDetailPnl.grabFocus();
 		else {
@@ -547,7 +547,7 @@ public class InvoiceDetailsScreen extends Screen {
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand().toUpperCase().trim();
 		boolean inShippingAddressField=false;
-		//  	System.out.println(this.getClass().getName() + ":" + command + "|");
+		//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
 
 		//-----------------------------
 		if (command.equals("CANCEL")) { //cancel
@@ -557,7 +557,7 @@ public class InvoiceDetailsScreen extends Screen {
 						.hasMoreElements();) {
 					Invoice inv = (Invoice) enum.nextElement();
 					if (inv.getInvoice() == 0) {
-						System.out.println(this.getClass().getName() + ":"
+						ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"
 								+ "removed Invoice:" + inv);
 
 						invoices.remove(inv);
@@ -576,14 +576,14 @@ public class InvoiceDetailsScreen extends Screen {
 
 			//-----------------------------
 		} else if (command.equals("INVOICECHANGED")) { //INVOICE CHANGED
-			System.out.println(this.getClass().getName() + ":"
+			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"
 					+ "Invoicechanged");
 			editedInvoice = true;
 			buttonBar.enableButton(0, true);
 			return;
 			//-----------------------------
 		} else if (command.equals("INFOCHANGED")) { //Customer CHANGED
-			System.out.println(this.getClass().getName() + ":"
+			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"
 					+ "CustomerChanged");
 			editedCustomer = true;
 			buttonBar.enableButton(0, true);
@@ -593,7 +593,7 @@ public class InvoiceDetailsScreen extends Screen {
 			addEntry();
 			//-----------------------------
 		} else if (command.equals("EDITINVOICEENTRY")) {
-			//  	    System.out.println(this.getClass().getName() + ": Edit: "+ e.getID());
+			//  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ": Edit: "+ e.getID());
 			editEntry(e.getID());
 			return;
 			//-----------------------------
@@ -653,7 +653,7 @@ public class InvoiceDetailsScreen extends Screen {
 				inv.setItems(attList);
 			}
 			InvoiceEntries entry = (InvoiceEntries) e.getSource();
-			System.out.println(this.getClass().getName() + ":attList.indexOf:"
+			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":attList.indexOf:"
 					+ attList.indexOf(entry));
 
 			attList.addElement(entry);
@@ -664,7 +664,7 @@ public class InvoiceDetailsScreen extends Screen {
 		} else if (command.equals("INVOICEENTRYCHANGED")
 				|| command.equals("ITEMSAVE")) { //INFO CHANGED
 			Vector invList = model.getInvoiceData();
-//			System.out.println(this.getClass().getName() + ":Change - cnt "
+//			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Change - cnt "
 //					+ invList.size());
 			Vector items = model.getInvoiceItemsData();
 			removeBlankItems(items);
@@ -687,7 +687,7 @@ public class InvoiceDetailsScreen extends Screen {
 
 			//-----------------------------
 		} else if (command.equals("DBMODELCHANGED-KNIFEDATA")) { //INFO CHANGED
-			System.out.println(this.getClass().getName() + ":" + command + "|");
+			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
 			loadItemList(model);
 			//-----------------------------
 		} else if (command.equals("SHIP")) { // Ship it
@@ -729,7 +729,7 @@ public class InvoiceDetailsScreen extends Screen {
 			inShippingAddressField = invoiceDetailPnl.isShippingAddressField(currFocus);
 			//-----------------------------
 		} else { // Undefined
-			System.out.println(this.getClass().getName() + ":UndefinedAction:"
+			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":UndefinedAction:"
 					+ command + "|");
 		}
 		invoiceEntriesList.expand(expandedList);
@@ -738,7 +738,7 @@ public class InvoiceDetailsScreen extends Screen {
 		if(inShippingAddressField){
 			Component currFocus = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
 			currFocus.requestFocus();
-			System.out.println(this.getClass().getName() + ":Move back to AddressField???");
+			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Move back to AddressField???");
 		}
 
 	}

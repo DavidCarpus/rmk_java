@@ -1,6 +1,9 @@
 package rmk.gui.search;
 
 import javax.swing.*;
+
+import rmk.ErrorLogger;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
@@ -74,7 +77,7 @@ public class ReportSearchScreen
 
 
     public void internalFrameActivated(javax.swing.event.InternalFrameEvent e) {
-//  	System.out.println(this.getClass().getName() + ":"+ "Window Activated.");
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Window Activated.");
 //  	("Internal frame activated", e);
     }
 
@@ -103,7 +106,7 @@ public class ReportSearchScreen
 		//we're done; clear and dismiss the dialog
 		clearAndHide();
             } else { //user closed dialog or clicked cancel
-//  		System.out.println(this.getClass().getName() + ":"+ "It's OK. We won't force you to type "
+//  		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "It's OK. We won't force you to type "
 //                             + magicWord + ".");
                 searchCriteria = null;
                 clearAndHide();
@@ -132,24 +135,7 @@ public class ReportSearchScreen
 //  	    return;
 
 //  	}else{
-	    System.out.println(this.getClass().getName() + ":" + command + "|");
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
 //          }
     }
-
-    //--------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------
-    public static void main(String args[]) throws Exception{
-	String txt = 	"<I>italics</I>";
-//  "Message";
-	ReportSearchScreen dial = new ReportSearchScreen();
-        dial.setVisible(true);
-  	System.out.println(dial.getCriteria());
-  	System.out.println(dial.getType());
-	
-  	System.exit(0);
-    }
-
-
-
 }

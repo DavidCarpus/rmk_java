@@ -3,6 +3,8 @@ package rmk.reports;
 import java.awt.print.*;
 import java.awt.*;
 import java.awt.geom.*;
+
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Invoice;
 import java.util.*;
 
@@ -125,7 +127,7 @@ public class TaxOrdered
 		}
 	    } catch (Exception e){ }
 	} else{
-	    System.out.println(this.getClass().getName() + ":"+ "No Invoice???:");
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "No Invoice???:");
 	}
 	return pages;
     }
@@ -300,7 +302,7 @@ public class TaxOrdered
 	tst.setFormat(ReportDataInvoicesList.FORMAT_TAX_ORDERED); // FORMAT_TAX_SHIPPED FORMAT_MINIS
 
   	rpt.setReport(tst);
-//    	System.out.println(tst.getInvoice());
+//    	ErrorLogger.getInstance().logMessage(tst.getInvoice());
 //    	rpt.setInvoice(60001); // 42496, 42683, 50000, 42684
   	rpt.setVisible(true);
     }

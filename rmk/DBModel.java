@@ -56,9 +56,6 @@ public class DBModel{
 	return (Vector)data.get(ADDRESS_DATA);
     }
     public void setInvoiceData(Vector lst){
-//  	System.out.println("=====================");	
-//    	System.out.println(this.getClass().getName() + ":setInvoiceData:"+ ErrorLogger.getInstance().stkTrace(""));
-//  	System.out.println("=====================");	
 	setData(INVOICE_DATA, lst);
     }
     public Vector getInvoiceData(){
@@ -113,7 +110,7 @@ public class DBModel{
 	if(listeners == null) return;
 	for(Enumeration enum=listeners.elements(); enum.hasMoreElements();){
 	    ActionListener listener = (ActionListener)enum.nextElement();
-//      	    System.out.println(this.getClass().getName() + ":notify:" + listener);
+//      	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":notify:" + listener);
 	    listener.actionPerformed(event);
 	}
     }

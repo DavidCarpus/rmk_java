@@ -16,6 +16,7 @@ import carpus.database.DBInterface;
 
 import Configuration.Config;
 
+import rmk.ErrorLogger;
 import rmk.database.Workers.InvoiceWorker;
 import rmk.database.Workers.PaymentsWorker;
 import rmk.database.dbobjects.Invoice;
@@ -43,9 +44,9 @@ public class Cleanup {
 				System.out.print("\n" + i);
 
         }
-        System.out.println(this.getClass().getName() + "\nBad CheckNumbers?:");
+        ErrorLogger.getInstance().logMessage(this.getClass().getName() + "\nBad CheckNumbers?:");
         for(Enumeration enum = badNums.elements(); enum.hasMoreElements();){
-            System.out.println(enum.nextElement());
+            ErrorLogger.getInstance().logMessage(""+enum.nextElement());
         }
     }
     public Vector fixInvoiceCCPayments(Connection cx, Invoice inv) throws Exception{
@@ -66,7 +67,7 @@ public class Cleanup {
                 if(number != null && number.length() > 0){
                     number = FinancialInfo.removeCardNumberDashes(number);
                     payment.setCheckNumber(number);
-                    System.out.println(this.getClass().getName() + payment);
+                    ErrorLogger.getInstance().logMessage(this.getClass().getName() + payment);
                 }
                 
             } else if(paymentType == 5){ // cash, ignore

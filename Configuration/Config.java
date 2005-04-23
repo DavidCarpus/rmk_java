@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+import rmk.ErrorLogger;
+
 import carpus.database.MySQLDB;
 
 public class Config
@@ -41,7 +43,7 @@ public class Config
 				Properties loadedProps = new Properties();
 				loadedProps.load(propFile);
 				propFile.close();				
-				System.out.println("Using configuration file:" + propFileName);
+				ErrorLogger.getInstance().logMessage("Using configuration file:" + propFileName);
 				return loadedProps;
 			}
 		} catch (Exception e) {
@@ -175,7 +177,7 @@ public class Config
 	{
 		if (db != null)
 			return db;
-		System.out.println(getDBType());
+		ErrorLogger.getInstance().logMessage(getDBType());
 
 		if (getDBType().equals("POSTGRESQL"))
 		{
@@ -384,10 +386,10 @@ public class Config
 		getDB();
 		//  	loadProperties();
 		p.list(System.out);
-		//  	System.out.println(getDataFileLocation("PartTypes"));
-		System.out.println(getFaxNumber());
-		System.out.println(getDBType());
-		//  	System.out.println(p);	
+		//  	ErrorLogger.getInstance().logMessage(getDataFileLocation("PartTypes"));
+		ErrorLogger.getInstance().logMessage(getFaxNumber());
+		ErrorLogger.getInstance().logMessage(getDBType());
+		//  	ErrorLogger.getInstance().logMessage(p);	
 	}
 
 }

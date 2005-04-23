@@ -113,7 +113,7 @@ public class InvoicePaymentsSummaryPanel
 		else
 			fields[FIELD_TAX].setForeground(Color.BLACK);
 
-		//    	System.out.println(this.getClass().getName() + ":Taxes:"+ taxes);
+		//    	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Taxes:"+ taxes);
 		//  	if(taxes > 0){
 		labels[FIELD_TAX].setText(
 			labelsText[FIELD_TAX] + " " + percentFormat.format(taxes));

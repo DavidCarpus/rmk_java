@@ -1,5 +1,7 @@
 package rmk.database.dbobjects;
 import java.sql.*;
+
+import rmk.ErrorLogger;
 import carpus.database.Fixed;
 
 public class Customer extends DBObject{
@@ -131,7 +133,7 @@ public class Customer extends DBObject{
 	setDealer(recordSet.getInt("Dealer"));
 	setFlag(recordSet.getBoolean("Flag"));
 	String memo = recordSet.getString("Memo");
-//  	System.out.println(this.getClass().getName() + ":"+ memo);
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ memo);
 	
 	setMemo(memo);
 	setPrefix(recordSet.getString("Prefix"));
@@ -142,7 +144,7 @@ public class Customer extends DBObject{
 	setCreditCardNumber(recordSet.getString("CreditCardNumber"));
 	setCreditCardExpiration(carpus.util.DateFunctions.gregorianFromString(recordSet.getString("CreditCardExpiration")));
 	setEMailAddress(recordSet.getString("EMailAddress"));
-//  	System.out.println(this.getClass().getName() + ":"+ "Done loading...");
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Done loading...");
 	
     }
     public String getIDSQL(){
@@ -177,10 +179,10 @@ public class Customer extends DBObject{
 		
 //  		Customer customer = new Customer(lst);
 //    		System.out.print(row);
-//      		System.out.println(":" + customer.getCustomerID());
+//      		ErrorLogger.getInstance().logMessage(":" + customer.getCustomerID());
 //  //    		customer.transfering = false;
 //  //    		customer.edited=false;
-//  //  		System.out.println(customer.updateSql((int)customer.getCustomer()));
+//  //  		ErrorLogger.getInstance().logMessage(customer.updateSql((int)customer.getCustomer()));
 		
 //      		java.util.ArrayList outputLst = new java.util.ArrayList();
 //  		outputLst.add(customer);
@@ -201,7 +203,7 @@ public class Customer extends DBObject{
 
       for(int i=0; i < lst.size(); i++){
 	  Customer item = (Customer)lst.get(i);
-	  System.out.println(item);      
+	  ErrorLogger.getInstance().logMessage(""+item);      
       }
     }
  

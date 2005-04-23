@@ -3,6 +3,7 @@ package rmk.database;
 import java.io.*;
 import java.sql.SQLException;
 
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.*;
 
 public class TxtXfer
@@ -18,7 +19,7 @@ public class TxtXfer
 	public void xferAddress(long startRow) throws Exception
 	{
 		String fileName = Configuration.Config.getDataFileLocation("Address");
-		System.out.println("\nXFer: " + fileName);
+		ErrorLogger.getInstance().logMessage("\nXFer: " + fileName);
 
 		carpus.database.Fixed fixed = new carpus.database.Fixed();
 		BufferedInputStream in =
@@ -48,7 +49,7 @@ public class TxtXfer
 	public void xferCustomers(long startRow) throws Exception
 	{
 		String fileName = Configuration.Config.getDataFileLocation("Customers");
-		System.out.println("\nXFer: " + fileName);
+		ErrorLogger.getInstance().logMessage("\nXFer: " + fileName);
 
 		carpus.database.Fixed fixed = new carpus.database.Fixed();
 		BufferedInputStream in =
@@ -77,7 +78,7 @@ public class TxtXfer
 	public void xferInvoices(long startRow) throws Exception
 	{
 		String fileName = Configuration.Config.getDataFileLocation("Invoices");
-		System.out.println("\nXFer: " + fileName);
+		ErrorLogger.getInstance().logMessage("\nXFer: " + fileName);
 
 		carpus.database.Fixed fixed = new carpus.database.Fixed();
 		BufferedInputStream in =
@@ -108,7 +109,7 @@ public class TxtXfer
 	{
 		String fileName =
 			Configuration.Config.getDataFileLocation("InvoiceEntries");
-		System.out.println("\nXFer: " + fileName);
+		ErrorLogger.getInstance().logMessage("\nXFer: " + fileName);
 
 		carpus.database.Fixed fixed = new carpus.database.Fixed();
 		BufferedInputStream in =
@@ -143,7 +144,7 @@ public class TxtXfer
 	{
 		String fileName =
 			Configuration.Config.getDataFileLocation("InvoiceEntryAdditions");
-		System.out.println("\nXFer: " + fileName);
+		ErrorLogger.getInstance().logMessage("\nXFer: " + fileName);
 
 		carpus.database.Fixed fixed = new carpus.database.Fixed();
 		BufferedInputStream in =
@@ -178,7 +179,7 @@ public class TxtXfer
 	{
 		String fileName =
 			Configuration.Config.getDataFileLocation("PartPrices");
-		System.out.println("\nXFer: " + fileName);
+		ErrorLogger.getInstance().logMessage("\nXFer: " + fileName);
 
 		carpus.database.Fixed fixed = new carpus.database.Fixed();
 		BufferedInputStream in =
@@ -208,7 +209,7 @@ public class TxtXfer
 	public void xferParts(long startRow) throws Exception
 	{
 		String fileName = Configuration.Config.getDataFileLocation("Parts");
-		System.out.println("\nXFer: " + fileName);
+		ErrorLogger.getInstance().logMessage("\nXFer: " + fileName);
 
 		carpus.database.Fixed fixed = new carpus.database.Fixed();
 		BufferedInputStream in =
@@ -224,14 +225,14 @@ public class TxtXfer
 		    if (row >= startRow)
 			{
 				lst = fixed.getArray(new String(currInput), Parts.lengths);
-				//    		System.out.println(fixed.list(lst));
+				//    		ErrorLogger.getInstance().logMessage(fixed.list(lst));
 				Parts invoice = new Parts(lst);
 				java.util.Vector outputLst = new java.util.Vector();
 				outputLst.add(invoice);
-				//  		System.out.println(this.getClass().getName() + ":"+ invoice);		
+				//  		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ invoice);		
 				if (db.saveItems("Parts", outputLst) == null)
 					return;
-				//  		System.out.println(this.getClass().getName() + ":"+ invoice);		
+				//  		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ invoice);		
 			}
 			row++;
 		}
@@ -241,7 +242,7 @@ public class TxtXfer
 	public void xferPartTypes(long startRow) throws Exception
 	{
 		String fileName = Configuration.Config.getDataFileLocation("PartTypes");
-		System.out.println("\nXFer: " + fileName);
+		ErrorLogger.getInstance().logMessage("\nXFer: " + fileName);
 
 		carpus.database.Fixed fixed = new carpus.database.Fixed();
 		BufferedInputStream in =
@@ -257,14 +258,14 @@ public class TxtXfer
 		    if (row >= startRow)
 			{
 				lst = fixed.getArray(new String(currInput), PartTypes.lengths);
-//				System.out.println(fixed.list(lst));
+//				ErrorLogger.getInstance().logMessage(fixed.list(lst));
 				PartTypes item = new PartTypes(lst);
 				java.util.Vector outputLst = new java.util.Vector();
 				outputLst.add(item);
-				//  		System.out.println(this.getClass().getName() + ":"+ invoice);		
+				//  		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ invoice);		
 				if (db.saveItems("PartTypes", outputLst) == null)
 					return;
-				//  		System.out.println(this.getClass().getName() + ":"+ invoice);		
+				//  		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ invoice);		
 			}
 			row++;
 		}
@@ -274,7 +275,7 @@ public class TxtXfer
 	public void xferPayments(long startRow) throws Exception
 	{
 		String fileName = Configuration.Config.getDataFileLocation("Payments");
-		System.out.println("\nXfer: " + fileName);
+		ErrorLogger.getInstance().logMessage("\nXfer: " + fileName);
 
 		carpus.database.Fixed fixed = new carpus.database.Fixed();
 
@@ -291,7 +292,7 @@ public class TxtXfer
 		    if (row >= startRow)
 			{
 				lst = fixed.getArray(new String(currInput), Payments.lengths);
-				//  		System.out.println(fixed.list(lst));		
+				//  		ErrorLogger.getInstance().logMessage(fixed.list(lst));		
 				Payments invoice = new Payments(lst);
 				java.util.Vector outputLst = new java.util.Vector();
 				outputLst.add(invoice);

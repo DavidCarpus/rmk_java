@@ -4,6 +4,7 @@ import java.awt.print.*;
 import java.awt.*;
 import java.awt.geom.*;
 
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Customer;
 import rmk.database.dbobjects.Invoice;
 import Configuration.Config;
@@ -71,7 +72,7 @@ public class InvoiceReport extends BaseReport implements ReportInterface {
         double pageHeight = endY - startY;
         int column = 0;
         
-        //    	System.out.println(this.getClass().getName() + ":"+ width + ":"+
+        //    	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ width + ":"+
         // height);
         
         g2.setFont(infoFont);
@@ -125,7 +126,7 @@ public class InvoiceReport extends BaseReport implements ReportInterface {
             }
         }
         //  	g2.setFont(new Font ("serif", Font.BOLD, 10));
-        //  	System.out.println(this.getClass().getName() + ":"+ width);
+        //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ width);
         
         if (lastPage) g2.translate(120, 10); // translate to start
         //  	width += 100;
@@ -142,7 +143,7 @@ public class InvoiceReport extends BaseReport implements ReportInterface {
         while (currentPage-- > 0)
             results += OTHER_PAGE_ROWS;
         
-        //    	System.out.println("rowsRendered:"+ results + ": P"+currentPage);
+        //    	ErrorLogger.getInstance().logMessage("rowsRendered:"+ results + ": P"+currentPage);
         return results;
     }
     //-------------------------------------------------------------------
@@ -152,7 +153,7 @@ public class InvoiceReport extends BaseReport implements ReportInterface {
         int lstHt = 0;
         if (data.getInvoice() != null) {
             listRows = data.getTotalListRows();
-            //  	    System.out.println("getNumberOfPages:listRows:" + listRows);
+            //  	    ErrorLogger.getInstance().logMessage("getNumberOfPages:listRows:" + listRows);
             if (listRows <= ONE_PAGE_ROWS) { // only 1 page?
                 return 0; }
             
@@ -164,7 +165,7 @@ public class InvoiceReport extends BaseReport implements ReportInterface {
                 listRows -= OTHER_PAGE_ROWS;
             }
         } else {
-            System.out.println(this.getClass().getName() + ":"
+            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"
                     + "No Invoice???:");
         }
         return pages;
@@ -425,7 +426,7 @@ public class InvoiceReport extends BaseReport implements ReportInterface {
         rmk.gui.HtmlReportDialog rpt = new rmk.gui.HtmlReportDialog();
         rpt.exitOnCancel = true;
         rmk.reports.InvoiceReport tst = new rmk.reports.InvoiceReport(42699);
-        System.out.println(tst.getInvoice());
+        ErrorLogger.getInstance().logMessage(""+tst.getInvoice());
         rpt.setReport(tst);
         //    	rpt.setInvoice(60001); // 42496, 44424, 42683, 50000, 42684, 44732, 53163,
         // 53384, 44800, 53483

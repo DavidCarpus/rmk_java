@@ -3,6 +3,7 @@ package rmk.reports;
 import javax.print.attribute.standard.MediaPrintableArea;
 import javax.swing.*;
 
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Customer;
 
 import java.awt.*;
@@ -203,7 +204,7 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
             g2.setFont(originalFont);
         }
         //  	g2.setFont(currFont);
-        //  	System.out.println(this.getClass().getName() + ":"+
+        //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+
         // originalFont.getStyle());
 
 //        outTxt = txt;
@@ -362,7 +363,7 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
 //            paper.setImageableArea((int) dim.getX(), (int) dim.getY(),
 //                    (int) dim.getWidth(), (int) dim.getHeight());
             if(printDestination == ReportInterface.PRINT_TO_SCREEN){
-//                System.out.println(this.getClass().getName() + "Print To Screen...");
+//                ErrorLogger.getInstance().logMessage(this.getClass().getName() + "Print To Screen...");
                 Rectangle dim = getDisplayDim();
                 g.clearRect((int) dim.getX(), (int) dim.getY(), (int) dim
                         .getWidth() + 100, (int) dim.getHeight() + 100);
@@ -371,7 +372,7 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
                         (int) dim.getWidth(), (int) dim.getHeight());
                 
             } else if(printDestination == ReportInterface.PRINT_TO_PRINTER){
-                System.out.println(this.getClass().getName() + "Print To Printer...");
+                ErrorLogger.getInstance().logMessage(this.getClass().getName() + "Print To Printer...");
                 MediaPrintableArea area = Printing.getPrintArea();
                 double convRate = 1.0/72.0;
                 paper.setImageableArea(0.5*convRate, 0.5*convRate,
@@ -391,7 +392,7 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
     //===================================================================
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand().toUpperCase().trim();
-        //  	System.out.println(this.getClass().getName() + ":"+ command);
+        //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ command);
 
         if (command.equals("CANCEL")) { //cancel
             System.exit(0);
@@ -626,7 +627,7 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
 				else if(currSegment.indexOf("I")  > 0)
 					styleMod = ITALIC;
 				else
-					System.out.println("BaseReport:" + "Unknown format" + currSegment);
+					ErrorLogger.getInstance().logMessage("BaseReport:" + "Unknown format" + currSegment);
     			
     			if(currSegment.indexOf("/") > 0){ // end format
     				styleMod = -styleMod;
@@ -660,7 +661,7 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
     public static void main(String args[]) throws Exception {
         String txt = "<B><U>test</U>item</B>message";
         BaseReport tst = new rmk.reports.BladeList();
-        System.out.println(BaseReport.parseFormattedText(txt));
+        ErrorLogger.getInstance().logMessage(""+BaseReport.parseFormattedText(txt));
     }
 }
 

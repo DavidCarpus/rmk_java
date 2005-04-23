@@ -1,5 +1,6 @@
 package rmk.reports;
 
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Customer;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.Address;
@@ -138,7 +139,7 @@ public class ReportDataCust{
 	if(comment != null)  txtRows++;
 
 	String results[][] = new String[txtRows][5];
-//    	System.out.println(this.getClass().getName() + "txtRows:"+ txtRows);
+//    	ErrorLogger.getInstance().logMessage(this.getClass().getName() + "txtRows:"+ txtRows);
 
 	int col=0;
 	int row=0;
@@ -200,7 +201,7 @@ public class ReportDataCust{
 	String comment = entry.getComment();
 	if(comment != null && comment.trim().length() == 0) comment = null;
 	if(comment != null)  txtRows++;
-//      	System.out.println(this.getClass().getName() + "txtRows:"+ txtRows);
+//      	ErrorLogger.getInstance().logMessage(this.getClass().getName() + "txtRows:"+ txtRows);
 
 	String results[][] = new String[txtRows][5];
 	
@@ -427,13 +428,13 @@ public class ReportDataCust{
 	java.util.GregorianCalendar date = new java.util.GregorianCalendar();
 	while(date.get(Calendar.DAY_OF_WEEK) != Calendar.THURSDAY)
 	    date.add(Calendar.DATE,1);
-	System.out.println(date);
+	ErrorLogger.getInstance().logMessage(""+date);
 	date.add(Calendar.DATE,14);
 	Vector invoices = sys.invoiceInfo.getInvoicesByDate("DateShipped", date,date);
 //  	Vector data = ReportDataCustBladeList.getBladeList(invoices);
 
-//  	System.out.println(invoices.size());
-//  	System.out.println(data.size());
+//  	ErrorLogger.getInstance().logMessage(invoices.size());
+//  	ErrorLogger.getInstance().logMessage(data.size());
 //  	rmk.gui.HtmlReportDialog rpt = new rmk.gui.HtmlReportDialog(null, rmk.gui.HtmlReportDialog.INVOICE_REPORT);
 //  //  	rmk.gui.HtmlReportDialog rpt = new rmk.gui.HtmlReportDialog(null, rmk.gui.HtmlReportDialog.ACKNOWLEDGE_REPORT);
 //  	rpt.exitOnCancel=true;
@@ -445,7 +446,7 @@ public class ReportDataCust{
 
 //  	String data[][] = ReportDataCust.getInvoiceItems(invoice);
 //  	int lstHt = getListHeight(fontHeight, 0, data.length/2, data);
-//  	System.out.println(lstHt);
+//  	ErrorLogger.getInstance().logMessage(lstHt);
 	
     }
 //  	setCustomer(sys.getCustomer());

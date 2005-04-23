@@ -7,6 +7,7 @@ import java.awt.event.*;
 import javax.swing.border.EtchedBorder;
 
 import rmk.DataModel;
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Parts;
 
 //===============================================================
@@ -57,13 +58,13 @@ public class PartsFeaturesPanel
 	    notifyListeners(new ActionEvent(this,0,"PartsChange"));
 
 	} else if(command.equals("ADDFEATURE")){ // actually, this is a remove, (code reuse)
-	    System.out.println(this.getClass().getName() + ":"+ "Remove Feature?");
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Remove Feature?");
 
 	} else{
-	    System.out.println(this.getClass().getName() + ":Undefined:" + command + "|");
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
 	    notifyListeners(e);
 	}
-//  	System.out.println(e);   
+//  	ErrorLogger.getInstance().logMessage(e);   
     }
 //-----------------------------------------------------------------
     public void stateChanged(javax.swing.event.ChangeEvent e){	

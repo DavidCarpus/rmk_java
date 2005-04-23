@@ -21,7 +21,7 @@ public class DBGuiModel extends rmk.DBModel{
     }
 
 //      public static void main(String args[]) throws Exception{
-//  	System.out.println(new DBGuiModel());
+//  	ErrorLogger.getInstance().logMessage(new DBGuiModel());
 //      }
 
 }

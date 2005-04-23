@@ -3,6 +3,7 @@ package rmk.gui.ScreenComponents;
 import java.awt.*;
 import java.awt.event.*;
 import carpus.gui.*;
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.Customer;
 import java.util.*;
@@ -137,7 +138,7 @@ implements ActionListener, FocusListener{
 			buttonBar.setButtonLabel(0, "Shipped");
 
 		} else { // Undefined
-			System.out.println(
+			ErrorLogger.getInstance().logMessage(
 				this.getClass().getName() + ":Undefined:" + command + "|");
 		}
 
@@ -156,7 +157,7 @@ implements ActionListener, FocusListener{
 		}
 		setData(model.getInvoiceData());
 		if (data == null || data.size() == 0) {
-			System.out.println(
+			ErrorLogger.getInstance().logMessage(
 				this.getClass().getName() + ":" + "Null data?:" + data);
 			sort = false;
 			buttonBar.enableButton(0, false);

@@ -1,6 +1,8 @@
 package rmk.database.dbobjects;
 import java.sql.*;
 import java.io.*;
+
+import rmk.ErrorLogger;
 import carpus.database.Fixed;
 
 public class PartTypes extends DBObject{
@@ -79,7 +81,7 @@ public class PartTypes extends DBObject{
 	carpus.database.PostgresDB db = new carpus.database.PostgresDB();
 	db.connect();
  	String fileName=Configuration.Config.getDataFileLocation("PartTypes");
-	System.out.println(fileName);
+	ErrorLogger.getInstance().logMessage(fileName);
 	
 	carpus.database.Fixed fixed = new carpus.database.Fixed();
 	BufferedInputStream in = (new BufferedInputStream( new FileInputStream(fileName)));
@@ -91,11 +93,11 @@ public class PartTypes extends DBObject{
 //   && row < 200){
 		lst = fixed.getArray(new String(currInput),lengths);
 //  		fixed.list(lst);
-		System.out.println(fixed.list(lst));
+		ErrorLogger.getInstance().logMessage(fixed.list(lst));
 		PartTypes item = new PartTypes(lst);
  		System.out.print(row);
-   		System.out.println(":" + item);
-		System.out.println(item);		
+   		ErrorLogger.getInstance().logMessage(":" + item);
+		ErrorLogger.getInstance().logMessage(""+item);		
     		java.util.Vector outputLst = new java.util.Vector();
 		outputLst.add(item);
       		if(db.saveItems("PartTypes", outputLst) == null) return;

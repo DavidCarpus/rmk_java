@@ -137,7 +137,7 @@ public class InvoiceItemFeaturesPanel extends JPanel{
 //  	for(int item = 0; item <  items.size(); item++){
 //  	    selectedItems.addElement(items.get(item));
 //  	    InvoiceEntryAdditions addition =  ((ListObject)items.get(item)).getAddition();
-//  //  	    System.out.println(this.getClass().getName() + ":"+ 
+//  //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ 
 //  //  			       sys.partInfo.getPartTypeFromID((int)addition.getPartID()));
 	    
 //  	}

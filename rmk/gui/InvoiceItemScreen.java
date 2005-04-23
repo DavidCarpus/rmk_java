@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
 import rmk.database.dbobjects.Invoice;
@@ -99,7 +100,7 @@ public class InvoiceItemScreen extends Screen{
 
         itemPanel.setData(model);
         
-//      System.out.println(this.getClass().getName() + ":"+ "Change?" +
+//      ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Change?" +
 //      entry.getPrice() + " : " + initialPrice);
         
         int knifeID=0;
@@ -144,11 +145,11 @@ public class InvoiceItemScreen extends Screen{
 	    else{
 		if(match.getAdditionID() != feature.getAdditionID()){ // feature removed and added
 		    results.add(feature);
-//  		    System.out.println(this.getClass().getName() + ":"+ match + ":" + feature);
+//  		    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ match + ":" + feature);
 		}
 		if(match.getEntryID() != feature.getEntryID()){
 		    // Knife change, feature same
-		    System.out.println(this.getClass().getName() + ":"+ "Knife change, feature same");
+		    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Knife change, feature same");
 		    results.add(feature);
 		}
 	    }
@@ -185,7 +186,7 @@ public class InvoiceItemScreen extends Screen{
 
     //==========================================================
     public void internalFrameActivated(javax.swing.event.InternalFrameEvent e) {
-//  	System.out.println(this.getClass().getName() + ":"+ "Window Activated.");
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Window Activated.");
 //  	("Internal frame activated", e);
     }
 
@@ -197,7 +198,7 @@ public class InvoiceItemScreen extends Screen{
         if (command.equals("CANCEL")) { //cancel
 	    defaultCancelAction();
 	} else if (command.equals("INVOICEFEATURECHANGE")) { //INVOICE FEATURE CHANGE
-//  	    System.out.println(this.getClass().getName() + ":INVOICEFEATURECHANGE" );
+//  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":INVOICEFEATURECHANGE" );
 	    buttonBar.enableButton(0,isEdited());
 	} else if (command.equals("ADDFEATURE")) { //INVOICE FEATURE CHANGE
 	    itemPanel.actionPerformed(e);
@@ -207,15 +208,15 @@ public class InvoiceItemScreen extends Screen{
   	} else if (command.equals("SAVE")){
 	    saveData();
 	} else{
-	    System.out.println(this.getClass().getName() + ":" + command);
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command);
 	}
     }
     //==========================================================
     public void saveData() {
         InvoiceEntries possibleNewKnife = itemPanel.getData();
-        //  	System.out.println(this.getClass().getName() + ":"+ "Was ? : " +
+        //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Was ? : " +
         // knife);
-        //  	System.out.println(this.getClass().getName() + ":"+ "Save ? : " +
+        //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Save ? : " +
         // possibleNewKnife);
 
         boolean newknife = false;
@@ -238,10 +239,10 @@ public class InvoiceItemScreen extends Screen{
             invoiceEntries = new Vector();
         
         if (newknife && changedKnife){
-            System.out.println(this.getClass().getName() + ":Remove OLD knife and features.");
+            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Remove OLD knife and features.");
             long idOfOriginal = possibleNewKnife.getInvoiceEntryID();
             sys.invoiceInfo.removeInvoiceEntryAndAdditions(idOfOriginal);
-            System.out.println(this.getClass().getName() + ":" + possibleNewKnife.getInvoice());
+            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + possibleNewKnife.getInvoice());
             
             Vector invData = model.getInvoiceItemsData();
             if(invData.contains(knife)){
@@ -258,7 +259,7 @@ public class InvoiceItemScreen extends Screen{
         
         Vector currentFeatures = model.getInvoiceItemAttributesData();
         if (currentFeatures == null) {
-            System.out.println(this.getClass().getName() + ":"
+            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"
                     + "saveData:currentFeatures == null");
             currentFeatures = new Vector();
         }
@@ -319,7 +320,7 @@ public class InvoiceItemScreen extends Screen{
         currKnife.setFeatures(currentFeatures);
         Configuration.Config.getDB().saveItems("InvoiceEntryAdditions",
                 currentFeatures);
-        //      	System.out.println(this.getClass().getName() +
+        //      	ErrorLogger.getInstance().logMessage(this.getClass().getName() +
         // ":model.setKnifeData:"+ savedInvoiceEntries);
         savedInvoiceEntries.remove(currKnife);
         savedInvoiceEntries.add(currKnife);
@@ -336,7 +337,7 @@ public class InvoiceItemScreen extends Screen{
 	    
         model.addActionListener(this);
 
-        //  	System.out.println(this.getClass().getName() + ":knifeID:"+
+        //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":knifeID:"+
         // knife.getID().longValue());
         itemPanel.setEdited(knife.getID().longValue() == 0);
         buttonBar.enableButton(0, isEdited());

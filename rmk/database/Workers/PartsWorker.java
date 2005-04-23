@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.*;
 
 import java.io.*;
+
+import rmk.ErrorLogger;
 import carpus.database.*;
 
 public class PartsWorker extends DBObjectLoader implements IDBObjectLoader{
@@ -41,7 +43,7 @@ public class PartsWorker extends DBObjectLoader implements IDBObjectLoader{
     // moved to superclass
 
     public String lookup(Connection  cx, String field, String keyValue) throws Exception{
-	System.out.println(this.getClass().getName() + TABLE_NAME + " Lookup");
+	ErrorLogger.getInstance().logMessage(this.getClass().getName() + TABLE_NAME + " Lookup");
 	String qry = "Select " + field + " from "+ TABLE_NAME +" where " + ID_FIELD + " = " + keyValue ;
 
 	Statement stmt  = cx.createStatement();
@@ -75,7 +77,7 @@ public class PartsWorker extends DBObjectLoader implements IDBObjectLoader{
 	    lst = fixed.getArray(currString,rmk.database.dbobjects.Parts.lengths);
 	    rmk.database.dbobjects.Parts item = new rmk.database.dbobjects.Parts(lst);
 	    outputLst.add(item);
-//  	    System.out.println(this.getClass().getName() + item.saveSql((int)item.getPartID()));
+//  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + item.saveSql((int)item.getPartID()));
 
 	    row++;
 	}

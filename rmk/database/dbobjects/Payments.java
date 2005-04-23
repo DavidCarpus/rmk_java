@@ -1,6 +1,8 @@
 package rmk.database.dbobjects;
 import java.sql.*;
 import java.io.*;
+
+import rmk.ErrorLogger;
 import carpus.database.Fixed;
 
 public class Payments extends DBObject{
@@ -128,11 +130,11 @@ setExpirationDate(carpus.util.DateFunctions.gregorianFromJavaDate(recordSet.getD
 //   && row < 200){
 //  	    if(row < 5){
 		lst = fixed.getArray(new String(currInput),lengths);
-		System.out.println(fixed.list(lst));
+		ErrorLogger.getInstance().logMessage(fixed.list(lst));
 		Payments item = new Payments(lst);
   		System.out.print(row);
-    		System.out.println(":" + item.getPaymentID());
-//  		System.out.println(item);		
+    		ErrorLogger.getInstance().logMessage(":" + item.getPaymentID());
+//  		ErrorLogger.getInstance().logMessage(item);		
     		java.util.Vector outputLst = new java.util.Vector();
 		outputLst.add(item);
 //        		if(db.saveItems("Payments", outputLst) == null) return;

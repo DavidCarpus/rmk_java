@@ -8,6 +8,7 @@ import java.util.Vector;
 import java.util.GregorianCalendar;
 
 import rmk.DataModel;
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.Customer;
 import rmk.database.dbobjects.Payments;
@@ -87,7 +88,7 @@ public class InvoicePaymentsScreen extends Screen {
     //------------------------------------------------------------------
     public void setData(DBGuiModel model) {
         this.model = model;
-        //  	System.out.println(model);
+        //  	ErrorLogger.getInstance().logMessage(model);
         customerPnl.setData(model);
         invoiceDetailPnl.setData(model);
         invoicePaymentsPnl.setData(model);
@@ -141,7 +142,7 @@ public class InvoicePaymentsScreen extends Screen {
 
     //==========================================================
     private void removeEntry(long invoice, long paymentID) {
-        System.out.println(this.getClass().getName() + ":removeEntry("
+        ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":removeEntry("
                 + invoice + "," + paymentID + ")");
         Vector outputList = model.getInvoiceData();
         rmk.DataModel sys = rmk.DataModel.getInstance();
@@ -149,7 +150,7 @@ public class InvoicePaymentsScreen extends Screen {
         model.removeActionListener(this);
 
         Vector payments = model.getPaymentsData();
-        //  	    System.out.println(this.getClass().getName() + ": Display: "+
+        //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ": Display: "+
         // e.getID());
 
         for (java.util.Enumeration enum = payments.elements(); enum
@@ -211,7 +212,7 @@ public class InvoicePaymentsScreen extends Screen {
         Invoice invoice = (Invoice) outputList.get(outputList.size() - 1);
         addEntry(invoice.getInvoice(), invoice.getCustomerID());
 
-        //  	System.out.println(this.getClass().getName() + ":"+ "Window
+        //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Window
         // Activated.");
         //  	("Internal frame activated", e);
     }
@@ -222,9 +223,9 @@ public class InvoicePaymentsScreen extends Screen {
 
         // -------------------------
         if (command.equals("CANCEL")) { //cancel
-        //  	    System.out.println(this.getClass().getName() + ":"+ "Cancel");
+        //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Cancel");
             defaultCancelAction();
-            //  	    System.out.println(this.getClass().getName() + ":"+ "Canceled");
+            //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Canceled");
             // -------------------------
         } else if (command.equals("F1")) { //F1 - Panel1
             customerPnl.requestFocus();
@@ -321,7 +322,7 @@ public class InvoicePaymentsScreen extends Screen {
             }
             // -------------------------
         } else { // Undefined
-            System.out.println(this.getClass().getName() + ":" + command + "|");
+            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
         }
     }
 

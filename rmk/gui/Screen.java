@@ -119,7 +119,7 @@ abstract class Screen
 	    ActionListener listener = (ActionListener)enum.nextElement();
 	    listener.actionPerformed(event);
 //  	    if(title.equals("Invoice Item"))
-//  		System.out.println(this.getClass().getName() + ":"+ listener);
+//  		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ listener);
 	    
 	}
     }

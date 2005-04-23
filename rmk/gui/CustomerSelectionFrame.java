@@ -9,6 +9,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
+import rmk.ErrorLogger;
+
 public class CustomerSelectionFrame extends JInternalFrame implements ActionListener {
     Vector listeners=null;
     ArrayList customerList;
@@ -106,7 +108,7 @@ public class CustomerSelectionFrame extends JInternalFrame implements ActionList
 	return results;
     }
     public void actionPerformed(ActionEvent e) {
-//  	System.out.println(e);
+//  	ErrorLogger.getInstance().logMessage(e);
 	String command = e.getActionCommand().toUpperCase();
 	
         if (command.equals("CANCEL")) { //cancel
@@ -120,13 +122,13 @@ public class CustomerSelectionFrame extends JInternalFrame implements ActionList
 		}
 	    }
         } else {
-	    System.out.println(this.getClass().getName() + ":" + command);
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command);
 	}
 	
     }
 
     public void setCustomers(ArrayList lst){
-//  	System.out.println("CustomerSelectionFrame:setCustomers()" + lst.size());
+//  	ErrorLogger.getInstance().logMessage("CustomerSelectionFrame:setCustomers()" + lst.size());
 	this.toFront();
 	
 	customerList = lst;

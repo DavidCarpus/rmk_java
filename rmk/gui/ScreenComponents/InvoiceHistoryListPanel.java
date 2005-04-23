@@ -13,6 +13,7 @@ import java.util.Vector;
 
 import javax.swing.table.TableColumn;
 
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.HistoryItems;
 import rmk.gui.DBGuiModel;
 import carpus.gui.DataListPanel;
@@ -84,7 +85,7 @@ implements ActionListener, FocusListener {
 
 		setData(model.getInvoiceData());
 		if (data == null || data.size() == 0) {
-			System.out.println(
+			ErrorLogger.getInstance().logMessage(
 				this.getClass().getName() + ":" + "Null data?:" + data);
 			sort = false;
 		}
@@ -106,7 +107,7 @@ implements ActionListener, FocusListener {
 		if (command.equals("INVOICEDETAILS") || command.equals("CTRL_ENTERKEY")) {
 			event = new ActionEvent(this, 1, "Details");
 		} else {  // Undefined
-			System.out.println(this.getClass().getName() + ":UndefinedAction:" + command + "|");
+			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":UndefinedAction:" + command + "|");
 		}
 		notifyListeners(event);
 	}

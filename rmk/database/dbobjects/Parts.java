@@ -1,6 +1,8 @@
 package rmk.database.dbobjects;
 import java.sql.*;
 import java.io.*;
+
+import rmk.ErrorLogger;
 import carpus.database.Fixed;
 
 public class Parts extends DBObject{
@@ -158,11 +160,11 @@ public class Parts extends DBObject{
 //  	    if(row < 5){
 		lst = fixed.getArray(new String(currInput),lengths);
 //  		fixed.list(lst);
-		System.out.println(fixed.list(lst));
+		ErrorLogger.getInstance().logMessage(fixed.list(lst));
 		Parts item = new Parts(lst);
  		System.out.print(row);
-   		System.out.println(":" + item);
-		System.out.println(item);		
+   		ErrorLogger.getInstance().logMessage(":" + item);
+		ErrorLogger.getInstance().logMessage(""+item);		
 //      		java.util.Vector outputLst = new java.util.Vector();
 //  		outputLst.add(item);
 //        		if(db.saveItems("Parts", outputLst) == null) return;

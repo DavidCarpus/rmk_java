@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.table.TableColumn;
 
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Parts;
 
 public class PartsListPanel extends carpus.gui.DataListPanel  implements ActionListener{
@@ -43,7 +44,7 @@ public class PartsListPanel extends carpus.gui.DataListPanel  implements ActionL
 	}
 
 	public void doubleClick(){
-//		System.out.println(this.getClass().getName() + ":"+ "selected:" + selectedItem);
+//		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "selected:" + selectedItem);
 	notifyListeners(new ActionEvent(this,(int)selectedItem,"PartsDetails"));
 	}
 	public long selectedItem(int row){
@@ -59,7 +60,7 @@ public class PartsListPanel extends carpus.gui.DataListPanel  implements ActionL
 	if(command.equals("CANCEL")){
 		event = new ActionEvent(this,1,"CANCEL");
 	} else {  // Undefined
-		System.out.println(this.getClass().getName() + ":Undefined:" + command + "|");
+		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
 		}
 	notifyListeners(event);
 	}
@@ -111,7 +112,7 @@ class PartsListTableModel  extends carpus.gui.DataListPanelTableModel {
 		data[i][colIndex++] = new Boolean(item.isDiscountable());
 		data[i][colIndex++] = new Boolean(item.isBladeItem());
 		if(item.getPartCode().equalsIgnoreCase("#1"))
-			System.out.println("Debug");
+			ErrorLogger.getInstance().logMessage("Debug");
 		data[i][colIndex++] = new Boolean(item.askPrice());
 	}
 	}

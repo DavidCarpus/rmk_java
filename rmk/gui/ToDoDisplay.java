@@ -17,6 +17,8 @@ import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 
+import rmk.ErrorLogger;
+
 import java.beans.*; //property change stuff
 import java.awt.*;
 import java.awt.event.*;
@@ -85,7 +87,7 @@ public class ToDoDisplay extends JDialog
 		}
 		if (!gotIt)
 			return;
-		System.out.println(this.getClass().getName() + ":" + helpURL);
+		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + helpURL);
 
 		//		BufferedReader in = new BufferedReader(
 		//							   new StringReader(
@@ -180,7 +182,7 @@ public class ToDoDisplay extends JDialog
 //	"Message";
 	ToDoDisplay dial = new ToDoDisplay(null, txt, "To Do", "");
 		dial.setVisible(true);
-	System.out.println(dial.getText());
+	ErrorLogger.getInstance().logMessage(dial.getText());
 	
 	System.exit(0);
 	}

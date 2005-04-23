@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import carpus.gui.*;
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Address;
 
 public class CustomerAddressPanel extends carpus.gui.DataEntryPanel{
@@ -164,7 +165,7 @@ public class CustomerAddressPanel extends carpus.gui.DataEntryPanel{
 					+ ":\n"
 					+ "Address Missing.",
 				new Exception("Design Error"));
-			System.out.println(
+			ErrorLogger.getInstance().logMessage(
 				this.getClass().getName()
 					+ ":" + rmk.ErrorLogger.getInstance().stkTrace(""));
 

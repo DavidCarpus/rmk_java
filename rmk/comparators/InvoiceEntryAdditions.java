@@ -14,7 +14,7 @@ public class InvoiceEntryAdditions
     int diff;
 
     diff = (int)(entry1.getPartType() - entry2.getPartType());
-//      System.out.println(this.getClass().getName() + ":"+ diff);
+//      ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ diff);
     
     if(diff != 0) return diff;
 

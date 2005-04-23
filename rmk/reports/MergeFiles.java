@@ -7,6 +7,7 @@ import java.text.NumberFormat;
 import javax.swing.*;
 
 import rmk.DataModel;
+import rmk.ErrorLogger;
 import rmk.database.FinancialInfo;
 import rmk.database.dbobjects.Customer;
 import rmk.database.dbobjects.Invoice;
@@ -34,7 +35,7 @@ public class MergeFiles{
 	    return results;
 	Vector data = sys.invoiceInfo.getDealerSpecInvoices(date);
 	if(data == null || data.size() == 0) return "";
-	System.out.println("Got invoices");
+	ErrorLogger.getInstance().logMessage("Got invoices");
 	
 	results += "Invoice|";
 	results += "Estimated|";
@@ -50,7 +51,7 @@ public class MergeFiles{
 	for(java.util.Enumeration enum = data.elements(); enum.hasMoreElements();){
 	    Invoice invoice = (Invoice )enum.nextElement();
 	    boolean dupe = false;
-//  	    System.out.println(invoice.getInvoice());
+//  	    ErrorLogger.getInstance().logMessage(invoice.getInvoice());
 	    
 	    String row[] = getDealerRow(invoice);
 	    if(lastInv != null){
@@ -61,15 +62,15 @@ public class MergeFiles{
 	    if(dupe){
 		int lastCnt = Integer.parseInt(lastRow[11]);
 		int currCnt = Integer.parseInt(row[11]);
-//  		System.out.println("*** dupe cust ***" + lastCnt + ":" + currCnt 
+//  		ErrorLogger.getInstance().logMessage("*** dupe cust ***" + lastCnt + ":" + currCnt 
 		row[11] = ""+(lastCnt + currCnt);
-//  		System.out.println("*** dupe cust ***" + lastRow[0] + ":" + row[0] + " (" + row[11] + ")"
+//  		ErrorLogger.getInstance().logMessage("*** dupe cust ***" + lastRow[0] + ":" + row[0] + " (" + row[11] + ")"
 //  				   + "  **   " + invoice.getCustomerID());
 		lastInv = null;
 	    } 
 
 	    if(lastInv != null){
-//  		System.out.println("add:"+ lastRow[0] + "  " + lastRow[11]);
+//  		ErrorLogger.getInstance().logMessage("add:"+ lastRow[0] + "  " + lastRow[11]);
 		
 		results += addRow(lastRow);
 	    }
@@ -78,11 +79,11 @@ public class MergeFiles{
 	    lastRow = (String[])row.clone();
 	}
 	if(lastInv != null){
-//  	    System.out.println("add:"+ lastRow[0] + "  " + lastRow[11]);
+//  	    ErrorLogger.getInstance().logMessage("add:"+ lastRow[0] + "  " + lastRow[11]);
 	    results += addRow(lastRow);
 	}
 //  	if(lastInv != null){
-//  	    System.out.println("add:"+ lastRow[0]);
+//  	    ErrorLogger.getInstance().logMessage("add:"+ lastRow[0]);
 //  	    results += addRow(lastRow);
 //  	}
 
@@ -109,7 +110,7 @@ public class MergeFiles{
 	int col=0;
 	results[col++] = ""+inv.getInvoice();	
 	Date estDate = inv.getDateEstimated().getTime();
-	System.out.println("MergeFiles:getDealerRow:"+DataModel.db.dateStr(inv.getDateEstimated()));
+	ErrorLogger.getInstance().logMessage("MergeFiles:getDealerRow:"+DataModel.db.dateStr(inv.getDateEstimated()));
 	results[col++] = dateFormatter.format(estDate);
 
 	try {
@@ -271,8 +272,8 @@ public class MergeFiles{
     //--------------------------------------------------------------------------------
     public static void main(String args[]) throws Exception{
 //  //  	getDealerSpecRequestList();
-//      	System.out.println("MergeFiles:main:"+getDealerSpecRequestList());
-        	System.out.println("MergeFiles:main:"+getBalanceDueList());
+//      	ErrorLogger.getInstance().logMessage("MergeFiles:main:"+getDealerSpecRequestList());
+        	ErrorLogger.getInstance().logMessage("MergeFiles:main:"+getBalanceDueList());
 
   	generateMergeFile(MERGE_TYPE_WIERD_BALANCE_DUE, 
   			  Configuration.Config.getMergeFileLocation() + "WierdBalanceDue.txt");

@@ -161,7 +161,7 @@ public class TaxShipped extends TaxOrdered implements ReportInterface {
 	tst.setFormat(ReportDataInvoicesList.FORMAT_TAX_SHIPPED); // FORMAT_TAX_SHIPPED FORMAT_MINIS
 
   	rpt.setReport(tst);
-//    	System.out.println(tst.getInvoice());
+//    	ErrorLogger.getInstance().logMessage(tst.getInvoice());
 //    	rpt.setInvoice(60001); // 42496, 42683, 50000, 42684
   	rpt.setVisible(true);
     }

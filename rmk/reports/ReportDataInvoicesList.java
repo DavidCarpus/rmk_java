@@ -195,9 +195,9 @@ public class ReportDataInvoicesList {
 			listData = new Vector();
 		//  	Vector minis = sys.invoiceInfo.getMiniInvoices();
 		//  	Vector miniCust = getMiniCustomers(minis);
-		System.out.println(this.getClass().getName() + "Get mini Customers.");
+		ErrorLogger.getInstance().logMessage(this.getClass().getName() + "Get mini Customers.");
 		Vector miniCust = sys.customerInfo.getMiniCustomers();
-		System.out.println(this.getClass().getName() + "Got mini Customers.");
+		ErrorLogger.getInstance().logMessage(this.getClass().getName() + "Got mini Customers.");
 		//  	Object inv[] = minis.toArray();
 		//  	Arrays.sort(inv, new rmk.comparators.RptTaxOrdered());
 		//  	int lastCustID=0;
@@ -251,7 +251,7 @@ public class ReportDataInvoicesList {
 		if (cust.getEMailAddress() != null)
 			info[10] += cust.getEMailAddress();
 		results.add(info);
-		//  	System.out.println("Added mini Customer " + cust);
+		//  	ErrorLogger.getInstance().logMessage("Added mini Customer " + cust);
 	}
 	//------------------------------------------------------------------------
 	double getColumnTotal(int col){
@@ -523,11 +523,11 @@ public class ReportDataInvoicesList {
 			this.endDate = new GregorianCalendar(year, month, 1);
 			this.endDate.add(Calendar.MONTH, 1);
 		}
-		//    	System.out.println("SetShipDateS:" + sys.db.dateStr(startDate));
-		//    	System.out.println("SetShipDateE:" + sys.db.dateStr(endDate));
+		//    	ErrorLogger.getInstance().logMessage("SetShipDateS:" + sys.db.dateStr(startDate));
+		//    	ErrorLogger.getInstance().logMessage("SetShipDateE:" + sys.db.dateStr(endDate));
 		invoices = sys.invoiceInfo.getInvoicesByDate("dateestimated",
 				startDate, endDate);
-		//  	System.out.println(invoices.size() + " invoices.");
+		//  	ErrorLogger.getInstance().logMessage(invoices.size() + " invoices.");
 	}
 	//------------------------------------------------------------------------
 	public void setOrderedDate(GregorianCalendar ordered) {
@@ -539,11 +539,11 @@ public class ReportDataInvoicesList {
 		this.endDate = new java.util.GregorianCalendar(year, month, 1);
 		endDate.add(Calendar.MONTH, 1);
 		endDate.add(Calendar.DAY_OF_MONTH, -1);
-		System.out.println(this.getClass().getName() + "Ordered:" + DataModel.db.dateStr(startDate) + ":"
+		ErrorLogger.getInstance().logMessage(this.getClass().getName() + "Ordered:" + DataModel.db.dateStr(startDate) + ":"
 				+ DataModel.db.dateStr(endDate));
 		invoices = sys.invoiceInfo.getInvoicesByDate("dateOrdered", startDate,
 				endDate);
-		System.out.println(this.getClass().getName() + ":invoices.size:"
+		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":invoices.size:"
 				+ invoices.size());
 	}
 	//------------------------------------------------------------------------
@@ -556,11 +556,11 @@ public class ReportDataInvoicesList {
 		this.endDate = new java.util.GregorianCalendar(year, month, 1);
 		endDate.add(Calendar.MONTH, 1);
 		endDate.add(Calendar.DAY_OF_MONTH, -1);
-		System.out.println(this.getClass().getName() + "Shipped:" + DataModel.db.dateStr(startDate) + ":"
+		ErrorLogger.getInstance().logMessage(this.getClass().getName() + "Shipped:" + DataModel.db.dateStr(startDate) + ":"
 				+ DataModel.db.dateStr(endDate));
 		invoices = sys.invoiceInfo.getInvoicesByDate("DateShipped", startDate,
 				endDate);
-		System.out.println(this.getClass().getName() + ":invoices.size:"
+		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":invoices.size:"
 				+ invoices.size());
 	}
 	
@@ -676,7 +676,7 @@ public class ReportDataInvoicesList {
 				}
 			}
 			if(info[4].indexOf("<I>") > 0)
-				System.out.println("Debug");
+				ErrorLogger.getInstance().logMessage("Debug");
 		}
 		return totalQty;
 	}
@@ -754,11 +754,11 @@ public class ReportDataInvoicesList {
 											  // FORMAT_TAX_ORDERED
 		blData.setEstimatedShipDatesRange(date, null);
 //		blData.setOrderedDate(date);
-		System.out.println("Rows:" + blData.getTotalListRows());
+		ErrorLogger.getInstance().logMessage("Rows:" + blData.getTotalListRows());
 		// getBladeList getBalanceDue getTaxShipped, getTaxOrdered getMinis
 		Vector data = blData.getTaxOrdered();
-		//  	System.out.println(invoices.size());
-		//  	System.out.println(data.size());
+		//  	ErrorLogger.getInstance().logMessage(invoices.size());
+		//  	ErrorLogger.getInstance().logMessage(data.size());
 		for (Enumeration enum = data.elements(); enum.hasMoreElements();) {
 			String info[] = (String[]) enum.nextElement();
 			for (int i = 0; i < info.length; i++) {

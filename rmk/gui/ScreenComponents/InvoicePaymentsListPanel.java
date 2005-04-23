@@ -3,6 +3,7 @@ package rmk.gui.ScreenComponents;
 import java.awt.*;
 import java.awt.event.*;
 import carpus.gui.*;
+import rmk.ErrorLogger;
 import rmk.database.FinancialInfo;
 import rmk.database.dbobjects.Payments;
 import java.util.*;
@@ -62,7 +63,7 @@ implements ActionListener{
     public void actionPerformed(ActionEvent e) {
 	String command = e.getActionCommand().toUpperCase();
 	ActionEvent event=null;
-//  	System.out.println(this.getClass().getName() + ":" + command + "|");
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
 
 	if(command.equals("DELETE")){
   	    event = new ActionEvent(this,1,"DELETEPAYMENT");
@@ -73,7 +74,7 @@ implements ActionListener{
 	}else if(command.equals("F1") || command.equals("F2") || command.equals("F3")){
   	    event = e;
 	} else {  // Undefined
-	    System.out.println(this.getClass().getName() + ":Undefined:" + command + "|");
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
         }
 	if(event != null)    notifyListeners(event);
     }

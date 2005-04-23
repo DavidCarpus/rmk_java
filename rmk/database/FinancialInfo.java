@@ -54,7 +54,7 @@ public class FinancialInfo {
         int year = InvoiceInfo.getPricingYear(invoice, customerInfo
                 .isDealer(invoice.getCustomerID()));
         int invPrice = 0;
-        //  	System.out.println(this.getClass().getName() + ":year:"+ year);
+        //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":year:"+ year);
 
         Vector entries = getInvoiceEntries(invoice);
 
@@ -88,8 +88,8 @@ public class FinancialInfo {
         price =  partPrices.getPartPrice(priceYear, (int) entry.getPartID());
 
         entryRetail += price;
-        System.out.println(this.getClass().getName() + "Base :" + entry + ": " + price);
-        //    	System.out.println(this.getClass().getName() + ":"+ price);
+        ErrorLogger.getInstance().logMessage(this.getClass().getName() + "Base :" + entry + ": " + price);
+        //    	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ price);
 
         Vector additions = entry.getFeatures();
         if (additions == null) {
@@ -107,13 +107,13 @@ public class FinancialInfo {
                     .getPartID());
             if (updateFeaturePrices && price != feature.getPrice() && price > 0) {
                 feature.setPrice(price);
-                System.out.println(this.getClass().getName() + "Feature :" + feature + ": " + price);
+                ErrorLogger.getInstance().logMessage(this.getClass().getName() + "Feature :" + feature + ": " + price);
             }
             entryRetail += feature.getPrice();
         }
         entryRetail *= entry.getQuantity();
         if (entryRetail != entry.getPrice()) {
-            //  	    System.out.println(this.getClass().getName() + ":"+ entry + ":
+            //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ entry + ":
             // N:" + entryRetail);
             entry.setPrice(entryRetail);
             changed = true;
@@ -232,7 +232,7 @@ public class FinancialInfo {
             items = invoiceInfo.getInvoiceEntries(invoice.getInvoice());
             if (items == null) items = new Vector();
             invoice.setItems(items);
-            //  	    System.out.println(this.getClass().getName() + ":"+ "got
+            //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "got
             // items");
         }
         for (Enumeration enum = items.elements(); enum.hasMoreElements();) {
@@ -243,7 +243,7 @@ public class FinancialInfo {
         diff = Math.floor(diff * 100 + 0.5) / 100;
         if (diff != 0) { // round to 1 cent
             total = Math.floor(total * 100 + 0.5) / 100;
-            //  	    System.out.println(this.getClass().getName() + ":" + "update db
+            //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + "update db
             // - Invoice.totalretail $" + total );
             try {
                 db.execute("update Invoices set TotalRetail = " + total
@@ -252,10 +252,10 @@ public class FinancialInfo {
                 invoice.setTotalRetail(total);
                 if (!edited) invoice.markSaved();
             } catch (Exception e) {
-                System.out.println(this.getClass().getName() + ":ERR:" + e);
+                ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":ERR:" + e);
             } // end of try-catch
         }
-        //  	System.out.println(this.getClass().getName() + ":"+
+        //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+
         // invoice.getTotalRetail());
 
         return total;
@@ -345,7 +345,7 @@ public class FinancialInfo {
         if (invoice.isShopSale()) return getTaxRateForState("FL");
 
         double percentage = invoice.getTaxPercentage();
-        //  	System.out.println(this.getClass().getName() + ":"+ percentage);
+        //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ percentage);
         if (percentage > 1) percentage /= 100; // make percentage == .xx
         if (percentage != 0) return percentage;
 
@@ -496,7 +496,7 @@ public class FinancialInfo {
         String number = payment.getCheckNumber();
         if (number == null || number.trim().length() == 0) return "CA";
         number = number.toUpperCase();
-        //  	System.out.println(this.getClass().getName() + ":"+ number);
+        //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ number);
 
         if (number.equals("VI") || number.equals("MC") || number.equals("DI"))
                 return number; // cc code, not number
@@ -523,7 +523,7 @@ public class FinancialInfo {
 
         number = removeCardNumberDashes(number);
         number = addCardNumberDashes(number);
-        //  	System.out.println( "isValidCCNumber():number.length():"+
+        //  	ErrorLogger.getInstance().logMessage( "isValidCCNumber():number.length():"+
         // number.length());
 
         if (number.length() < 19) return false; // must be AT LEAST 19
@@ -557,7 +557,7 @@ public class FinancialInfo {
                     && (Character.isWhitespace(original.charAt(0)) || original
                             .charAt(0) == '-'))
                 original = original.substring(1);
-            //  	    System.out.println(results + ":" + original);
+            //  	    ErrorLogger.getInstance().logMessage(results + ":" + original);
         }
         while (original.length() > 0
                 && // get VCode??
@@ -589,7 +589,7 @@ public class FinancialInfo {
         int dashCnt = 0;
         if (original == null) return results;
         while (original.length() > 4 && dashCnt < 3) {
-            //  	    System.out.println(results + ":" + original);
+            //  	    ErrorLogger.getInstance().logMessage(results + ":" + original);
             results += original.substring(0, 4);
             original = original.substring(4);
             results += "-";
@@ -643,7 +643,7 @@ public class FinancialInfo {
         while (st.hasMoreTokens()) {
             curr = st.nextToken();
             tokenLen = curr.length();
-            //  	    System.out.println("curr:" + curr);
+            //  	    ErrorLogger.getInstance().logMessage("curr:" + curr);
             if (tokenLen == 5 || tokenLen == 9 || tokenLen == 10) { // possible zip code
                 tmpStr = curr.substring(0, 5);
                 zip = 0;
@@ -653,15 +653,15 @@ public class FinancialInfo {
                 }
                 if (zip > 0) {
                     if (prev.length() == 2) return prev.toUpperCase();
-                    System.out.println("**zip:" + zip);
-                    System.out.println("**prev:" + prev);
+                    ErrorLogger.getInstance().logMessage("**zip:" + zip);
+                    ErrorLogger.getInstance().logMessage("**prev:" + prev);
                 }
             } else if(curr.equalsIgnoreCase("APO")){
                 return curr;
             }
             prev = curr;
         }
-        //  	System.out.println(this.getClass().getName() + ":"+ shippingInfo);
+        //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ shippingInfo);
         return "UNKNOWN";
     }
 
@@ -703,48 +703,4 @@ public class FinancialInfo {
         return comment;
  
     }
-    //==========================================================
-    //==========================================================
-    //==========================================================
-    public static void main(String args[]) throws Exception {
-        rmk.DataModel sys = rmk.DataModel.getInstance();
-        FinancialInfo fi = sys.financialInfo;
-        //    	System.out.println(fi.getLastCreditCard(23532)); // 78
-        //      	Invoice inv = sys.invoiceInfo.getInvoice(51482);
-        //    	System.out.println(fi.getInvoiceTaxes(inv));
-
-        //        	String cardNum = "1111-2222-3333-4444 vcode 233";
-        String cardNum = "1111-2222-3333-4444  * 233";
-        //      	String cardNum = "1234 5678-9012 3456";
-        //      	cardNum = removeCardNumberDashes(cardNum);
-        //      	cardNum = addCardNumberDashes(cardNum);
-        //    	System.out.println(cardNum);
-        System.out.println(isValidCCNumber(cardNum));
-        System.out.println(getVCode(cardNum));
-        System.out.println(getBaseCCNumber(cardNum));
-
-        //  	System.out.println(fi.getCardExpiration(80000, "1234 5678-9012
-        // 3456*234"));
-        //  	System.out.println(fi.getCardExpiration(80000, "1111 2222 3333
-        // 4444*234"));
-
-        Invoice inv = sys.invoiceInfo.getInvoice(53089);
-        // 41859, 42496, 50101, 50111 42514, 42511, 44827, 44266, 44800
-        //    	System.out.println(fi.getShippingState(inv));
-        //    	System.out.println(fi.getInvoiceTaxRate(inv));
-        //    	System.out.println(fi.getInvoiceDue(inv));
-        //  	System.out.println(fi.recomputeInvoiceRetail(inv));
-
-        //  	System.out.println("FL?:"+ fi.isFloridaState(inv));
-        //  	System.out.println(fi.getInvoiceTaxRate(inv));
-        //    	System.out.println(fi.getTotalInvoiceDiscount(inv));
-        //    	System.out.println(fi.getLastPayment(44266));
-        //    	System.out.println(fi.getPaymentTypeCode(fi.getLastPayment(47929)));
-        // // 44266
-
-        System.out.println("TR:" + fi.getTotalRetail(inv));
-
-        System.exit(0);
-    }
-
 }

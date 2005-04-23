@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
 
+import rmk.ErrorLogger;
+
 public class EntrySearchPanel 
     extends CriteriaPanel
 {
@@ -19,7 +21,7 @@ public class EntrySearchPanel
     public void actionPerformed(ActionEvent e) {
 	String command = e.getActionCommand().toUpperCase();
 
-	System.out.println(this.getClass().getName() + ":Undefined:" + command + "|");
+	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
     }
     //========================================================
     public Vector getCriteria(){

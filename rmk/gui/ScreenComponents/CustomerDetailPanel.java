@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.util.Calendar;
 
 import carpus.gui.*;
+import rmk.ErrorLogger;
 import rmk.database.FinancialInfo;
 import rmk.database.dbobjects.Customer;
 
@@ -163,17 +164,17 @@ public class CustomerDetailPanel
 	    event = new ActionEvent(this, 1, "CUSTOMER DETAIL CHANGED");
 	    //----------------------------------------------------------
   	}else if(command.equals("FLAG_CHANGED")){
-	    System.out.println(this.getClass().getName() + ":" + command + "|");
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
 	    setEdited(true);
 	    event = new ActionEvent(this, 1, "CUSTOMER DETAIL CHANGED");
 	    //----------------------------------------------------------
   	} else {
-	    System.out.println(this.getClass().getName() + ":Undefined:" + command + "|");
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
 	    event = new ActionEvent(this, 1, "CUSTOMER DETAIL CHANGED");
   	}
 
 	if(event != null){
-	    System.out.println(this.getClass().getName() + ":"+ "notify listners");	    
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "notify listners");	    
 	    notifyListeners(event);
 	}
     }
@@ -244,7 +245,7 @@ public class CustomerDetailPanel
 
 		customer.setCreditCardExpiration(expDate);
 	    } catch (Exception e){
-		System.out.println(this.getClass().getName() + ":"+ e);
+		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ e);
 	    } // end of try-catch
 	} else{
 	    customer.setCreditCardExpiration(null);
@@ -324,14 +325,14 @@ public class CustomerDetailPanel
     	java.util.GregorianCalendar expiration = customer.getCreditCardExpiration();
       	java.text.DateFormat format = new java.text.SimpleDateFormat("MM/yyyy");
 
-//  	System.out.println(this.getClass().getName() + ":"+ format.format(expiration.getTime()));
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ format.format(expiration.getTime()));
 
 	format.setLenient(true);
   	((LabeledTextField)txtFields[FIELD_CCEXPIRATION_DATE]).setValue(expiration != null? 
 									""+format.format(expiration.getTime()):"");
 
 //  	String expiration = ((LabeledTextField)txtFields[FIELD_CCEXPIRATION_DATE]).getValue();
-//  	System.out.println(this.getClass().getName() + ":"+ expiration);
+//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ expiration);
 
 	setEdited(false);
     }

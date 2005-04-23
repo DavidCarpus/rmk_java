@@ -106,8 +106,8 @@ public class PartPrices extends DBObject{
 //  		fixed.list(lst);
 //  		PartPrices item = new PartPrices(lst);
 //    		System.out.print(row);
-//      		System.out.println(":" + item);
-//  //  		System.out.println(item);		
+//      		ErrorLogger.getInstance().logMessage(":" + item);
+//  //  		ErrorLogger.getInstance().logMessage(item);		
 //  //      		java.util.Vector outputLst = new java.util.Vector();
 //  //  		outputLst.add(item);
 //  //        		if(db.saveItems("PartPrices", outputLst) == null) return;

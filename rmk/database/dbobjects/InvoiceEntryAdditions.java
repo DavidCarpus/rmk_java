@@ -114,7 +114,7 @@ public class InvoiceEntryAdditions extends DBObject{
 		lst = fixed.getArray(new String(currInput),lengths);
 		fixed.list(lst);
 		InvoiceEntryAdditions item = new InvoiceEntryAdditions(lst);
-//    		System.out.println(row + ":" + item.getAdditionID());
+//    		ErrorLogger.getInstance().logMessage(row + ":" + item.getAdditionID());
 //     		java.util.Vector outputLst = new java.util.Vector();
 //  		outputLst.add(item);
 //     		if(db.saveItems("InvoiceEntryAdditions", outputLst) == null) return;

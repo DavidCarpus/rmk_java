@@ -1,6 +1,7 @@
 package rmk.reports;
 
 import rmk.DataModel;
+import rmk.ErrorLogger;
 import rmk.database.PartInfo;
 import rmk.database.PartPriceTable;
 import rmk.database.dbobjects.Customer;
@@ -232,7 +233,7 @@ public class ReportData {
                 results += "  "
                         + expiredDateFormatter.format(expDate.getTime());
             }
-            //	    System.out.println(this.getClass().getName() + "CC#" + ":"+ results);
+            //	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + "CC#" + ":"+ results);
 
         }
         return results;
@@ -477,7 +478,7 @@ public class ReportData {
             txtRows += commentLines;
         }
 
-        //      	System.out.println(this.getClass().getName() + "txtRows:"+ txtRows);
+        //      	ErrorLogger.getInstance().logMessage(this.getClass().getName() + "txtRows:"+ txtRows);
 
         String results[][] = new String[txtRows][5];
 
@@ -806,7 +807,7 @@ public class ReportData {
                 String part1 = "";
                 part1 = shippingInstr.substring(0, 15);
 
-                //  	    System.out.println(this.getClass().getName() + ":"+
+                //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+
                 // shippingInstr);
 
                 //  	    while(part1.length() < 10 &&
@@ -817,14 +818,14 @@ public class ReportData {
                 //  // else
                 //  	    }
                 //  	    String part2 = shippingInstr.substring(part1.length());
-                //  	    System.out.println(this.getClass().getName() + ":part2:"+
+                //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":part2:"+
                 // part2);
                 results[3] += " " + part1 + "";
             } else {
                 results[3] += " " + shippingInstr + "";
             }
         }
-        //  	System.out.println(this.getClass().getName() + "results[3]:"+
+        //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + "results[3]:"+
         // results[3]);
 
         results[4] += " (" + percentFormat.format(taxPercentage) + ")";
@@ -845,7 +846,7 @@ public class ReportData {
     	    rptDialog.setVisible(true);
     	} catch (Exception ex){
     	    ex.printStackTrace();
-    	    System.out.println(rmk.ErrorLogger.getInstance().stkTrace(ex));
+    	    ErrorLogger.getInstance().logMessage(rmk.ErrorLogger.getInstance().stkTrace(ex));
     	}
 
 //        ReportData rptData = new ReportData();
@@ -855,14 +856,14 @@ public class ReportData {
 //            for(int i=0; i< item.length;i++){
 //                System.out.print(""+item[i] + " " );
 //            }
-//            System.out.println();
+//            ErrorLogger.getInstance().logMessage();
 //        }
         
 //        rmk.DataModel sys = rmk.DataModel.getInstance();
 //        rmk.gui.HtmlReportDialog rpt = new rmk.gui.HtmlReportDialog();
 //        rpt.exitOnCancel = true;
 //        rmk.reports.InvoiceReport tst = new rmk.reports.InvoiceReport(42496);
-//        System.out.println(tst.getInvoice());
+//        ErrorLogger.getInstance().logMessage(tst.getInvoice());
 //        rpt.setReport(tst);
 //        //    	rpt.setInvoice(60001); // 42496, 42683, 50000, 42684, 44732, 53163,
 //        // 53384, 44800, 53483, 44424
@@ -884,14 +885,14 @@ public class ReportData {
         //	}
         //=====================================================
         //// getDealerSpecRequestList();
-        //	  System.out.println(MergeFiles.getBalanceDueList());
-        //		  System.out.println(getBalanceDueList());
+        //	  ErrorLogger.getInstance().logMessage(MergeFiles.getBalanceDueList());
+        //		  ErrorLogger.getInstance().logMessage(getBalanceDueList());
 
         //	  generateMergeFile(MERGE_TYPE_BALANCE_DUE,
         //				Configuration.Config.getMergeFileLocation() + "BalanceDue.txt");
         System.exit(0);
         //  	int lstHt = getListHeight(fontHeight, 0, data.length/2, data);
-        //  	System.out.println(lstHt);
+        //  	ErrorLogger.getInstance().logMessage(lstHt);
 
     }
     //  	setCustomer(sys.getCustomer());
