@@ -1,7 +1,6 @@
 package rmk.database.dbobjects;
 import java.sql.*;
 
-import rmk.ErrorLogger;
 import carpus.database.Fixed;
 
 public class Customer extends DBObject{
@@ -117,7 +116,9 @@ public class Customer extends DBObject{
 	if(getPrefix() != null)  results += getPrefix() + " ";
 	if(getFirstName() != null)  results += getFirstName() + " ";
 	if(getLastName() != null)  results += getLastName() + " ";
-	results += getPhoneNumber();
+	if(isDealer())
+		results += "(DLR)";
+//	results += getPhoneNumber();
 	results += "  " + getDiscount();
 	return "[" + results + "]";
     }
@@ -172,41 +173,6 @@ public class Customer extends DBObject{
 	return deactivateSql("Customers", "CustomerID", id);
     }
 
-//      public static void main(String args[]) throws Exception{
-//  	carpus.database.PostgresDB db = new carpus.database.PostgresDB();
-//  	db.connect();
-
-		
-//  		Customer customer = new Customer(lst);
-//    		System.out.print(row);
-//      		ErrorLogger.getInstance().logMessage(":" + customer.getCustomerID());
-//  //    		customer.transfering = false;
-//  //    		customer.edited=false;
-//  //  		ErrorLogger.getInstance().logMessage(customer.updateSql((int)customer.getCustomer()));
-		
-//      		java.util.ArrayList outputLst = new java.util.ArrayList();
-//  		outputLst.add(customer);
-//        		if(db.saveItems("Customers", outputLst) == null) return;
-//  //    	    }
-//  	    row++;
-//  	}
-//      }
-
-
-
-      public static void main(String args[])
-	throws Exception
-    {
-	carpus.database.DBInterface db = Configuration.Config.getDB();
-  	db.connect();
-	java.util.Vector lst = db.getItems("Customers", "CustomerID = 1005");
-
-      for(int i=0; i < lst.size(); i++){
-	  Customer item = (Customer)lst.get(i);
-	  ErrorLogger.getInstance().logMessage(""+item);      
-      }
-    }
- 
 	/**
 	 * @return
 	 */
