@@ -122,7 +122,19 @@ public class ErrorLogger implements carpus.util.LoggerInterface{
     	}
     	return results.substring(results.indexOf("("));
     }
-    
+    public static String getCallerFunction(){
+    	String results="";
+    	Exception e = new Exception();
+    	StackTraceElement[] trace = e.getStackTrace();
+    	for(int i=2; i< 3; i++){
+    	    String item = ""+trace[i];
+    	    if(!(item.startsWith("java.") || item.startsWith("javax.")  || item.startsWith("sun.")))
+      		if(!(item.startsWith("rmk.DBModel."))){
+    			results += " " + trace[i];
+    		}
+    	}
+    	return results;
+    }   
     public String stkTrace(Exception e){
 	String results="";
 	StackTraceElement[] trace = e.getStackTrace();
@@ -154,7 +166,7 @@ public class ErrorLogger implements carpus.util.LoggerInterface{
 	}
     }
     public void logDebug(String msg){
-    	String mesg = "Debug:" + getCaller() + ":" +  msg ;
+    	String mesg = "Debug:" + getCallerFunction() + ":" +  msg ;
     	log(mesg);
     }
     
