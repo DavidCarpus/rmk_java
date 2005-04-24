@@ -372,7 +372,9 @@ public class Dialogs {
         	return cancelledInvoiceEntry();
         } else if (initialModel.length() <= 0) { // OK'd with blank
         return null; }
-
+        
+        ErrorLogger.getInstance().logDebug("Entered:" + initialModel);
+        
         String modelCode = initialModel.trim();
         if (modelCode.endsWith(",")) // trim off extraneous ,
                 modelCode = modelCode.substring(0, modelCode.length() - 1);

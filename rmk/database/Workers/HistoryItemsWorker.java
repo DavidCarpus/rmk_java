@@ -25,7 +25,7 @@ public class HistoryItemsWorker extends DBObjectLoader implements IDBObjectLoade
 		qry += criteria;
 	    }	
 	    Statement stmt  = cx.createStatement();
-	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + qry);
+//	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + qry);
 	    ResultSet rs = stmt.executeQuery(qry);
 	    rmk.database.dbobjects.HistoryItems object;
 	    while(rs.next()){
