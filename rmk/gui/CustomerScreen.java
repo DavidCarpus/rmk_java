@@ -86,6 +86,27 @@ public class CustomerScreen extends Screen{
 		model.addActionListener(this);
 		this.pack();
 	}
+	public void updateInvPrice(Invoice invoice){
+		if(model.getInvoiceData() != null){
+			Vector invoiceData = model.getInvoiceData();
+            for (java.util.Enumeration enum = invoiceData.elements(); enum
+            .hasMoreElements();) {
+            	Invoice listInvoice=(Invoice) enum.nextElement();
+            	if(listInvoice.getInvoice() == invoice.getInvoice()){
+            		if(listInvoice == invoice){ // same reference
+                		invoicePanel.setData(model);
+            			return;
+            		} else{
+            			invoiceData.remove(listInvoice);
+            			invoiceData.add(invoice);
+                		invoicePanel.setData(model);
+            		}
+            		break;
+            	}
+            }
+		}
+	}
+	
     private void saveData(){
 	carpus.database.DBInterface db = Configuration.Config.getDB();
 	Customer cust = (Customer)custPanel.getData();
@@ -167,6 +188,8 @@ public class CustomerScreen extends Screen{
 				else
 					custAddPanel.grabFocus();
 			}
+			ApplicationMenu.getInstance().pushScreenToTopOfStack(this);
+
 //		  	("Internal frame activated", e);
 	}
 

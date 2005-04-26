@@ -206,8 +206,11 @@ public class InvoiceDetailsScreen extends Screen {
 
 		rmk.gui.IScreen screen = rmk.ScreenController.getInstance()
 				.getCustomerScreen(inv);
-		if (screen != null)
-			((CustomerScreen) screen).setData(model);
+		if (screen != null){
+			((CustomerScreen) screen).updateInvPrice(inv);
+			this.requestFocus();
+//			((CustomerScreen) screen).setData(model);
+		}
 	}
 
 	//==========================================================
@@ -540,6 +543,7 @@ public class InvoiceDetailsScreen extends Screen {
 				}
 			}
 		}
+		ApplicationMenu.getInstance().pushScreenToTopOfStack(this);
 		//  	("Internal frame activated", e);
 	}
 
@@ -672,6 +676,7 @@ public class InvoiceDetailsScreen extends Screen {
 			Invoice inv = (Invoice) invList.get(invList.size() - 1);
 			inv.setItems(items);
 			updatePaymentSummary(inv);
+			this.grabFocus();
 			if (invoiceNumber == 0)
 				invoiceDetailPnl.grabFocus();
 			else

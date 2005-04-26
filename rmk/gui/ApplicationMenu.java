@@ -231,6 +231,26 @@ implements ActionListener
 		
 		return lastScreen;
     }
+    public void pushScreenToTopOfStack(Screen screen){
+    	if(screens.size() <=0 ){
+    		screens.add(screen);
+    		return;
+    	}
+    	
+    	Screen lastScreen = (Screen) screens.get(screens.size() - 1);
+    	for(Enumeration screenList=screens.elements(); screenList.hasMoreElements();){
+    		Screen currScreen = (Screen) screenList.nextElement();
+    		if(currScreen.title == lastScreen.title){
+    			return; // already at top of stack
+    		}
+    		if(currScreen.title == screen.title){
+    			screens.remove(currScreen);
+    			screens.add(currScreen);
+    			return;
+    		}
+    		
+    	}
+    }
     
     public boolean unsavedScreens(){
 		for (Enumeration enum = screens.elements(); enum.hasMoreElements();) {

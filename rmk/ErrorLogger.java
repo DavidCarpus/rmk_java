@@ -165,8 +165,10 @@ public class ErrorLogger implements carpus.util.LoggerInterface{
 	    
 	}
     }
-    public void logDebug(String msg){
+    public void logDebug(String msg, boolean logTrace){
     	String mesg = "Debug:" + getCallerFunction() + ":" +  msg ;
+    	if(logTrace)
+    		mesg += stkTrace("ErrorLogger");
     	log(mesg);
     }
     

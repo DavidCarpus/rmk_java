@@ -373,7 +373,7 @@ public class Dialogs {
         } else if (initialModel.length() <= 0) { // OK'd with blank
         return null; }
         
-        ErrorLogger.getInstance().logDebug("Entered:" + initialModel);
+        ErrorLogger.getInstance().logDebug("Entered:" + initialModel, false);
         
         String modelCode = initialModel.trim();
         if (modelCode.endsWith(",")) // trim off extraneous ,
