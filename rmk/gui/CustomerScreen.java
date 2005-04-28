@@ -197,7 +197,7 @@ public class CustomerScreen extends Screen{
     //==========================================================
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand().toUpperCase().trim();
-        //      	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
+		ErrorLogger.getInstance().logDebugCommand(command);
 
         if (command.equals("CANCEL")) { //cancel
             Vector invList = model.getInvoiceData();

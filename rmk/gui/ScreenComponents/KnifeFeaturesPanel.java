@@ -59,6 +59,7 @@ implements ActionListener
 //-----------------------------------------------------------------
     public void actionPerformed(ActionEvent e) {
 	String command = e.getActionCommand().toUpperCase().trim();
+    ErrorLogger.getInstance().logDebugCommand(command);
 
   	if (command.startsWith("SET_KNIFE_MODEL|")) { //SET_KNIFE_MODEL
 	    int year = Integer.parseInt(command.substring(command.indexOf("|")+1));

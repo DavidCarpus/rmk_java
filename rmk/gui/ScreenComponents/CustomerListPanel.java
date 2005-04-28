@@ -117,6 +117,7 @@ public class CustomerListPanel extends JPanel implements ActionListener{
 
     public void actionPerformed(ActionEvent e) {
 	String command = e.getActionCommand().toUpperCase();
+    ErrorLogger.getInstance().logDebugCommand(command);
 
 	ActionEvent event=null;
 

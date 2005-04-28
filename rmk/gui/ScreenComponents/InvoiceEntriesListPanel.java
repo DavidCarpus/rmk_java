@@ -3,6 +3,7 @@ package rmk.gui.ScreenComponents;
 import java.awt.*;
 import java.awt.event.*;
 import carpus.gui.*;
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
@@ -92,6 +93,7 @@ implements ActionListener, FocusListener{
     //----------------------------------------------------------
     public void actionPerformed(ActionEvent e) {
 	String command = e.getActionCommand().toUpperCase();
+    ErrorLogger.getInstance().logDebugCommand(command);
 
 	ActionEvent event=null;
 

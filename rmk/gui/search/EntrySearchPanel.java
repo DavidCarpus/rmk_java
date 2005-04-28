@@ -20,8 +20,7 @@ public class EntrySearchPanel
     //----------------------------------------------------------
     public void actionPerformed(ActionEvent e) {
 	String command = e.getActionCommand().toUpperCase();
-
-	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
+	ErrorLogger.getInstance().logMessage(":Undefined:" + command + "|");
     }
     //========================================================
     public Vector getCriteria(){

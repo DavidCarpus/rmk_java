@@ -60,6 +60,7 @@ public class InvoiceHistoryScreen extends Screen {
 	 */
 	public void actionPerformed(ActionEvent arg0) {
 		String command = arg0.getActionCommand().toUpperCase().trim();
+        ErrorLogger.getInstance().logDebugCommand(command);
 
 		if (command.equals("CANCEL")) { //cancel
 			defaultCancelAction();

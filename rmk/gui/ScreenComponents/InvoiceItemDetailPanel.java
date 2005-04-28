@@ -126,6 +126,7 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 	//-----------------------------------------------------------------
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand().toUpperCase().trim();
+        ErrorLogger.getInstance().logDebugCommand(command);
 
 		if (command.equals("INVOICEFEATUREREMOVED")) { //removed feature
 			featureChange();

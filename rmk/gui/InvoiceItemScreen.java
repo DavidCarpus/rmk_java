@@ -194,6 +194,7 @@ public class InvoiceItemScreen extends Screen{
     //==========================================================
     public void actionPerformed(ActionEvent e) {
 	String command = e.getActionCommand().toUpperCase().trim();
+	ErrorLogger.getInstance().logDebugCommand(command);
 
         if (command.equals("CANCEL")) { //cancel
 	    defaultCancelAction();

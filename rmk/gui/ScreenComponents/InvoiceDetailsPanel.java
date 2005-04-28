@@ -354,9 +354,11 @@ implements ActionListener
     //========================================================
     public void actionPerformed(ActionEvent e){
         String command = e.getActionCommand().toUpperCase();
+        ErrorLogger.getInstance().logDebugCommand(command);
+
         boolean optionChanged = false;
         ActionEvent event=null;
-//      ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ command);
+        ErrorLogger.getInstance().logDebugCommand(command);
         
         if(command.equals("EDIT NOTES") || command.equals("ADD NOTES")){
             String text = rmk.gui.Dialogs.getEditNote(currentNotes, "Notes", rmk.gui.Dialogs.MAX_LEN_INVOICE_NOTES, true);

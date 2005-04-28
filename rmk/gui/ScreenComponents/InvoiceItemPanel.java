@@ -75,7 +75,8 @@ implements ActionListener,  ListSelectionListener
 //  -----------------------------------------------------------------
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand().toUpperCase().trim();
-        
+        ErrorLogger.getInstance().logDebugCommand(command);
+
         if (command.equals("INVOICEITEMDETAILSCHANGE")) { //INVOICE FEATURE CHANGE
             setEdited(true);
             notifyListeners("INVOICEFEATURECHANGE", this);

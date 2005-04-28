@@ -105,6 +105,7 @@ implements ActionListener, FocusListener{
 	//-------------------------------------------
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand().toUpperCase();
+        ErrorLogger.getInstance().logDebugCommand(command);
 
 		ActionEvent event = null;
 

@@ -551,7 +551,7 @@ public class InvoiceDetailsScreen extends Screen {
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand().toUpperCase().trim();
 		boolean inShippingAddressField=false;
-		//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
+		ErrorLogger.getInstance().logDebugCommand(command);
 
 		//-----------------------------
 		if (command.equals("CANCEL")) { //cancel

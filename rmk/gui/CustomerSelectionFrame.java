@@ -108,9 +108,9 @@ public class CustomerSelectionFrame extends JInternalFrame implements ActionList
 	return results;
     }
     public void actionPerformed(ActionEvent e) {
-//  	ErrorLogger.getInstance().logMessage(e);
 	String command = e.getActionCommand().toUpperCase();
-	
+    ErrorLogger.getInstance().logDebugCommand(command);
+
         if (command.equals("CANCEL")) { //cancel
             this.setVisible(false);
         } else if (command.equals("SELECT")) { //select

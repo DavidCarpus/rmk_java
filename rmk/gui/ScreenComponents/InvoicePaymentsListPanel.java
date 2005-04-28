@@ -62,6 +62,8 @@ implements ActionListener{
     //================================================
     public void actionPerformed(ActionEvent e) {
 	String command = e.getActionCommand().toUpperCase();
+    ErrorLogger.getInstance().logDebugCommand(command);
+
 	ActionEvent event=null;
 //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
 

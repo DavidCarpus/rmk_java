@@ -51,7 +51,8 @@ public class CustomerSelectionScreen extends Screen{
     //==========================================================
     public void actionPerformed(ActionEvent e) {
 	String command = e.getActionCommand().toUpperCase();
-	
+    ErrorLogger.getInstance().logDebugCommand(command);
+
         if (command.equals("CANCEL")) { //cancel
 	    defaultCancelAction();
 	    return;

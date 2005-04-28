@@ -107,7 +107,8 @@ implements ActionListener
 	//-----------------------------------------------------------------
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand().toUpperCase().trim();
-		
+        ErrorLogger.getInstance().logDebugCommand(command);
+
 		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
 		
 		notifyListeners(e);

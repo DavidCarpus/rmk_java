@@ -392,6 +392,8 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
     //===================================================================
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand().toUpperCase().trim();
+        ErrorLogger.getInstance().logDebugCommand(command);
+
         //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ command);
 
         if (command.equals("CANCEL")) { //cancel

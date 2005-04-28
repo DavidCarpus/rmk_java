@@ -5,6 +5,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.border.EtchedBorder;
+
+import rmk.ErrorLogger;
 import rmk.database.dbobjects.Parts;
 import rmk.database.dbobjects.PartPrices;
 
@@ -56,8 +58,10 @@ public class PartsPanel
     }
 //-----------------------------------------------------------------
     public void actionPerformed(ActionEvent e) {
-	String command = e.getActionCommand().toUpperCase().trim();
+	String command = e.getActionCommand().toUpperCase().trim();	
 	if(loading) return;
+    ErrorLogger.getInstance().logDebugCommand(command);
+
 
 	if(command.equals("COMBOBOXCHANGED"))
 	    notifyListeners(new ActionEvent(this,0,"PartsChange"));

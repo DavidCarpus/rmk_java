@@ -41,7 +41,9 @@ public class InvoiceItemFeatureEntryPanel
 //-----------------------------------------------------------------
     public void actionPerformed(ActionEvent e) {
 	String command = e.getActionCommand().toUpperCase().trim();
-        if (command.equals("ENTEREDNEWENTRY")) { //removed feature
+    ErrorLogger.getInstance().logDebugCommand(command);
+
+    if (command.equals("ENTEREDNEWENTRY")) { //removed feature
 	    ActionEvent event = new ActionEvent(this, 0, "EnteredNewEntry-" + field.getText());
 	    field.setText("");
 	    notifyListeners(event);

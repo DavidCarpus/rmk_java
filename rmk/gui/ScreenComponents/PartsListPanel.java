@@ -55,6 +55,8 @@ public class PartsListPanel extends carpus.gui.DataListPanel  implements ActionL
 
 	public void actionPerformed(ActionEvent e) {
 	String command = e.getActionCommand().toUpperCase();
+    ErrorLogger.getInstance().logDebugCommand(command);
+
 	ActionEvent event=null;
 
 	if(command.equals("CANCEL")){

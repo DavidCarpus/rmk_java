@@ -52,6 +52,8 @@ public class PartsFeaturesPanel
 //-----------------------------------------------------------------
     public void actionPerformed(ActionEvent e) {
 	String command = e.getActionCommand().toUpperCase().trim();
+    ErrorLogger.getInstance().logDebugCommand(command);
+
 	if(loading) return;
 
 	if(command.equals("COMBOBOXCHANGED")){
