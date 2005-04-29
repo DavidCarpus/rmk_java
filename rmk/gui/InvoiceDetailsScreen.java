@@ -673,7 +673,14 @@ public class InvoiceDetailsScreen extends Screen {
 			Vector items = model.getInvoiceItemsData();
 			removeBlankItems(items);
 			loadItemList(model);
-			Invoice inv = (Invoice) invList.get(invList.size() - 1);
+			Invoice detailInv = invoiceDetailPnl.getData();
+			Invoice inv=null;
+			for(Enumeration list = invList.elements(); list.hasMoreElements();){
+				inv = (Invoice) list.nextElement();
+				if(inv.getInvoice() == detailInv.getInvoice())
+					break;
+			}
+//			Invoice inv = (Invoice) invList.get(invList.size() - 1);
 			inv.setItems(items);
 			updatePaymentSummary(inv);
 			this.grabFocus();
