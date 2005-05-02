@@ -4,9 +4,12 @@ import java.awt.*;
 import java.awt.event.*;
 import carpus.gui.*;
 import rmk.ErrorLogger;
+import rmk.ScreenController;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
+import rmk.gui.IScreen;
+
 import java.util.*;
 import javax.swing.table.TableColumn;
 
@@ -18,6 +21,8 @@ carpus.gui.DataListPanel
 implements ActionListener, FocusListener{
     Vector invoiceEntriesList;
     boolean expanded = false;
+    IScreen parent = null;
+    
 //==========================================================
 //==========================================================
     public InvoiceEntriesListPanel(){
@@ -88,6 +93,11 @@ implements ActionListener, FocusListener{
 		buttonBar.enableButton(2, true);
 		return val;
     }
+    
+	public void setParent(IScreen screen){
+		parent = screen;
+	}
+
 //==========================================================
 //==========================================================
     //----------------------------------------------------------
@@ -97,23 +107,31 @@ implements ActionListener, FocusListener{
 
 	ActionEvent event=null;
 
-	if(command.equals("INVOICEENTRIESDETAILS")){
-	    event = new ActionEvent(this,1,"InvoiceEntriesDetails-" + selectedItem);
-	} else if(command.equals("CANCEL")){
-	    event = new ActionEvent(this,1,"CANCEL");
-
-	}else if(command.equals("F1") || command.equals("F2") || command.equals("F3")){
-  	    event = e;
+	if(command.equals("F1")){
+		parent.buttonPress(ScreenController.BUTTON_F1, 0);
+		return;
+	}else if(command.equals("F2")){
+		parent.buttonPress(ScreenController.BUTTON_F2, 0);
+		return;
+	}else if(command.equals("F3")){
+		parent.buttonPress(ScreenController.BUTTON_F3, 0);
+		return;						
+	}else if(command.equals("CANCEL")){
+		parent.buttonPress(ScreenController.BUTTON_CANCEL, 0);
+		return;						
 	} else if(command.equals("ADDINVOICEENTRY")){
-	    event = new ActionEvent(this,1,"ADDINVOICEENTRY");
+		parent.buttonPress(ScreenController.BUTTON_ADD, 0);
+		return;
 	} else if(command.equals("EDITINVOICEENTRY") || command.equals("CTRL_ENTERKEY")){
-	    event = new ActionEvent(this,(int)selectedItem,"EDITINVOICEENTRY");
+		parent.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int)selectedItem);
+		return;
 	} else if(command.equals("REMOVEINVOICEENTRY")){
-	    event = new ActionEvent(this,(int)selectedItem,"REMOVEINVOICEENTRY");
+		parent.buttonPress(ScreenController.BUTTON_REMOVE, (int)selectedItem);
+		return;
 	} else {
 	    System.out.println(this.getClass().getName() + ":Undefined:" + command + "|");
 	}
-	notifyListeners(event);
+	ErrorLogger.getInstance().TODO();
     }
 
     //----------------------------------------------------------

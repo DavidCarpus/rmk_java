@@ -14,6 +14,7 @@ import javax.swing.border.EtchedBorder;
 import rmk.ErrorLogger;
 import rmk.database.dbobjects.Customer;
 import rmk.gui.Dialogs;
+import rmk.gui.IScreen;
 
 
 public class CustomerListPanel extends JPanel implements ActionListener{
@@ -24,7 +25,7 @@ public class CustomerListPanel extends JPanel implements ActionListener{
     JTable table;
     long selectedCustomer;
     carpus.gui.BasicToolBar buttonBar;
-
+    IScreen parent = null;
 
     public CustomerListPanel(){
 	setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
@@ -108,6 +109,11 @@ public class CustomerListPanel extends JPanel implements ActionListener{
   	add(buttonBar);	
 //    	setPreferredSize(new Dimension(325,125));
     }
+    
+	public void setParent(IScreen screen){
+		parent = screen;
+	}
+	
     public long getSelectedItemID(){
         return selectedCustomer;
     }

@@ -4,8 +4,11 @@ import java.awt.*;
 import java.awt.event.*;
 import carpus.gui.*;
 import rmk.ErrorLogger;
+import rmk.ScreenController;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.Customer;
+import rmk.gui.IScreen;
+
 import java.util.*;
 import javax.swing.table.TableColumn;
 
@@ -15,6 +18,7 @@ extends
 carpus.gui.DataListPanel
 implements ActionListener, FocusListener{
 	public static final int INVOICE_COL_WIDTH = 48;
+	IScreen parent = null;
     Vector invoiceList;
 
 //    int customerID=0;
@@ -87,10 +91,13 @@ implements ActionListener, FocusListener{
 		add(buttonBar);
 		//    	setPreferredSize(new Dimension(325,125));
 	}
-    
+	public void setParent(IScreen screen){
+		parent = screen;
+	}
 	//-------------------------------------------
 	public void doubleClick() {
-		actionPerformed(new ActionEvent(this, 1, "InvoiceDetails"));
+		parent.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int) getSelectedItemID());
+//		actionPerformed(new ActionEvent(this, 1, "InvoiceDetails"));
 	}
 	//-------------------------------------------
 	public long selectedItem(int row) {
@@ -105,27 +112,16 @@ implements ActionListener, FocusListener{
 	//-------------------------------------------
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand().toUpperCase();
-        ErrorLogger.getInstance().logDebugCommand(command);
 
 		ActionEvent event = null;
 
 		if (command.equals("INVOICEDETAILS") || command.equals("CTRL_ENTERKEY")) {
-			event = new ActionEvent(this, 1, "InvoiceDetails");
-		} else if (command.equals("CANCEL")) {
-			event = new ActionEvent(this, 1, "CANCEL");
-		} else if (
-			command.equals("F1")
-				|| command.equals("F2")
-				|| command.equals("F3")
-				|| command.equals("F11")) {
-			event = e;
-		} else if (command.equals("ADD")) {
-			event = new ActionEvent(this, 1, "ADDINVOICE");
+			parent.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int) getSelectedItemID());
+			return;
 		} else if (command.equals("INVOICE")) {
-			event = new ActionEvent(this, 1, "INVOICEREPORT");
-		} else if (command.equals("PAYMENTS")) { //PaymentInfo Display
-			event = e;
-		} else if (command.equals("SHIPPED")) { //PaymentInfo Display
+			parent.buttonPress(ScreenController.BUTTON_DISPLAY_INVOICE,0);
+			return;
+		}else if (command.equals("SHIPPED")) { //PaymentInfo Display
 			if (buttonBar.getButtonLabel(0).equals("Shipped")) {
 				setData(sys.invoiceInfo.getShippedInvoices(customer));
 				buttonBar.setButtonLabel(0, "Basic");
@@ -133,17 +129,30 @@ implements ActionListener, FocusListener{
 				setData(sys.invoiceInfo.getInitialInvoices(customer));
 				buttonBar.setButtonLabel(0, "Shipped");
 			}
-		} else if (command.equals("RELOAD")) { //PaymentInfo Display
-			model.setInvoiceData(sys.invoiceInfo.getInitialInvoices(customer));
-			setData(model.getInvoiceData());
-			buttonBar.setButtonLabel(0, "Shipped");
-
-		} else { // Undefined
-			ErrorLogger.getInstance().logMessage(
-				this.getClass().getName() + ":Undefined:" + command + "|");
+			return;
+		} else if (command.equals("ADD")) {
+			parent.updateOccured(null,ScreenController.UPDATE_ADD ,null);
+			return;
+		} else if(command.equals("CANCEL")){
+			parent.buttonPress(ScreenController.BUTTON_CANCEL, 0);
+			return;
 		}
-
-		notifyListeners(event);
+		
+		ErrorLogger.getInstance().logDebugCommand(command);
+//		if (command.equals("PAYMENTS")) { //PaymentInfo Display
+//			event = e;
+//
+//		} else if (command.equals("RELOAD")) { //PaymentInfo Display
+//			model.setInvoiceData(sys.invoiceInfo.getInitialInvoices(customer));
+//			setData(model.getInvoiceData());
+//			buttonBar.setButtonLabel(0, "Shipped");
+//
+//		} else { // Undefined
+//			ErrorLogger.getInstance().logMessage(
+//				this.getClass().getName() + ":Undefined:" + command + "|");
+//		}
+//
+//		notifyListeners(event);
 	}
 	//------------------------------------------
 	public void setData(rmk.gui.DBGuiModel model) {
@@ -179,11 +188,6 @@ implements ActionListener, FocusListener{
 
 		setVisible(true);
 	}
-
-	public static void main(String args[]) throws Exception {
-		rmk.gui.Application.main(args);
-	}
-
 }
 	//======================================================
 	//======================================================

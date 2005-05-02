@@ -7,7 +7,8 @@ import java.util.Enumeration;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class BasicToolBar extends JToolBar implements ActionListener {
+public class BasicToolBar extends JToolBar implements ActionListener 
+{
 
     String[] imageFileNames;
 

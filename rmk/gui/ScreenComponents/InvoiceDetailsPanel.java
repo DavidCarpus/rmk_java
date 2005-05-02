@@ -15,6 +15,7 @@ import java.util.GregorianCalendar;
 import carpus.gui.*;
 import carpus.util.DateFunctions;
 import rmk.ErrorLogger;
+import rmk.ScreenController;
 import rmk.database.dbobjects.Invoice;
 
 public class InvoiceDetailsPanel 
@@ -132,8 +133,7 @@ implements ActionListener
         c.gridx++;
         knifeCountButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evnt) {
-                notifyListeners(new ActionEvent(this, 1, "KnifeCounts-" + 
-                        ((LabeledTextField)txtFields[FIELD_DATEESTIMATED]).getValue()));
+            	parent.buttonPress(ScreenController.BUTTON_KNIFE_COUNT,0);
             }
         }
         );
@@ -144,7 +144,7 @@ implements ActionListener
         JPanel financeButtons = new JPanel();
         paymentButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evnt) {
-                notifyListeners(evnt);
+            	parent.buttonPress(ScreenController.BUTTON_F6,0);
             }});
         
         discountButton.addActionListener(this);
@@ -362,10 +362,24 @@ implements ActionListener
         
         if(command.equals("EDIT NOTES") || command.equals("ADD NOTES")){
             String text = rmk.gui.Dialogs.getEditNote(currentNotes, "Notes", rmk.gui.Dialogs.MAX_LEN_INVOICE_NOTES, true);
-            if(text == null) return; // NO change
-            currentNotes = text;    
+            if(text == null || (currentNotes != null && currentNotes.equalsIgnoreCase(text))) return; // NO change
+            if(currentNotes != null && currentNotes.equalsIgnoreCase(text)) return; // NO change
+            currentNotes = text;
+            invoice.setComment(currentNotes);
             notesButton.setToolTipText(text);
-            event = new ActionEvent(this, 1, "INVOICECHANGED");
+//            event = new ActionEvent(this, 1, "INVOICECHANGED");
+            parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
+            return;
+    	}else if(command.equals("F1")){
+    		parent.updateOccured(null,ScreenController.BUTTON_F1, null);
+    		return;
+    	}else if(command.equals("F2")){
+    		parent.updateOccured(null,ScreenController.BUTTON_F2, null);
+    		return;
+    	}else if(command.equals("F3")){
+    		parent.updateOccured(null,ScreenController.BUTTON_F3, null);
+    		return;
+    		
         } else if(command.equals("DISCOUNT")){
             double newDisc = discountPercentage;
             if(newDisc < 1) newDisc *= 100;
@@ -378,23 +392,25 @@ implements ActionListener
                 if(discountPercentage != newDisc){
                     discountPercentage = newDisc;
                     invoice.setDiscountPercentage(discountPercentage);
-                    event = new ActionEvent(this, 1, "INVOICECHANGED");
+                    parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
+//                    event = new ActionEvent(this, 1, "INVOICECHANGED");
                 }
             } catch (Exception err){
             } // end of try-catch
+            return;
             
             //---------------------------------
         } else if(command.equals("SAME SHIP ADDRESS")){
             shipAddressPanel.setVisible(false);
-            event = new ActionEvent(this, 1, "INVOICECHANGED");
-//          taxRate = 0;
+            parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
             optionChanged = true;
+            return;
             //---------------------------------
         } else if(command.equals("SHIPPING ADDRESS")){
             shipAddressPanel.setVisible(true);
-            event = new ActionEvent(this, 1, "INVOICECHANGED");
-//          taxRate = 0;
+            parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
             optionChanged = true;
+            return;
             //---------------------------------
         } else if(command.equals("SHOP SALE")){
             shipAddressPanel.setVisible(false);
@@ -412,12 +428,13 @@ implements ActionListener
             }
             invoice.setShopSale(true);
             updateTaxRate(invoice);
-            event = new ActionEvent(this, 1, "INVOICECHANGED");
+            parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, null);
             optionChanged = true;
             double storedTaxrate = invoice.getTaxPercentage();
             if(storedTaxrate <= 0){
                 taxRate = sys.financialInfo.getInvoiceTaxRate(invoice);
             }
+            return;
         } else if(command.equals("EST_UP_WEEK")){
             adjustEstDate(-7);
             event = new ActionEvent(this, 1, "INVOICECHANGED");
@@ -426,6 +443,7 @@ implements ActionListener
             event = new ActionEvent(this, 1, "INVOICECHANGED");
         } else if(command.equals("TAXRATE")){
             if(taxRate < 1) taxRate *= 100.0;
+            double oldRate = taxRate;
             String reply=JOptionPane.showInputDialog("New Tax Rate?", ""+taxRate);
             if(reply == null || reply.equals("")) return;  // NO change	    
             try {
@@ -435,23 +453,35 @@ implements ActionListener
             } catch (Exception err){
             } // end of try-catch
             if(taxRate > 1) taxRate /= 100.0;
-            event = new ActionEvent(this, 1, "INVOICECHANGED");
+            if(taxRate != oldRate){
+            	invoice.setTaxPercentage(taxRate);
+            	parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);            	
+            }else
+            	ErrorLogger.getInstance().logMessage("TaxRate not changed");
+            return;
+            
         } else if(command.equals("<")){
             GregorianCalendar date = DateFunctions.gregorianFromString(((LabeledTextField)txtFields[FIELD_DATEESTIMATED]).getValue());
             date.add(GregorianCalendar.WEEK_OF_YEAR, -1);
             ((LabeledTextField)txtFields[FIELD_DATEESTIMATED]).setValue(
                     dateFormatter.format(date.getTime()));
-            event = new ActionEvent(this, 1, "INVOICECHANGED");
+            invoice.setDateEstimated(date);
+            parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
+            return;
+//            event = new ActionEvent(this, 1, "INVOICECHANGED");
         } else if(command.equals(">")){
             GregorianCalendar date = DateFunctions.gregorianFromString(((LabeledTextField)txtFields[FIELD_DATEESTIMATED]).getValue());
             date.add(GregorianCalendar.WEEK_OF_YEAR, 1);
             ((LabeledTextField)txtFields[FIELD_DATEESTIMATED]).setValue(
                     dateFormatter.format(date.getTime()));
-            event = new ActionEvent(this, 1, "INVOICECHANGED");
-        } else {
-            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
+            invoice.setDateEstimated(date);
+//            event = new ActionEvent(this, 1, "INVOICECHANGED");
+            parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
+            return;
         }
-        notifyListeners(event);
+        
+        ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
+        ErrorLogger.getInstance().TODO();
     }
     //--------------------------------------------------------
     void adjustEstDate(int days){
@@ -541,7 +571,8 @@ implements ActionListener
         setData((carpus.database.DBObject)(Invoice )invoice);
         invoice.setDiscountPercentage(discountPercentage);
         updatePaymentInfo(invoice);
-        
+        setPrimaryDataItem(invoice);
+
         paymentButton.setEnabled((invoice.getInvoice() != 0));
 //      // paymentButton not relevent if invoice hasn't been saved
 //      } else{
@@ -613,7 +644,10 @@ implements ActionListener
         
         if(updateTaxRate(invoice)){
             setEdited(true);
-            notifyListeners(new ActionEvent(this, 1, "INVOICECHANGED"));
+            setPrimaryDataItem(invoice);
+            if(! loading)
+            	editingOccured();
+//            notifyListeners(new ActionEvent(this, 1, "INVOICECHANGED"));
         }
         
         discountPercentage = invoice.getDiscountPercentage();

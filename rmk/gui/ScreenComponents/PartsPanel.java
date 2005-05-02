@@ -4,11 +4,15 @@ import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Vector;
+
 import javax.swing.border.EtchedBorder;
 
 import rmk.ErrorLogger;
+import rmk.ScreenController;
 import rmk.database.dbobjects.Parts;
 import rmk.database.dbobjects.PartPrices;
+import rmk.gui.IScreen;
 
 import carpus.gui.*;
 
@@ -19,6 +23,7 @@ public class PartsPanel
     implements ActionListener, ChangeListener
 //===============================================================
 {
+	Vector listeners=null;
     rmk.DataModel sys = rmk.DataModel.getInstance();
     Parts part;
     boolean loading = false;
@@ -38,7 +43,8 @@ public class PartsPanel
     JComponent[] txtFields = new JComponent[3];
     JPanel subPanels[] = new JPanel[3];
     PartPricePanel pricePanel = new PartPricePanel();
-
+    protected IScreen parent=null;
+    
 //-----------------------------------------------------------------
     public PartsPanel(){
 	subPanels[0] = descPanel();
@@ -56,32 +62,33 @@ public class PartsPanel
 //        	setPreferredSize(new Dimension(40,240));
       	setPreferredSize(new Dimension(140,220));
     }
+    
+    public void setParent(IScreen screen){
+    	parent = screen;
+    	pricePanel.setParent(parent);
+    }
 //-----------------------------------------------------------------
     public void actionPerformed(ActionEvent e) {
-	String command = e.getActionCommand().toUpperCase().trim();	
-	if(loading) return;
-    ErrorLogger.getInstance().logDebugCommand(command);
-
-
-	if(command.equals("COMBOBOXCHANGED"))
-	    notifyListeners(new ActionEvent(this,0,"PartsChange"));
-	else
-	    notifyListeners(e);
-//  	System.out.println(this.getClass().getName() + ":Undefined:" + command + "|");
-//  	System.out.println(e);   
+    	String command = e.getActionCommand().toUpperCase().trim();	
+    	if(loading) return;
+    	if(command.equalsIgnoreCase("COMBOBOXCHANGED")){
+    		parent.updateOccured(null,ScreenController.UPDATE_EDIT,null);
+    		return;
+    	}
+    	ErrorLogger.getInstance().logDebugCommand(command);
     }
+
 //-----------------------------------------------------------------
     public boolean pricesEdited(){
-	return pricePanel.isEdited();
+    	return pricePanel.isEdited();
     }
     public boolean isEdited(){
-	return super.isEdited() || pricesEdited();
+    	return super.isEdited() || pricesEdited();
     }
 //-----------------------------------------------------------------
     public void stateChanged(javax.swing.event.ChangeEvent e){	
 	if(!loading){
-	    ActionEvent event = new ActionEvent(this,1,"PartsChange");
-	    notifyListeners(event);
+		parent.updateOccured(null,ScreenController.UPDATE_EDIT,null);
 	}
     }
     public PartPrices getPriceChange(){	
@@ -98,6 +105,8 @@ public class PartsPanel
 	part.setActive( active.isSelected());
 	part.setAskPrice(askPrice.isSelected());
 
+	setPrimaryDataItem(part);
+	
 	int ptype = sys.partInfo.getPartTypeID(""+partTypes.getSelectedItem());
 	part.setPartType(ptype);
 	return part;
@@ -189,30 +198,36 @@ public class PartsPanel
 	pnl = new JPanel();
 	pnl.add(new JLabel("Discountable"));
 	pnl.add(discountable);
+	discountable.setRolloverEnabled(false);
 	results.add(pnl);
 
 	pnl = new JPanel();
 	pnl.add(new JLabel("Blade Item"));
 	pnl.add(bladeItem);
+	bladeItem.setRolloverEnabled(false);
 	results.add(pnl);
 
 	pnl = new JPanel();
 	pnl.add(new JLabel("Taxable" ));
 	pnl.add(taxable);
+	taxable.setRolloverEnabled(false);
 	results.add(pnl);
 
 	pnl = new JPanel();
 	pnl.add(new JLabel("Sheath"));
 	pnl.add(sheath);
+	sheath.setRolloverEnabled(false);
 	results.add(pnl);
 	
 	pnl = new JPanel();
 	pnl.add(new JLabel("Active"));
+	active.setRolloverEnabled(false);
 	pnl.add(active);
 	results.add(pnl);
 	
 	pnl = new JPanel();
 	pnl.add(new JLabel("Ask Price"));
+	askPrice.setRolloverEnabled(false);
 	pnl.add(askPrice);
 	results.add(pnl);
 	
@@ -228,10 +243,4 @@ public class PartsPanel
 
 	return results;
     }
-
-//-----------------------------------------------------------------
-//-----------------------------------------------------------------
-      public static void main(String args[]) throws Exception{
-  	rmk.gui.Application.main(args);
-      }
 }

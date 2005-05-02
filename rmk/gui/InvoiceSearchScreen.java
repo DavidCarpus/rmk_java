@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.event.InternalFrameEvent;
 
 import rmk.ErrorLogger;
+import rmk.database.dbobjects.DBObject;
 
 import carpus.gui.BasicToolBar;
 import carpus.gui.DataEntryPanel;
@@ -59,7 +60,7 @@ public class InvoiceSearchScreen extends Screen {
 			     new String[] {"Search", "Cancel"},
 			     new String[] {"Search", "Cancel"});
 		buttonBar.getButton(0).setForeground(DK_GREEN);
-		buttonBar.addActionListener(this);
+		ButtonBarTranslator translator = new ButtonBarTranslator(this, buttonBar);
 		buttonBar.setLayout( new FlowLayout(FlowLayout.CENTER));
 		buttonBar.enableButton(0, edited);
 		
@@ -69,8 +70,16 @@ public class InvoiceSearchScreen extends Screen {
 
 	}
 
+    //==========================================================
 	public void actionPerformed(ActionEvent e) {
-		String command = e.getActionCommand().toUpperCase().trim();
+		if(!processHotKeys(e)){
+			ErrorLogger.getInstance().TODO();
+		}
+	}
+    //==========================================================
+	public void processCommand(String command, Object from){
+//	    public void actionPerformed(ActionEvent e) {
+//		String command = e.getActionCommand().toUpperCase().trim();
         ErrorLogger.getInstance().logDebugCommand(command);
 
 		//-----------------------------
@@ -96,23 +105,21 @@ public class InvoiceSearchScreen extends Screen {
 	}
 
 	public void internalFrameActivated(InternalFrameEvent arg0) {
-		// TODO Auto-generated method stub
+		ErrorLogger.getInstance().TODO();
 	}
 
 	public boolean isEdited() {
-		// TODO Auto-generated method stub
 		return edited;
 	}
 
 	public void setData(DBGuiModel model) {
-		// TODO Auto-generated method stub
-
+		ErrorLogger.getInstance().TODO();
 	}
 	
 
 	JPanel getDatePanel(){
 		DatePanel datePanel = new DatePanel();
-		datePanel.addActionListener(this);
+		datePanel.setParent(this);
 		return datePanel;
 	}
 	
@@ -179,6 +186,17 @@ public class InvoiceSearchScreen extends Screen {
 		
 		return results;
 	}
+
+	
+    public void updateOccured(DBObject itemChanged, int changeType, DBObject parentItem){
+		ErrorLogger.getInstance().TODO();
+     }
+    
+	public void buttonPress(int button, int id) {
+		ErrorLogger.getInstance().TODO();
+	}
+	
+
 	
 	class DatePanel extends DataEntryPanel{
 
@@ -214,42 +232,52 @@ public class InvoiceSearchScreen extends Screen {
 		 * @see carpus.gui.DataEntryPanel#actionPerformed(java.awt.event.ActionEvent)
 		 */
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-		    notifyListeners(e);
+			ErrorLogger.getInstance().TODO();
+//		    notifyListeners(e);
 		}
 		
+
 		class FieldEditCheck extends KeyAdapter{
 		    String msg="";
 		    DataEntryPanel pnl;
-
 		    FieldEditCheck(String message, DataEntryPanel panel){
-		    	pnl = panel;
-		    	msg = message;
+			pnl = panel;
+			msg = message;
 		    }
 		    public void keyTyped(KeyEvent e){
-		    	if(e.isControlDown()) // ctrl key was held ... Not processes here
-		    		return;
-		    	pnl.notifyListeners(msg, pnl);
-		    	pnl.setEdited(true);
+//		    	System.out.println(this.getClass().getName() + ":keyTyped:" + e);
+			if(e.isControlDown()) // ctrl key was held ... Not processes here
+			    return;
+			if (!pnl.isEdited() && !e.isAltDown()){
+//		  	    System.out.println(this.getClass().getName() + ":keyTyped:" + e);
+				pnl.editingOccured();
+//			    pnl.notifyListeners(msg, pnl);
+			    pnl.setEdited(true);
+			}
+			if(e.isAltDown()){
+//		  	    System.out.println(this.getClass().getName() + ":keyTyped:" + e);
+			}
 		    }
 		    public void keyPressed(KeyEvent e){
 			int code = e.getKeyCode();
 			
 			if(code == KeyEvent.VK_ESCAPE){
 			    //Key pressed is the Escape key. Hide this Dialog.
-			    pnl.notifyListeners("Cancel", pnl);
+				pnl.cancelUpdate();
+//			    pnl.notifyListeners("Cancel", pnl);
 			} else if(code == KeyEvent.VK_ENTER){
 			    //Key pressed is the Enter key. 
 			    if(e.isControlDown())
-				pnl.notifyListeners("CTRL_ENTERKEY", pnl);
+					pnl.saveUpdate();
+//				pnl.notifyListeners("CTRL_ENTERKEY", pnl);
 			    else
-				pnl.notifyListeners("ENTERKEY", pnl);
+			    	pnl.performEnterAction();
+//				pnl.notifyListeners("ENTERKEY", pnl);
 			//  } else if(code == KeyEvent.VK_ENTER){
 //		  	    //Key pressed is the Enter key. 
 //		    	    pnl.notifyListeners("ENTERKEY", pnl);
-			}
+		  	}
 		    }
-		    
 		}
 	}
 	

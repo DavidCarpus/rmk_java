@@ -1,8 +1,8 @@
 package rmk;
 
 import java.util.Vector;
-import java.util.Enumeration;
-import java.awt.event.ActionListener;
+//import java.util.Enumeration;
+//import java.awt.event.ActionListener;
 
 public class DBModel{
     public static final int CUSTOMER_DATA = 0;
@@ -89,30 +89,30 @@ public class DBModel{
     }
 
 //-----------------------------------------------------------------
-    public void addActionListener(java.awt.event.ActionListener listener){
-	if(listeners == null) listeners = new Vector();
-	if(!listeners.contains(listener)) listeners.addElement(listener);
-    }
-    public void removeActionListener(java.awt.event.ActionListener listener){
-	if(listeners == null) return;
-	listeners.remove(listener);
-    }
-
-    private void notifyListeners(String msg){
-	if(listeners == null) return;
-	notifyListeners(new java.awt.event.ActionEvent(this,1,msg));
-    }
-    private void notifyListeners(String msg, carpus.gui.DataEntryPanel panel){
-	if(listeners == null) return;
-	notifyListeners(new java.awt.event.ActionEvent(panel,1,msg));
-    }
-    private void notifyListeners(java.awt.event.ActionEvent event){
-	if(listeners == null) return;
-	for(Enumeration enum=listeners.elements(); enum.hasMoreElements();){
-	    ActionListener listener = (ActionListener)enum.nextElement();
-//      	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":notify:" + listener);
-	    listener.actionPerformed(event);
-	}
-    }
+//    public void addActionListener(java.awt.event.ActionListener listener){
+//	if(listeners == null) listeners = new Vector();
+//	if(!listeners.contains(listener)) listeners.addElement(listener);
+//    }
+//    public void removeActionListener(java.awt.event.ActionListener listener){
+//	if(listeners == null) return;
+//	listeners.remove(listener);
+//    }
+//
+//    private void notifyListeners(String msg){
+//	if(listeners == null) return;
+//	notifyListeners(new java.awt.event.ActionEvent(this,1,msg));
+//    }
+//    private void notifyListeners(String msg, carpus.gui.DataEntryPanel panel){
+//	if(listeners == null) return;
+//	notifyListeners(new java.awt.event.ActionEvent(panel,1,msg));
+//    }
+//    private void notifyListeners(java.awt.event.ActionEvent event){
+//	if(listeners == null) return;
+//	for(Enumeration enum=listeners.elements(); enum.hasMoreElements();){
+//	    ActionListener listener = (ActionListener)enum.nextElement();
+////      	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":notify:" + listener);
+//	    listener.actionPerformed(event);
+//	}
+//    }
 //-----------------------------------------------------------------
 }

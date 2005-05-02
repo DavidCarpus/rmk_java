@@ -5,12 +5,15 @@ import java.util.*;
 import javax.swing.table.TableColumn;
 
 import rmk.ErrorLogger;
+import rmk.ScreenController;
 import rmk.database.dbobjects.Parts;
+import rmk.gui.IScreen;
 
 public class PartsListPanel extends carpus.gui.DataListPanel  implements ActionListener{
 	Vector partsList;
 	rmk.DataModel sys = rmk.DataModel.getInstance();
-
+	IScreen parent=null;
+	
 	public PartsListPanel(){
 		dataModel = new PartsListTableModel(partsList);
 	addTable(dataModel);
@@ -43,14 +46,20 @@ public class PartsListPanel extends carpus.gui.DataListPanel  implements ActionL
 	buttonBar = null;
 	}
 
-	public void doubleClick(){
-//		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "selected:" + selectedItem);
-	notifyListeners(new ActionEvent(this,(int)selectedItem,"PartsDetails"));
+
+	public void setParent(IScreen screen){
+		parent = screen;
 	}
+	
+	public void doubleClick(){
+		//		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "selected:" + selectedItem);
+		notifyListeners(new ActionEvent(this,(int)selectedItem,"PartsDetails"));
+	}
+	
 	public long selectedItem(int row){
-	long val = ((Long)sorter.getValueAt(row,1)).longValue();
-	notifyListeners(new ActionEvent(this, (int)val, "PartsDetails"));
-	return val;
+		long val = ((Long)sorter.getValueAt(row,1)).longValue();
+		parent.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int)val );
+		return val;
 	}
 
 	public void actionPerformed(ActionEvent e) {

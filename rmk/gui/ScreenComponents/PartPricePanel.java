@@ -3,6 +3,8 @@ package rmk.gui.ScreenComponents;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Vector;
+
 import javax.swing.border.EtchedBorder;
 
 import rmk.ErrorLogger;
@@ -18,6 +20,7 @@ extends carpus.gui.DataEntryPanel
 implements ActionListener
 //===============================================================
 {
+	Vector listeners=null;
 	JComponent[] txtFields = new JComponent[1];
 	JTextField[] pastPrices = new JTextField[rmk.database.PartPriceTable.getMaxYear()-rmk.database.PartPriceTable.getMinYear()+1];
 	JComboBox years = new JComboBox();
@@ -84,6 +87,7 @@ implements ActionListener
 		} catch (Exception e) {
 			ErrorLogger.getInstance().logError("Setting PartPricePanel Data", e);
 		}
+		setPrimaryDataItem(new PartPrices(0));
 		setEdited(false);
 		loading = false;
 	}
@@ -104,6 +108,10 @@ implements ActionListener
 		price.setPrice(newPrice);
 		return price;
 	}
+	  public void addActionListener(ActionListener listener){
+		if(listeners == null) listeners = new Vector();
+		if(!listeners.contains(listener)) listeners.addElement(listener);
+	    }
 	//-----------------------------------------------------------------
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand().toUpperCase().trim();
@@ -111,7 +119,10 @@ implements ActionListener
 
 		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
 		
-		notifyListeners(e);
+		//TODO: Neet to go through parent screen with messages
+		//		notifyListeners(e);
+		
+		
 		//  	saveButton.setEnabled(true);
 		//  	ErrorLogger.getInstance().logMessage(e);   
 	}

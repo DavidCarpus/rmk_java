@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import rmk.ErrorLogger;
+import rmk.ScreenController;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
@@ -13,6 +14,7 @@ import java.text.NumberFormat;
 import java.util.Vector;
 import carpus.gui.*;
 import rmk.gui.DBGuiModel;
+import rmk.gui.IScreen;
 
 //===============================================================
 //===============================================================
@@ -47,7 +49,8 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 	JTextPane comments = new JTextPane();
 
 	rmk.database.PartPriceTable priceTable = rmk.DataModel.getInstance().pricetable;
-
+	InvoiceItemFeatureEntryPanel entryPanel = new InvoiceItemFeatureEntryPanel();
+	
 	//-----------------------------------------------------------------
 	public InvoiceItemDetailPanel() {
 		//    	fieldPanel.setBackground(Color.BLUE);
@@ -106,10 +109,10 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 		//---------------------------------
 
 		JPanel featurePanel = new JPanel();
-		featurePanel.add(selectionPanel);
-		InvoiceItemFeatureEntryPanel entryPanel = new InvoiceItemFeatureEntryPanel();
+		featurePanel.add(selectionPanel);		
 		featurePanel.add(entryPanel);
-		entryPanel.addActionListener(this);
+		// TODO: Need to go through parent screen with messages
+//		entryPanel.setParent(this);
 
 		mainPanel.add(featurePanel);
 		//---------------------------------
@@ -122,12 +125,24 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 		setFieldEditCheck(txtFields, "InvoiceItemDetailsChange", this);
 		setPreferredSize(new Dimension(250, 300));
 	}
+	
+	public void setParent(IScreen screen){
+		entryPanel.setParent(screen);
+		selectionPanel.setParent(screen);
+		parent=screen;
+	}
 
 	//-----------------------------------------------------------------
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand().toUpperCase().trim();
         ErrorLogger.getInstance().logDebugCommand(command);
 
+        if (command.equals("QUANTITY_CHANGED")){
+        	featureChange();
+        	parent.updateOccured(knife,ScreenController.UPDATE_EDIT, null);
+        	return;
+        }
+        		
 		if (command.equals("INVOICEFEATUREREMOVED")) { //removed feature
 			featureChange();
 		} else if (command.equals("INVOICEFEATUREADDED")) { // added feature
@@ -182,15 +197,16 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:"
 					+ command + "|" + e);
 		}
+		ErrorLogger.getInstance().TODO();
 	}
 
 	//-----------------------------------------------------------------
-	public void featureChange() {
+	public boolean featureChange() {
 		if (loading)
-			return;
+			return false;
 
 		if (knife == null)
-			return;
+			return false;
 
 		long partID = knife.getPartID();
 		txtFields[FIELD_MODEL].setValue(sys.partInfo.getPartCodeFromID(partID));
@@ -206,15 +222,21 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 		double total = price * quantity;
 		if (oldTotal > 0 && oldTotal != total
 				&& !rmk.gui.Dialogs.yesConfirm("Update Price?"))
-			return;
+			return false;
 		//  	price += selectionPanel.getFeaturesTotalCosts(discountPercentage);
 		txtFields[FIELD_PRICE].setValue("" + total);
-		notifyListeners("InvoiceItemDetailsChange");
+		return true;
 	}
 
 	//-----------------------------------------------------------------
-	public void addFeature(InvoiceEntryAdditions newFeature) {
-		selectionPanel.addFeature(newFeature);
+	public boolean addFeature(InvoiceEntryAdditions newFeature) {
+		if(selectionPanel.addFeature(newFeature)){
+			featureChange();
+			return true;
+		} else{
+//			featureChange();
+			return false;
+		}
 	}
 
 	//-----------------------------------------------------------------

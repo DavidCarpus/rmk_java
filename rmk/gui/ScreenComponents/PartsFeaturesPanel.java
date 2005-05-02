@@ -28,20 +28,13 @@ public class PartsFeaturesPanel
 //-----------------------------------------------------------------
     public PartsFeaturesPanel(){
 	add(new JLabel("Valid Features"));
-//  	subPanels[0] = descPanel();
-//  	add(subPanels[0]);
-//  	subPanels[1] = pricePanel;
-//  	add(subPanels[1]);
-//    	subPanels[2] = ynPanel();
-//  	add(subPanels[2]);
-//  	pricePanel.addActionListener(this);
-//  	partTypes.addActionListener(this);
+
 	add(features);
 	features.setPreferredSize(new Dimension(300,100));
       	BoxLayout layout = new BoxLayout(this,BoxLayout.Y_AXIS);
 	setLayout(layout);
 	features.setBackground(Color.YELLOW);
-	features.addActionListener(this);
+//	features.addActionListener(this);
 
 	setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 	
@@ -57,14 +50,16 @@ public class PartsFeaturesPanel
 	if(loading) return;
 
 	if(command.equals("COMBOBOXCHANGED")){
-	    notifyListeners(new ActionEvent(this,0,"PartsChange"));
+		//TODO: Neet to go through parent screen with messages
+		//	    notifyListeners(new ActionEvent(this,0,"PartsChange"));
 
 	} else if(command.equals("ADDFEATURE")){ // actually, this is a remove, (code reuse)
 	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Remove Feature?");
 
 	} else{
 	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
-	    notifyListeners(e);
+		//TODO: Neet to go through parent screen with messages
+	    //	    notifyListeners(e);
 	}
 //  	ErrorLogger.getInstance().logMessage(e);   
     }
@@ -72,7 +67,8 @@ public class PartsFeaturesPanel
     public void stateChanged(javax.swing.event.ChangeEvent e){	
 	if(!loading){
 	    ActionEvent event = new ActionEvent(this,1,"PartsChange");
-	    notifyListeners(event);
+		//TODO: Neet to go through parent screen with messages
+	    //	    notifyListeners(event);
 	}
     }
 //-----------------------------------------------------------------
@@ -89,11 +85,5 @@ public class PartsFeaturesPanel
 	}
 	loading = false;
     }
-//-----------------------------------------------------------------
 
-//-----------------------------------------------------------------
-//-----------------------------------------------------------------
-      public static void main(String args[]) throws Exception{
-  	rmk.gui.Application.main(args);
-      }
 }

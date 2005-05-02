@@ -3,10 +3,13 @@ package rmk.gui;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
 import java.util.Vector;
 
 import rmk.ErrorLogger;
+import rmk.ScreenController;
+import rmk.SignalProcessor;
+import rmk.database.dbobjects.DBObject;
 import rmk.database.dbobjects.Parts;
 import rmk.database.dbobjects.PartPrices;
 
@@ -29,19 +32,22 @@ public class PartsScreen extends Screen{
 
 
 	partPnl = new rmk.gui.ScreenComponents.PartsPanel();
-	partPnl.addActionListener(this);
+	partPnl.setParent(this);
 	partPnl.setEnabled(false);
+	partPnl.setParent(this);
   	getContentPane().add(partPnl);
 
 	featuresPnl = new rmk.gui.ScreenComponents.PartsFeaturesPanel();
-	featuresPnl.addActionListener(this);
+	featuresPnl.setParent(this);
 	featuresPnl.setEnabled(false);
   	getContentPane().add(featuresPnl);
 	featuresPnl.setVisible(false);
+	featuresPnl.setParent(this);
 
 	partsList = new rmk.gui.ScreenComponents.PartsListPanel();
-	partsList.addActionListener(this);
+	partsList.setParent(this);
   	getContentPane().add(partsList);
+  	partsList.setParent(this);
 
 	buttonBar.addButton(null, "InActive","InActive","InActive Items");
 	buttonBar.addButton(null, "Features","Features","Features");
@@ -122,8 +128,16 @@ public class PartsScreen extends Screen{
 //    	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Window Activated.");
     }
     //==========================================================
-    public void actionPerformed(ActionEvent e) {
-	String command = e.getActionCommand().toUpperCase().trim();
+    //==========================================================
+	public void actionPerformed(ActionEvent e) {
+		if(!processHotKeys(e)){
+			ErrorLogger.getInstance().TODO();
+		}
+	}
+    //==========================================================
+	public void processCommand(String command, Object from){
+//	    public void actionPerformed(ActionEvent e) {
+//		String command = e.getActionCommand().toUpperCase().trim();
     ErrorLogger.getInstance().logDebugCommand(command);
 
 	//-----------------------------
@@ -150,7 +164,11 @@ public class PartsScreen extends Screen{
 	    partPnl.setVisible(!state);
 	//-----------------------------
   	} else if (command.equals("PARTSDETAILS")) { //
-	    int partID= e.getID();
+	    int partID= 0;
+	    
+	    // TODO: get ID from command
+//	    partID = e.getID();
+	    
 	    partPnl.setEnabled(true);
 	    part = sys.partInfo.getPart(partID);
 	    if(part == null){
@@ -173,15 +191,63 @@ public class PartsScreen extends Screen{
 	buttonBar.enableButton(3, (part != null && part.getPartType() == sys.partInfo.getPartTypeID("Knives")));
 	featuresPnl.setData(part);
     }
-    //==========================================================
-    //==========================================================
-    //==========================================================
-    public static void main(String args[]) throws Exception{
-	Application.main(args);
-    }
-    //==========================================================
-    //==========================================================
-    //==========================================================
+
+	public void updateOccured(DBObject itemChanged, int changeType, DBObject parentItem){
+		String parentName="";
+		if(parentItem != null) parentName = parentItem.getClass().getName();
+		String itemName="";
+		if(itemChanged != null) itemName = itemChanged.getClass().getName();
+
+		switch(changeType){
+		case ScreenController.UPDATE_EDIT:
+		{
+		    buttonBar.enableButton(0, true);
+		    if(itemName.indexOf("PartPrices")>0){
+		    	priceChange = true;
+		    }
+		}
+		break;
+		default:
+			ErrorLogger.getInstance().TODO();
+		}
+	}
+    
+    
+	public void buttonPress(int button, int id) {
+		switch(button){
+		case ScreenController.BUTTON_CANCEL:
+		{
+			defaultCancelAction();
+			SignalProcessor.getInstance().removeScreen(this);
+		}
+		break;
+
+		case ScreenController.BUTTON_SELECTION_DETAILS:
+		{
+		    int partID= 0;
+		    partID = id;
+		    partPnl.setEnabled(true);
+		    part = sys.partInfo.getPart(partID);
+		    if(part == null){
+		    	ErrorLogger.getInstance().logError("**** Unable to retrieve part: "+ partID, new Exception());
+		    	return;
+		    }
+		    partPnl.setData(part);
+		}
+		break;
+		
+		case ScreenController.BUTTON_SAVE:
+		{
+			saveData();
+		}
+		break;
+		
+		default:
+			ErrorLogger.getInstance().TODO();
+		}
+	}
+	
+
 }
 
 

@@ -1,20 +1,31 @@
 package carpus.gui;
 
 import javax.swing.*;
+
+import rmk.ErrorLogger;
+import rmk.ScreenController;
+import rmk.database.dbobjects.DBObject;
+import rmk.gui.IScreen;
+
 import java.awt.event.*;
-import java.util.Vector;
-import java.util.Enumeration;
 
 public abstract class DataEntryPanel extends JPanel{
     boolean edited = false;
-    protected Vector listeners=null;
+    protected IScreen parent=null;
+    carpus.database.DBObject data=null;
+//    protected Vector listeners=null;
 	protected carpus.util.Logger errorLog = carpus.util.Logger.getInstance();
 //      protected abstract void setData(carpus.database.DBObject item);
 
-    public void addActionListener(ActionListener listener){
-	if(listeners == null) listeners = new Vector();
-	if(!listeners.contains(listener)) listeners.addElement(listener);
-    }
+//    public void addActionListener(ActionListener listener){
+//	if(listeners == null) listeners = new Vector();
+//	if(!listeners.contains(listener)) listeners.addElement(listener);
+//    }
+
+	public void setParent(IScreen screen){
+		parent = screen;
+	}
+	
     public boolean isEdited(){
 	return edited;
     }
@@ -22,21 +33,21 @@ public abstract class DataEntryPanel extends JPanel{
 	edited = value;
     }
 //-----------------------------------------------------------------
-    public void notifyListeners(String msg){
-	if(listeners == null) return;
-	notifyListeners(new ActionEvent(this,1,msg));
-    }
-    public void notifyListeners(String msg, DataEntryPanel panel){
-	if(listeners == null) return;
-	notifyListeners(new ActionEvent(panel,1,msg));
-    }
-    public void notifyListeners(ActionEvent event){
-	if(listeners == null || event == null) return;
-//  	System.out.println(this.getClass().getName() + ":notify:" + event);
-	for(Enumeration enum=listeners.elements(); enum.hasMoreElements();){
-	    ((ActionListener)enum.nextElement()).actionPerformed(event);
-	}
-    }
+//    public void notifyListeners(String msg){
+//    	if(listeners == null) return;
+//    	notifyListeners(new ActionEvent(this,1,msg));
+//    }
+//    public void notifyListeners(String msg, DataEntryPanel panel){
+//    	if(listeners == null) return;
+//    	notifyListeners(new ActionEvent(panel,1,msg));
+//    }
+//    public void notifyListeners(ActionEvent event){
+//    	if(listeners == null || event == null) return;
+//    	//  	System.out.println(this.getClass().getName() + ":notify:" + event);
+//    	for(Enumeration enum=listeners.elements(); enum.hasMoreElements();){
+//    		((ActionListener)enum.nextElement()).actionPerformed(event);
+//    	}
+//    }
 //-----------------------------------------------------------------
 
 
@@ -76,11 +87,25 @@ public abstract class DataEntryPanel extends JPanel{
     public abstract void actionPerformed(ActionEvent e);
 
     public void performEnterAction(){
+    	parent.updateOccured((DBObject) data, ScreenController.ENTER_KEY, (DBObject)data);
+    }
+    public void editingOccured(){
+    	parent.updateOccured((DBObject) data, ScreenController.UPDATE_EDIT, (DBObject)data);
+    }
+    public void cancelUpdate(){
+    	parent.updateOccured((DBObject) data, ScreenController.UPDATE_CANCELED, (DBObject)data);
+    }
+    public void saveUpdate(){
+    	parent.updateOccured((DBObject) data, ScreenController.UPDATE_SAVE, (DBObject)data);
     }
 
-    //========================================================
-    public static void main(String args[]) throws Exception {
-	rmk.gui.Application.main(args);
+
+    
+    public carpus.database.DBObject getPrimaryDataItem(){
+    	return data;
+    }
+    public void setPrimaryDataItem(carpus.database.DBObject item){
+    	data = item;
     }
 
 }
@@ -96,9 +121,13 @@ class FieldEditCheck extends KeyAdapter{
 //    	System.out.println(this.getClass().getName() + ":keyTyped:" + e);
 	if(e.isControlDown()) // ctrl key was held ... Not processes here
 	    return;
+	if(e.getKeyCode() >= KeyEvent.VK_F1 && e.getKeyCode() <= KeyEvent.VK_F12){
+		ErrorLogger.getInstance().logDebug("Missing function key registration", true);
+	}
 	if (!pnl.isEdited() && !e.isAltDown()){
 //  	    System.out.println(this.getClass().getName() + ":keyTyped:" + e);
-	    pnl.notifyListeners(msg, pnl);
+		pnl.editingOccured();
+//	    pnl.notifyListeners(msg, pnl);
 	    pnl.setEdited(true);
 	}
 	if(e.isAltDown()){
@@ -110,13 +139,16 @@ class FieldEditCheck extends KeyAdapter{
 	
 	if(code == KeyEvent.VK_ESCAPE){
 	    //Key pressed is the Escape key. Hide this Dialog.
-	    pnl.notifyListeners("Cancel", pnl);
+		pnl.cancelUpdate();
+//	    pnl.notifyListeners("Cancel", pnl);
 	} else if(code == KeyEvent.VK_ENTER){
 	    //Key pressed is the Enter key. 
 	    if(e.isControlDown())
-		pnl.notifyListeners("CTRL_ENTERKEY", pnl);
+			pnl.saveUpdate();
+//		pnl.notifyListeners("CTRL_ENTERKEY", pnl);
 	    else
-		pnl.notifyListeners("ENTERKEY", pnl);
+	    	pnl.performEnterAction();
+//		pnl.notifyListeners("ENTERKEY", pnl);
 	//  } else if(code == KeyEvent.VK_ENTER){
 //  	    //Key pressed is the Enter key. 
 //    	    pnl.notifyListeners("ENTERKEY", pnl);

@@ -16,7 +16,43 @@ import java.awt.*;
  */
 public class ScreenController {
 	rmk.DataModel sys = rmk.DataModel.getInstance();
+	public static final int UPDATE_UNKNOWN=0;
+	public static final int UPDATE_EDIT=1;
+	public static final int UPDATE_CHANGE=2;
+	public static final int UPDATE_REMOVE=3;
+	public static final int UPDATE_ADD=4;
+	public static final int UPDATE_CANCELED=5;
 
+	public static final int LIST_ITEM_SELECTED=6;	
+	public static final int UPDATE_SAVE=7;
+	public static final int ENTER_KEY=8;
+	
+	
+	public static final int BUTTON_SELECTION_UNKNOWN=0;
+	public static final int BUTTON_SELECTION_DETAILS=1;
+	public static final int BUTTON_CANCEL=2;
+	public static final int BUTTON_ADD=3;
+	public static final int BUTTON_REMOVE=4;
+	public static final int BUTTON_SAVE=5;
+	public static final int BUTTON_KNIFE_COUNT=6;
+	public static final int BUTTON_DISPLAY_INVOICE=7;
+	public static final int BUTTON_DISPLAY_ACK_RPT=8;
+	public static final int BUTTON_SHIP=9;
+	
+	
+	public static final int BUTTON_F1=101;
+	public static final int BUTTON_F2=102;
+	public static final int BUTTON_F3=103;
+	public static final int BUTTON_F4=104;
+	public static final int BUTTON_F5=105;
+	public static final int BUTTON_F6=106;
+	public static final int BUTTON_F7=107;
+	public static final int BUTTON_F8=108;
+	public static final int BUTTON_F9=109;
+	public static final int BUTTON_F10=110;
+	public static final int BUTTON_F11=111;
+	public static final int BUTTON_F12=112;
+	
 	static int cntr = 0;
 
 	private static ScreenController instance = new ScreenController();
@@ -97,11 +133,11 @@ public class ScreenController {
 					.getInvoiceEntries(selectedInvoice.getInvoice()));
 
 			InvoiceDetailsScreen screen = new InvoiceDetailsScreen();
-			//			String title = "Invoice : ";
-			//			if (selectedInvoice != null) {
-			//				title += selectedInvoice.getInvoice();
-			//			}
-			//			screen.setTitle(title);
+			String title = "Invoice : ";
+			if (selectedInvoice != null) {
+				title += selectedInvoice.getInvoice();
+			}
+			screen.setTitle(title);
 
 			Desktop.getInstance().add(screen);
 			screen.setData(model);

@@ -3,7 +3,11 @@ package rmk.gui.ScreenComponents;
 import javax.swing.*;
 import java.awt.event.*;
 
+import rmk.DataModel;
 import rmk.ErrorLogger;
+import rmk.ScreenController;
+import rmk.database.dbobjects.InvoiceEntryAdditions;
+import rmk.database.dbobjects.Parts;
 import rmk.gui.DBGuiModel;
 
 //===============================================================
@@ -44,20 +48,26 @@ public class InvoiceItemFeatureEntryPanel
     ErrorLogger.getInstance().logDebugCommand(command);
 
     if (command.equals("ENTEREDNEWENTRY")) { //removed feature
-	    ActionEvent event = new ActionEvent(this, 0, "EnteredNewEntry-" + field.getText());
-	    field.setText("");
-	    notifyListeners(event);
+		InvoiceEntryAdditions newFeature = new InvoiceEntryAdditions(0);
+		String enteredCode = field.getText();
+		Parts part = DataModel.getInstance().partInfo.getPartFromCode(enteredCode);		
+		newFeature.setPartID(part.getPartID());
+		newFeature.setShortDescription(enteredCode.toUpperCase());
+		setEdited(true);
+    	parent.updateOccured(newFeature, ScreenController.UPDATE_ADD, null);
+    	field.setText("");
+//	    ActionEvent event = new ActionEvent(this, 0, "EnteredNewEntry-" + field.getText());
+//	    field.setText("");
+//	    notifyListeners(event);
+    	
 	} else{
 	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
 	}
     }
 //-----------------------------------------------------------------
     public void setData(DBGuiModel model ){}
-//-----------------------------------------------------------------
-//-----------------------------------------------------------------
-      public static void main(String args[]) throws Exception{
-  	rmk.gui.Application.main(args);
-      }
-//-----------------------------------------------------------------
+
+	
+    
 }
 

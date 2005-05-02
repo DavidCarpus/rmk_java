@@ -182,6 +182,7 @@ public class CustomerAddressPanel extends carpus.gui.DataEntryPanel{
 		txtFields[FIELD_STATE].setValue("" + state);
 		txtFields[FIELD_ZIP].setValue("" + address.getZIP());
 		txtFields[FIELD_COUNTRY].setValue("" + address.getCOUNTRY());
+		setPrimaryDataItem(data);
 		setEdited(false);
 	}
 }

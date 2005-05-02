@@ -7,6 +7,7 @@ import java.util.Calendar;
 
 import carpus.gui.*;
 import rmk.ErrorLogger;
+import rmk.ScreenController;
 import rmk.database.FinancialInfo;
 import rmk.database.dbobjects.Customer;
 
@@ -152,10 +153,25 @@ public class CustomerDetailPanel
   	if(command.equals("EDIT MEMO") || command.equals("ADD MEMO")){
 	    if(currentMemo == null) currentMemo = "";
 	    String text = rmk.gui.Dialogs.getEditNote(currentMemo, "Notes", rmk.gui.Dialogs.MAX_LEN_USER_NOTES, true);
-	    if(text == null) return; // NO change
+	    if(text == null) return; // Canceled, NO change	    
 	    text = text.replace('\n', '|');
+	    if(currentMemo != null && currentMemo.equals(text)) return; // NO change
 	    currentMemo = text;
-	    event = new ActionEvent(this, 1, "CUSTOMER DETAIL CHANGED");
+	    customer.setMemo(currentMemo);
+//	    event = new ActionEvent(this, 1, "CUSTOMER DETAIL CHANGED");
+	    parent.updateOccured(customer,ScreenController.UPDATE_EDIT, customer);
+	    return;
+	    //----------------------------------------------------------
+  	}else if(command.equals("EDIT BLADELIST") || command.equals("ADD BLADELIST")){
+	    if(currentBladeList == null) currentBladeList = "";
+	    String text = rmk.gui.Dialogs.getEditNote(currentBladeList, "BladeList", rmk.gui.Dialogs.MAX_LEN_BLADELIST_NOTES, true);
+	    if(text == null) return; // NO change
+	    currentBladeList = text;
+	    customer.setBladeList(currentBladeList);
+//	    event = new ActionEvent(this, 1, "CUSTOMER DETAIL CHANGED");
+	    parent.updateOccured(customer,ScreenController.UPDATE_EDIT, customer);
+	    return;
+	    
 	    //----------------------------------------------------------
   	}else if(command.equals("EDIT BLADELIST") || command.equals("ADD BLADELIST")){
 	    if(currentBladeList == null) currentBladeList = "";
@@ -176,7 +192,7 @@ public class CustomerDetailPanel
 
 	if(event != null){
 	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "notify listners");	    
-	    notifyListeners(event);
+//	    notifyListeners(event);
 	}
     }
     //----------------------------------------------------------

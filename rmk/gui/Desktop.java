@@ -34,10 +34,10 @@ public class Desktop
     }
 
     public JComponent add(JComponent comp){
-	super.add(comp);
-	Screen screen = (Screen)comp;
-	ApplicationMenu.getInstance().addScreenToWindowMenu(screen);
-	return comp;
+    	super.add(comp);
+    	Screen screen = (Screen)comp;
+    	ApplicationMenu.getInstance().addScreenToWindowMenu(screen);
+    	return comp;
     }
 
 	public void remove(JComponent comp) {

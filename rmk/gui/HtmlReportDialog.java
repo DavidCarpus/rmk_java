@@ -7,6 +7,8 @@ import carpus.gui.BasicToolBar;
 //import javax.print.*;
 
 import rmk.ErrorLogger;
+import rmk.ScreenController;
+import rmk.database.dbobjects.DBObject;
 import rmk.reports.BaseReport;
 
 public class HtmlReportDialog extends JDialog implements ActionListener{
@@ -103,6 +105,8 @@ public class HtmlReportDialog extends JDialog implements ActionListener{
         
         buttonBar.setFloatable(false);
 //      buttonBar.enableButton(0,false);
+        
+//        ErrorLogger.getInstance().TODO();
         KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
         buttonBar.registerKeyboardAction(this, "Cancel", stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
         KeyStroke stroke2 = KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0, true);
@@ -110,8 +114,10 @@ public class HtmlReportDialog extends JDialog implements ActionListener{
         KeyStroke stroke3 = KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0, true);
         buttonBar.registerKeyboardAction(buttonBar, "Prev", stroke3, JComponent.WHEN_IN_FOCUSED_WINDOW);
         
-        buttonBar.addActionListener(this);
         buttonBar.setLayout( new FlowLayout(FlowLayout.CENTER));
+        buttonBar.addActionListener(this);
+//		ButtonBarTranslator translator = new ButtonBarTranslator(this, buttonBar);
+
         getContentPane().add(buttonBar);
         
 //      rpt.setPreferredSize(new Dimension(450,650));
@@ -196,28 +202,4 @@ public class HtmlReportDialog extends JDialog implements ActionListener{
     }
     
     //=======================================================================
-    //=======================================================================
-    //=======================================================================
-    public static void main(String args[]) throws Exception{
-//      Application.main(args);
-        rmk.gui.HtmlReportDialog rpt = new rmk.gui.HtmlReportDialog();
-        rpt.exitOnCancel=true;
-        rmk.reports.InvoiceReport tst = new rmk.reports.InvoiceReport(42496);
-        ErrorLogger.getInstance().logMessage(""+tst.getInvoice());
-        rpt.setReport(tst);
-//      rpt.setInvoice(60001); // 42496, 42683, 50000, 42684
-        rpt.setVisible(true);
-        
-        
-        
-//      HtmlReportDialog rpt = new HtmlReportDialog(null,0);
-//      rpt.exitOnCancel=true;
-//      //  	rpt.setText(text);
-//      rpt.setReport(new rmk.reports.InvoiceReport(invoices[0]));
-//      //      	rpt.setInvoice(invoices[0]);
-//      //    	rpt.setInvoice(5000);
-//      rpt.setVisible(true);
-    }
-    //=======================================================================
-    
 }

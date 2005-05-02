@@ -191,4 +191,11 @@ public class ErrorLogger implements carpus.util.LoggerInterface{
     	log(mesg);
     }
     
+    public void TODO(){
+    	String caller = getCallerFunction();
+    	String mesg = "***** Unimplemented Functionallity *****:" + caller;
+    	log(mesg);
+    	
+    }
+    
 }

@@ -18,6 +18,9 @@ import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.TableColumn;
 
 import rmk.ErrorLogger;
+import rmk.ScreenController;
+import rmk.SignalProcessor;
+import rmk.database.dbobjects.DBObject;
 
 import Configuration.Config;
 
@@ -36,6 +39,7 @@ public class PreferencesScreen extends Screen {
     ShippingListCodePanel codePanel = new ShippingListCodePanel();
     TextEntryPanel textPanel = new TextEntryPanel();
     boolean edited = false;
+    IScreen parent=null;
     
 	public PreferencesScreen(){		
 		super("Preferences");
@@ -45,8 +49,8 @@ public class PreferencesScreen extends Screen {
 		getContentPane().add(codePanel);
 
 		textPanel.setFieldEditCheck(txtFields, "PrefChange", textPanel);
-		textPanel.addActionListener(this);
-		codePanel.addActionListener(this);
+		textPanel.setParent(this);
+		codePanel.setParent(this);
 		// load properties file
 		//set field values
 		setFields(Config.p);
@@ -72,64 +76,39 @@ public class PreferencesScreen extends Screen {
 	    codePanel.setStringValues(translations);
 	}
 	
-	void saveConfiguration() throws Exception{
+	void saveConfiguration(){
 		if(Config.getPropFileName() != null){
-			Properties prop = Config.p;
-
-			prop.setProperty("businessNumber", txtFields[FIELD_BUSINESS_NUMBER].getValue());
-			prop.setProperty("faxNumber", txtFields[FIELD_FAX_NUMBER].getValue());
-			prop.setProperty("monthsBacklogged", txtFields[FIELD_BACKLOG].getValue());
-			String fileName = Config.getPropFileName();
-			ErrorLogger.getInstance().logMessage("Saving Preferences to:" + fileName);
-			FileOutputStream propFile = new FileOutputStream(fileName);
-			prop.store(propFile, "RMK Settings");
-			propFile.close();
-			ErrorLogger.getInstance().logMessage(""+prop);
-			ErrorLogger.getInstance().logMessage("Saved Preferences to:" + fileName);
-		}
-
-	}
-	
-	public void actionPerformed(ActionEvent e) {
-		String command = e.getActionCommand().toUpperCase().trim();
-        ErrorLogger.getInstance().logDebugCommand(command);
-
-		//-----------------------------
-		if (command.equals("CANCEL")) { //cancel
-		    defaultCancelAction();
-		    //-----------------------------
-		} else if (command.equals("PREFCHANGE")) { //changed text value
-			edited=true;
-			buttonBar.enableButton(0, edited);
-			//-----------------------------
-		} else if (command.equals("EDITTRANSLATION")) { 
-		    int id= e.getID()+1;
-			Properties prop = Config.p;
-			String key = "ShippingCode" + id;
-			String startValue=prop.getProperty(key);
-            String newValue = JOptionPane.showInputDialog("Translation Value:", startValue);
-            if(newValue == null) return;
-            if(newValue.equalsIgnoreCase(startValue)) return; // no change
-            prop.setProperty(key, newValue);
-            setFields(prop);
-			edited=true;
-			buttonBar.enableButton(0, edited);
-			//-----------------------------
-		} else if (command.equals("SAVE")) { //save
 			try {
-				saveConfiguration();
+				Properties prop = Config.p;
+				
+				prop.setProperty("businessNumber", txtFields[FIELD_BUSINESS_NUMBER].getValue());
+				prop.setProperty("faxNumber", txtFields[FIELD_FAX_NUMBER].getValue());
+				prop.setProperty("monthsBacklogged", txtFields[FIELD_BACKLOG].getValue());
+				String fileName = Config.getPropFileName();
+				ErrorLogger.getInstance().logMessage("Saving Preferences to:" + fileName);
+				FileOutputStream propFile = new FileOutputStream(fileName);
+				prop.store(propFile, "RMK Settings");
+				propFile.close();
+				ErrorLogger.getInstance().logMessage(""+prop);
+				ErrorLogger.getInstance().logMessage("Saved Preferences to:" + fileName);
 				edited=false;
 				buttonBar.enableButton(0, edited);
 	            pack();
-
 			} catch (Exception err) {
 				ErrorLogger.getInstance().logError("Saving Configuration", err);
 			}
-			//-----------------------------
-		} else {  // Undefined
-		    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
 		}
-
+	}
+	
+    //==========================================================
+	public void actionPerformed(ActionEvent e) {
+		if(!processHotKeys(e)){
+			ErrorLogger.getInstance().TODO();
+		}
+	}
+    //==========================================================
+	public void processCommand(String command, Object from){
+	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
 	}
 
 	public void internalFrameActivated(InternalFrameEvent e) {
@@ -142,6 +121,73 @@ public class PreferencesScreen extends Screen {
 
 	public void setData(DBGuiModel model) {} // not used for this screen
 	
+	
+    public void updateOccured(DBObject itemChanged, int changeType, DBObject parentItem){
+		switch(changeType){
+		case ScreenController.UPDATE_SAVE:
+		{
+			saveConfiguration();
+		}
+		break;
+
+		case ScreenController.UPDATE_EDIT:
+		{
+			edited=true;
+			buttonBar.enableButton(0, edited);
+		}
+		break;
+		
+		case ScreenController.UPDATE_CANCELED:
+		{
+			defaultCancelAction();
+			SignalProcessor.getInstance().removeScreen(this);
+		}
+		break;
+		
+		default:
+			ErrorLogger.getInstance().TODO();
+		}
+     }
+    
+	public void buttonPress(int button, int id) {
+		switch(button){
+		case ScreenController.BUTTON_CANCEL:
+			defaultCancelAction();
+			SignalProcessor.getInstance().removeScreen(this);
+		break;
+		
+		case ScreenController.BUTTON_SELECTION_DETAILS:
+		{
+			Properties prop = Config.p;
+			String key = "ShippingCode" + id;
+			String startValue=prop.getProperty(key);
+            String newValue = JOptionPane.showInputDialog("Translation Value:", startValue);
+            if(newValue == null) return;
+            if(newValue.equalsIgnoreCase(startValue)) return; // no change
+            prop.setProperty(key, newValue);
+            setFields(prop);
+			edited=true;
+			buttonBar.enableButton(0, edited);
+		}
+		break;
+		
+		case ScreenController.BUTTON_SAVE:
+		{
+			saveConfiguration();
+		}
+		break;
+		
+		default:
+			ErrorLogger.getInstance().TODO();
+		}
+	}
+	
+
+	
+//	==================================================
+//	==================================================
+//	==================================================
+
 	class TextEntryPanel extends DataEntryPanel{
 		public TextEntryPanel(){
 			setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
@@ -220,24 +266,30 @@ public class PreferencesScreen extends Screen {
 		}
 
 		protected void doubleClick() {
-			notifyListeners(new ActionEvent(this,(int)currItem,"EditTranslation"));
+			parent.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int) selectedItem+1);
+//			notifyListeners(new ActionEvent(this,(int)currItem,"EditTranslation"));
 		}
 
 		protected long selectedItem(int row) {
-			currItem = row;
+			selectedItem = row;
 			return selectedItem;
+		}
+		
+		public void setParent(IScreen screen){
+			parent =screen;
 		}
 
 		public void setData(DBGuiModel model) {
-			// TODO Auto-generated method stub
-			
+			ErrorLogger.getInstance().TODO();
 		}
+		
 		/* (non-Javadoc)
 		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 		 */
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
+			if(!processHotKeys(e)){
+				ErrorLogger.getInstance().TODO();
+			}
 		}
 
 	}

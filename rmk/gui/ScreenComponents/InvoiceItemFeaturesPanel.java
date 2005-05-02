@@ -1,6 +1,9 @@
 package rmk.gui.ScreenComponents;
 
 import javax.swing.*;
+
+import rmk.ErrorLogger;
+import rmk.ScreenController;
 import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
 import rmk.database.dbobjects.Parts;
@@ -9,6 +12,7 @@ import java.util.Vector;
 import java.util.Enumeration;
 import rmk.gui.DBGuiModel;
 import rmk.gui.Dialogs;
+import rmk.gui.IScreen;
 
 import java.awt.Dimension;
 import java.awt.event.*;
@@ -19,6 +23,7 @@ public class InvoiceItemFeaturesPanel extends JPanel{
     rmk.DataModel sys = rmk.DataModel.getInstance();
     DBGuiModel model;
     Vector listeners;
+    IScreen parent=null;
 
     public InvoiceItemFeaturesPanel(){
 	JList selections = new JList(selectedItems);
@@ -66,6 +71,10 @@ public class InvoiceItemFeaturesPanel extends JPanel{
 
 	scrollPane.setPreferredSize(new Dimension(180,150));
     }
+    
+    public void setParent(IScreen screen){
+    	parent = screen;
+    }
 
 //-----------------------------------------------------------------
     public void editFeaturePrice(int index){
@@ -80,10 +89,10 @@ public class InvoiceItemFeaturesPanel extends JPanel{
 	notifyListeners("INVOICEFEATUREEDITED");	
     }
 //-----------------------------------------------------------------
-    public void addFeature(InvoiceEntryAdditions newFeature){
+    public boolean addFeature(InvoiceEntryAdditions newFeature){
 	// make sure it's not already in list
 	if(skipDuplicateEntry(newFeature))
-	    return;
+	    return false;
 
 	// not in displayList... Add it
 	Parts part = sys.partInfo.getPart(newFeature.getPartID());
@@ -107,7 +116,10 @@ public class InvoiceItemFeaturesPanel extends JPanel{
 	for(Enumeration enum=features.elements(); enum.hasMoreElements();){
 	    InvoiceEntryAdditions addition = (InvoiceEntryAdditions)enum.nextElement();
 	    if(addition.getPartID()  == newFeature.getPartID()){ // already in list...
-		return;
+	    	if(addition == newFeature)
+	    		return true;
+	    	else
+	    		return false;
 	    }
 	}
 	// Add to model
@@ -116,7 +128,9 @@ public class InvoiceItemFeaturesPanel extends JPanel{
 	features.add(newFeature); // add it to the vector of knife's feature
 
 //    	notifyListeners("INVOICEFEATUREADDED");	
-	notifyListeners(new ActionEvent(newFeature, 1, "INVOICEFEATUREADDED"));
+	parent.updateOccured(newFeature, ScreenController.UPDATE_ADD, null);
+	return true;
+//	notifyListeners(new ActionEvent(newFeature, 1, "INVOICEFEATUREADDED"));
       }
 //-----------------------------------------------------------------
     void sortFeatureList(){
@@ -149,16 +163,20 @@ public class InvoiceItemFeaturesPanel extends JPanel{
   	int partID = (int)((ListObject)selectedItems.get(index)).getID();
 	
 	Vector features = model.getInvoiceItemAttributesData();
+	InvoiceEntryAdditions addition=null;
   	for(int featureIndex=0;featureIndex < features.size(); featureIndex++){
-  	    InvoiceEntryAdditions addition = (InvoiceEntryAdditions)features.get(featureIndex);
+  	    addition = (InvoiceEntryAdditions)features.get(featureIndex);
   	    if(addition.getPartID()  == partID){ // remove from list...
-  		features.remove(featureIndex);
-		model.setInvoiceItemAttributesData(features);
-		break;
+  	    	features.remove(featureIndex);
+  	    	model.setInvoiceItemAttributesData(features);
+  	    	break;
   	    }
   	}
   	selectedItems.removeElementAt(index);
-  	notifyListeners("INVOICEFEATUREREMOVED");
+  	if(addition != null){
+  		parent.updateOccured(addition, ScreenController.UPDATE_REMOVE, null);
+//  		notifyListeners("INVOICEFEATUREREMOVED");
+  	}
     }
 //-----------------------------------------------------------------
     public int getFeatureCount(){
@@ -174,10 +192,17 @@ public class InvoiceItemFeaturesPanel extends JPanel{
 	
 	selectedItems.clear();
 	    
+	InvoiceEntries knife= (InvoiceEntries )model.getKnifeData().get(0);
 	for(int featureIndex=0; featureIndex < lst.size(); featureIndex++){
-	    addFeature((InvoiceEntryAdditions)lst.get(featureIndex));
+		InvoiceEntryAdditions feature = (InvoiceEntryAdditions)lst.get(featureIndex);
+		if(feature.getPartID() > 0){
+			feature.setEntryID(knife.getInvoiceEntryID());
+			addFeature(feature);
+		}else{
+			ErrorLogger.getInstance().logMessage("Feature missing partID?:" + feature);
 //  	    InvoiceEntryAdditions addition = (InvoiceEntryAdditions)lst.get(featureIndex);
 //  	    selectedItems.addElement(new ListObject(addition, selectedItems.size()+1));
+		}
 	}
 	sortFeatureList();
     }
@@ -250,11 +275,4 @@ public class InvoiceItemFeaturesPanel extends JPanel{
     public void clear(){
 	selectedItems.clear();
     }
-//-----------------------------------------------------------------
-//-----------------------------------------------------------------
-      public static void main(String args[]) throws Exception{
-  	rmk.gui.Application.main(args);
-      }
-//-----------------------------------------------------------------
-
 }

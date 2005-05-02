@@ -9,6 +9,9 @@ import java.util.GregorianCalendar;
 
 import rmk.DataModel;
 import rmk.ErrorLogger;
+import rmk.ScreenController;
+import rmk.SignalProcessor;
+import rmk.database.dbobjects.DBObject;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.Customer;
 import rmk.database.dbobjects.Payments;
@@ -34,12 +37,12 @@ public class InvoicePaymentsScreen extends Screen {
         getContentPane().setLayout(
                 new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         customerPnl = new rmk.gui.ScreenComponents.CustomerInfoPanel();
-        customerPnl.addActionListener(this);
+        customerPnl.setParent(this);
         getContentPane().add(customerPnl);
 
         invoiceDetailPnl = new rmk.gui.ScreenComponents.InvoiceDetailsPanel();
         invoiceDetailPnl.onPaymentsScreen(true);
-        invoiceDetailPnl.addActionListener(this);
+        invoiceDetailPnl.setParent(this);
         getContentPane().add(invoiceDetailPnl);
         JPanel msgPanel = new JPanel();
         msgPanel.add(new JLabel("$$$$$$$$ Payments $$$$$$$$"));
@@ -49,7 +52,7 @@ public class InvoicePaymentsScreen extends Screen {
         invoiceDetailPnl.setEnabled(false);
 
         invoicePaymentsPnl = new rmk.gui.ScreenComponents.InvoicePaymentsListPanel();
-        invoicePaymentsPnl.addActionListener(this);
+        invoicePaymentsPnl.setParent(this);
         getContentPane().add(invoicePaymentsPnl);
 
         getContentPane().add(buttonBar);
@@ -147,7 +150,7 @@ public class InvoicePaymentsScreen extends Screen {
         Vector outputList = model.getInvoiceData();
         rmk.DataModel sys = rmk.DataModel.getInstance();
 
-        model.removeActionListener(this);
+//        model.removeActionListener(this);
 
         Vector payments = model.getPaymentsData();
         //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ": Display: "+
@@ -167,7 +170,7 @@ public class InvoicePaymentsScreen extends Screen {
         rmk.Processing.updateScreens_Shipping(sys.invoiceInfo
                 .getInvoice(invoice));
 
-        model.addActionListener(this);
+//        model.addActionListener(this);
     }
 
     //------------------------------------------------------------------
@@ -218,8 +221,16 @@ public class InvoicePaymentsScreen extends Screen {
     }
 
     //==========================================================
-    public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand().toUpperCase().trim();
+	public void actionPerformed(ActionEvent e) {
+		if(!processHotKeys(e)){
+			ErrorLogger.getInstance().TODO();
+		}
+	}
+    //==========================================================
+    //==========================================================
+	public void processCommand(String command, Object from){
+//	    public void actionPerformed(ActionEvent e) {
+//		String command = e.getActionCommand().toUpperCase().trim();
 		ErrorLogger.getInstance().logDebugCommand(command);
 
         // -------------------------
@@ -327,13 +338,77 @@ public class InvoicePaymentsScreen extends Screen {
         }
     }
 
-    //------------------------------------------------------------------
-    //------------------------------------------------------------------
-    //------------------------------------------------------------------
-    public static void main(String args[]) throws Exception {
-        Application.main(args);
-    }
-    //------------------------------------------------------------------
-    //------------------------------------------------------------------
-    //------------------------------------------------------------------
+	public void updateOccured(DBObject itemChanged, int changeType, DBObject parentItem){
+		switch(changeType){
+		case ScreenController.UPDATE_ADD:
+		{
+			Vector outputList = model.getInvoiceData();
+			Invoice invoice = (Invoice) outputList.get(outputList.size() - 1);
+			addEntry(invoice.getInvoice(), invoice.getCustomerID());
+		}
+		break;
+		
+		default:
+			ErrorLogger.getInstance().TODO();
+		}
+	}
+    
+    
+	public void buttonPress(int button, int id) {
+		switch(button){
+		case ScreenController.BUTTON_CANCEL:
+		{
+			defaultCancelAction();
+			SignalProcessor.getInstance().removeScreen(this);
+		}
+		break;
+		
+		case ScreenController.BUTTON_REMOVE:
+		{
+            if(!rmk.gui.Dialogs.yesConfirm("Are you sure you wish to remove this payment?")){
+            	return;
+            }
+
+//            long id = invoicePaymentsPnl.getSelectedItemID();
+            Vector outputList = model.getInvoiceData();
+            Invoice invoice = (Invoice) outputList.get(0);
+            removeEntry(invoice.getInvoice(), id);
+		}
+		break;
+		
+		case ScreenController.BUTTON_DISPLAY_INVOICE:
+		{		
+			long invoiceNumber = invoice.getInvoice();
+			
+			int format = HtmlReportDialog.LONG_FORMAT;
+			Customer cust = (Customer) customerPnl.getData();
+			if (cust.isDealer()) format = HtmlReportDialog.SHORT_FORMAT;
+			
+			rmk.gui.Dialogs.report(HtmlReportDialog.INVOICE_REPORT, format,
+					(int) invoiceNumber);			
+		}
+		break;
+		
+		case ScreenController.BUTTON_DISPLAY_ACK_RPT:
+		{		
+			long invoiceNumber = invoice.getInvoice();
+			
+			int format = HtmlReportDialog.LONG_FORMAT;
+			Customer cust = (Customer) customerPnl.getData();
+			if (cust.isDealer()) format = HtmlReportDialog.SHORT_FORMAT;
+
+			
+			rmk.gui.Dialogs.report(HtmlReportDialog.ACKNOWLEDGE_REPORT, format,
+					(int) invoiceNumber);		
+		}
+		break;
+		
+
+		
+		default:
+			ErrorLogger.getInstance().TODO();
+		}
+	}
+	
+
 }

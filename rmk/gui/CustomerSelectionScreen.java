@@ -3,9 +3,10 @@ package rmk.gui;
 import javax.swing.*;
 
 import rmk.ErrorLogger;
+import rmk.database.dbobjects.DBObject;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
 import java.util.*;
 
 public class CustomerSelectionScreen extends Screen{
@@ -16,7 +17,8 @@ public class CustomerSelectionScreen extends Screen{
     	getContentPane().setLayout(new BorderLayout());
 
 	customerListPanel = new rmk.gui.ScreenComponents.CustomerListPanel();
-	customerListPanel.addActionListener(this);
+	customerListPanel.setParent(this);
+//	customerListPanel.addActionListener(this);
 	getContentPane().add(customerListPanel);
 
 	buttonBar = new carpus.gui.BasicToolBar(null, 
@@ -26,7 +28,8 @@ public class CustomerSelectionScreen extends Screen{
 	    {"Add", "Cancel"},
 						new String[] 
 	    {"Add", "Cancel"});
-	buttonBar.addActionListener(this);
+	ButtonBarTranslator translator = new ButtonBarTranslator(this, buttonBar);
+//	buttonBar.addActionListener(this);
 	buttonBar.setLayout( new FlowLayout(FlowLayout.CENTER));
 //  	buttonBar.enableButton(1, false);
 //  	buttonBar.enableButton(1, false);
@@ -49,8 +52,16 @@ public class CustomerSelectionScreen extends Screen{
 
 
     //==========================================================
-    public void actionPerformed(ActionEvent e) {
-	String command = e.getActionCommand().toUpperCase();
+    //==========================================================
+	public void actionPerformed(ActionEvent e) {
+		if(!processHotKeys(e)){
+			ErrorLogger.getInstance().TODO();
+		}
+	}
+    //==========================================================
+	public void processCommand(String command, Object from){
+//	    public void actionPerformed(ActionEvent e) {
+//		String command = e.getActionCommand().toUpperCase().trim();
     ErrorLogger.getInstance().logDebugCommand(command);
 
         if (command.equals("CANCEL")) { //cancel
@@ -74,13 +85,19 @@ public class CustomerSelectionScreen extends Screen{
 		customerListPanel.setData(model);
 		buttonBar.enableButton(3,true);
     }
+//
+//    public void addActionListener(ActionListener listener){
+//	if(listeners == null) listeners = new Vector();
+//	if(!listeners.contains(listener)) listeners.addElement(listener);
+//    }
 
-    public void addActionListener(ActionListener listener){
-	if(listeners == null) listeners = new Vector();
-	if(!listeners.contains(listener)) listeners.addElement(listener);
-    }
-    public static void main(String args[]) throws Exception{
-	Application.main(args);
-    }
 
+    public void updateOccured(DBObject itemChanged, int changeType, DBObject parentItem){
+		ErrorLogger.getInstance().TODO();
+     }
+    
+	public void buttonPress(int button, int id) {
+		ErrorLogger.getInstance().TODO();
+	}
+	
 }

@@ -1,11 +1,11 @@
 #RMK Settings
-#Fri Apr 22 07:20:34 EDT 2005
+#Sun May 01 19:55:42 EDT 2005
 mergeFileLocation=s\:/NewRMK/merge/
 databaseType=ACCESS
 faxNumber=(407)855-9054
 dbpasswd=skeet
 dataFileLocation=s\:/NewRMK/rmk/txt/
-monthsBacklogged=48
+monthsBacklogged=49
 lookandfeel=com.sun.java.swing.plaf.windows.WindowsLookAndFeel
 backgroundImageLocation=s\:/NewRMK/dcarpus/rmk/
 dbuser=gtr
@@ -13,7 +13,7 @@ dbFileLocation=s\:/NewRMK/dcarpus/
 ShippingCode8=BLANK
 ShippingCode7=OTHER
 ShippingCode6=RMK DEL
-ShippingCode5=UPS TBD IN 2009
+ShippingCode5=UPS TBD IN 2008
 ShippingCode4=FEDERAL EXPRESS
 ShippingCode3=PICK UP
 ShippingCode2=USPS/PRIORMAIL/INS

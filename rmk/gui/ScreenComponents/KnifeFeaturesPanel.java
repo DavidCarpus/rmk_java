@@ -3,8 +3,10 @@ package rmk.gui.ScreenComponents;
 import javax.swing.*;
 
 import rmk.ErrorLogger;
+import rmk.ScreenController;
 import rmk.database.dbobjects.Parts;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
+import rmk.gui.IScreen;
 
 import java.awt.*;
 import java.util.Vector;
@@ -21,6 +23,8 @@ implements ActionListener
     rmk.DataModel sys = rmk.DataModel.getInstance();
     DefaultListModel options[] = new DefaultListModel[sys.partInfo.mainPartTypeCnt()];
     Vector listeners;
+    IScreen parent;
+    
 //-----------------------------------------------------------------
     public KnifeFeaturesPanel(){
 	setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
@@ -32,11 +36,12 @@ implements ActionListener
 	    fields[fieldIndex].setVisibleRowCount(6);
 	    SingleSelectionModel selectionModel = new SingleSelectionModel(fieldIndex) {
 		    public void updateSingleSelection(int oldIndex, int newIndex) {
-//  			ErrorLogger.getInstance().logMessage(index + ":" + newIndex);
 			ListObject item = ((ListObject)options[id].get(newIndex));
-			notifyListeners(new ActionEvent(item.getAddition(),
-							(int)item.getID(),
-							"ADDFEATURE"));
+			InvoiceEntryAdditions addition = item.getAddition();
+			parent.updateOccured(addition, ScreenController.LIST_ITEM_SELECTED, null);
+//			notifyListeners(new ActionEvent(item.getAddition(),
+//							(int)item.getID(),
+//							"ADDFEATURE"));
 		    }
 		};
 	    fields[fieldIndex].setSelectionModel(selectionModel);
@@ -72,11 +77,17 @@ implements ActionListener
 	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command);
   	}
     }
-//-----------------------------------------------------------------
-    public void addActionListener(ActionListener listener){
-	if(listeners == null) listeners = new Vector();
-	if(!listeners.contains(listener)) listeners.addElement(listener);
-    }
+    
+
+	public void setParent(IScreen screen){
+		parent = screen;
+	}
+	
+////-----------------------------------------------------------------
+//    public void addActionListener(ActionListener listener){
+//	if(listeners == null) listeners = new Vector();
+//	if(!listeners.contains(listener)) listeners.addElement(listener);
+//    }
 //-----------------------------------------------------------------
     public void setKnifeModel(int model, int year){
 //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":setKnifeModel(int model, int year)"+ model + ":" + year);

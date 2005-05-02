@@ -62,22 +62,6 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 		});
 		KeyAdapter ka = new keyCheck(this);
 		table.addKeyListener(ka);
-
-		KeyStroke kF1 = KeyStroke
-				.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0);
-		this.registerKeyboardAction(this, "F1", kF1,
-				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-
-		KeyStroke kF2 = KeyStroke
-				.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0);
-		this.registerKeyboardAction(this, "F2", kF2,
-				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-
-		KeyStroke kF3 = KeyStroke
-				.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0);
-		this.registerKeyboardAction(this, "F3", kF3,
-				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-
 	}
 
 	protected void addTable(DataListPanelTableModel dataModel) {

@@ -1,6 +1,9 @@
 package rmk.gui;
 
 import javax.swing.*;
+
+import rmk.ErrorLogger;
+
 import java.awt.event.*;
 import java.util.Vector;
 import java.util.Enumeration;
@@ -15,13 +18,8 @@ implements ActionListener
     private Vector screens = new Vector();
     //===================================================
     public void addScreenToWindowMenu(JComponent screen){
-	screens.add(screen);
-	String title = ((Screen)screen).getTitle();
-        JMenuItem menuItem = new JMenuItem(title);
-        menuItem.setActionCommand("Window-" + title);
-        menuItem.addActionListener(this);
-	windowMenu.add(menuItem);
-	windowMenu.setVisible(true);
+    	screens.add(screen);
+    	addWindowMenuItem(((Screen)screen).getTitle());
     }
     //===================================================
 	public void removeScreenFromWindowMenu(Screen screen) {
@@ -33,18 +31,31 @@ implements ActionListener
 			}
 		}
 	// remove from menu
-	for(int itemIndex = windowMenu.getItemCount()-1; itemIndex>=0; itemIndex--){
-	    JMenuItem menuItem = windowMenu.getItem(itemIndex);
-	    String text = menuItem.getText();
-	    if(text.equalsIgnoreCase(screen.getTitle())){
-		windowMenu.remove(menuItem);
-		break;
-	    }
-	}
-
+		removeWindowMenuItem(screen.getTitle());
+		removeWindowMenuItem(screen.getTitle());
+		
 	// remove menu if empty
 	if(screens.size() == 0)  windowMenu.setVisible(false);
     }
+	
+	void removeWindowMenuItem(String title){
+		for(int itemIndex = windowMenu.getItemCount()-1; itemIndex>=0; itemIndex--){
+			JMenuItem menuItem = windowMenu.getItem(itemIndex);
+			String text = menuItem.getText();
+			if(text.equalsIgnoreCase(title)){
+				windowMenu.remove(menuItem);
+				break;
+			}
+		}		
+	}
+	void addWindowMenuItem(String title){
+		JMenuItem menuItem = new JMenuItem(title);
+		menuItem.setActionCommand("Window-" + title);
+		menuItem.addActionListener(this);
+		windowMenu.add(menuItem);
+		windowMenu.setVisible(true);
+	}
+
     //===================================================
     //===================================================
     private ApplicationMenu(){
@@ -174,25 +185,27 @@ implements ActionListener
     }
     //===================================================
     public void actionPerformed(ActionEvent e) {
-	String command = e.getActionCommand().toUpperCase().trim();
-	if(command.startsWith("WINDOW-")){
-	    String title = command.substring("WINDOW-".length());
-	    Screen screen = findScreen(title);
-	    if(screen != null){
-		try {
-		    screen.grabFocus();
-		    screen.toFront();
-		    screen.setSelected(true);
-		    screen.setIcon(false);
-		} catch (Exception except){} // end of try-catch
-	    }
-	} else{
-//  	    notifyListeners(e);
-	    if(listeners == null) return;
-	    for(Enumeration enum=listeners.elements(); enum.hasMoreElements();){
-		((ActionListener)enum.nextElement()).actionPerformed(e);
-	    }
-	}
+    	String command = e.getActionCommand().toUpperCase().trim();
+    	if(command.startsWith("WINDOW-")){
+    		String title = command.substring("WINDOW-".length());
+    		Screen screen = findScreen(title);
+    		if(screen != null){
+    			try {
+    				screen.grabFocus();
+    				screen.toFront();
+    				screen.setSelected(true);
+    				screen.setIcon(false);
+    			} catch (Exception except){} // end of try-catch
+    		} else{ // screen should not be on list, remove it
+    			removeWindowMenuItem(title);
+    		}
+    	} else{
+    		//  	    notifyListeners(e);
+    		if(listeners == null) return;
+    		for(Enumeration enum=listeners.elements(); enum.hasMoreElements();){
+    			((ActionListener)enum.nextElement()).actionPerformed(e);
+    		}
+    	}
     }
    //===================================================
 	public Screen findScreen(String title) {
@@ -236,20 +249,18 @@ implements ActionListener
     		screens.add(screen);
     		return;
     	}
+    	screens.remove(screen);
+    	screens.add(screen);
     	
-    	Screen lastScreen = (Screen) screens.get(screens.size() - 1);
-    	for(Enumeration screenList=screens.elements(); screenList.hasMoreElements();){
-    		Screen currScreen = (Screen) screenList.nextElement();
-    		if(currScreen.title == lastScreen.title){
-    			return; // already at top of stack
-    		}
-    		if(currScreen.title == screen.title){
-    			screens.remove(currScreen);
-    			screens.add(currScreen);
-    			return;
-    		}
-    		
-    	}
+    	String title = ((Screen)screen).getTitle();
+    	removeWindowMenuItem(title);
+    	addWindowMenuItem(title);
+    	
+    	ErrorLogger.getInstance().logMessage("Screen:" + screen.getTitle() + " is not in STACK.");
+    }
+    public void updateScreenTitle(String from, String newTitle){
+		removeWindowMenuItem(from);
+		addWindowMenuItem(newTitle);
     }
     
     public boolean unsavedScreens(){
