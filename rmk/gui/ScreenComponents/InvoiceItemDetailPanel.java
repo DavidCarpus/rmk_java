@@ -262,8 +262,8 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 	public InvoiceEntries getData() {
 		knife.setComment(comments.getText());
 		String price = txtFields[FIELD_PRICE].getValue();
-		if (price.startsWith("$")) // strip $
-			price = price.substring(1);
+		price = price.replaceAll("$",""); // remove $
+		price = price.replaceAll(",",""); // remove commas
 		knife.setPrice(Double.parseDouble(price));
 		String qty = txtFields[FIELD_QUANTITY].getValue();
 		knife.setQuantity(Integer.parseInt(qty));

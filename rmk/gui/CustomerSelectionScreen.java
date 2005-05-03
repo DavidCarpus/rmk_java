@@ -3,6 +3,8 @@ package rmk.gui;
 import javax.swing.*;
 
 import rmk.ErrorLogger;
+import rmk.ScreenController;
+import rmk.SignalProcessor;
 import rmk.database.dbobjects.DBObject;
 
 import java.awt.*;
@@ -85,11 +87,6 @@ public class CustomerSelectionScreen extends Screen{
 		customerListPanel.setData(model);
 		buttonBar.enableButton(3,true);
     }
-//
-//    public void addActionListener(ActionListener listener){
-//	if(listeners == null) listeners = new Vector();
-//	if(!listeners.contains(listener)) listeners.addElement(listener);
-//    }
 
 
     public void updateOccured(DBObject itemChanged, int changeType, DBObject parentItem){
@@ -97,7 +94,22 @@ public class CustomerSelectionScreen extends Screen{
      }
     
 	public void buttonPress(int button, int id) {
-		ErrorLogger.getInstance().TODO();
+		switch (button) {
+		case ScreenController.BUTTON_CANCEL:
+			defaultCancelAction();
+			SignalProcessor.getInstance().removeScreen(this);
+		break;
+		
+		case ScreenController.BUTTON_SELECTION_DETAILS:
+		{
+			ApplicationMenu.getInstance().pushScreenToTopOfStack(this);
+			rmk.ScreenController.getInstance().displayCustomer(id);
+		}
+		break;
+		default:
+			ErrorLogger.getInstance().TODO();
+		break;
+		}
 	}
 	
 }

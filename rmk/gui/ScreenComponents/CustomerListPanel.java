@@ -1,50 +1,47 @@
 package rmk.gui.ScreenComponents;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
+
 import carpus.gui.*;
+
 import java.util.*;
+
 import javax.swing.table.TableColumn;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.border.EtchedBorder;
 
 import rmk.ErrorLogger;
+import rmk.ScreenController;
 import rmk.database.dbobjects.Customer;
 import rmk.gui.Dialogs;
 import rmk.gui.IScreen;
 
 
-public class CustomerListPanel extends JPanel implements ActionListener{
+public class CustomerListPanel 
+	extends DataListPanel 
+	implements ActionListener
+{
+	
     Vector listeners=null;
-    CustomerListTableModel customerData;
-    carpus.util.TableSorter sorter;
-    Vector invoiceList;
-    JTable table;
+    Vector customerList;
     long selectedCustomer;
     carpus.gui.BasicToolBar buttonBar;
     IScreen parent = null;
-
+    
     public CustomerListPanel(){
-	setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-	setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+    	dataModel = new CustomerListTableModel(customerList);
+    	setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+    	setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+    	addTable(dataModel);
 
-        customerData = new CustomerListTableModel(invoiceList);
-        sorter = new carpus.util.TableSorter(customerData); 
-	table = new JTable(sorter);
-	table.setFont(new Font("Serif", Font.BOLD, 14));
-
-	KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
-      	this.registerKeyboardAction(this, "Cancel", stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
+//	KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
+//      	this.registerKeyboardAction(this, "Cancel", stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 	TableColumn column = null;
-	for (int i = 0; i < customerData.getColumnCount(); i++) {
-	    column = table.getColumnModel().getColumn(i);
-	    if(customerData.isDateColumn(i)) // date fields 
-		table.getColumnModel().getColumn(i).setCellRenderer
-		    (new TableDateCellRenderer(table.getSelectionBackground()));
+	for (int i = 0; i < dataModel.getColumnCount(); i++) {
+		column = table.getColumnModel().getColumn(i);
 	    if (i == 0) { // ID column, hide
 		column.setMaxWidth(0);
 		column.setMinWidth(0);
@@ -52,45 +49,46 @@ public class CustomerListPanel extends JPanel implements ActionListener{
   		column.setPreferredWidth(0);
 	    }else if (i == 1) { // Name column
 		column.setPreferredWidth(250);
-	    }else if (i > customerData.getColumnCount()-3) { // last 2 columns, flags
+	    }else if (i > dataModel.getColumnCount()-3) { // last 2 columns, flags
 			column.setPreferredWidth(10);
 	    }else {
 		column.setPreferredWidth(100);
 	    }
 	}
 
-	sorter.addMouseListenerToHeaderInTable(table);
-
+	setTableSelectionListeners();
+//	sorter.addMouseListenerToHeaderInTable(table);
+	
 	//following code specifies that only one row at a time can be selected
-	table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	ListSelectionModel rowSM = table.getSelectionModel();
-	rowSM.addListSelectionListener(new ListSelectionListener(){
-		public void valueChanged(ListSelectionEvent e) {
-		    if (e.getValueIsAdjusting()) return; //Ignore extra messages.
-		    ListSelectionModel lsm = (ListSelectionModel)e.getSource();
-		    if (!lsm.isSelectionEmpty()) {
-			int row=lsm.getMinSelectionIndex();
-				selectedCustomer = ((Long)sorter.getValueAt(row,0)).longValue();
-				buttonBar.enableButton(1, false);
-//				buttonBar.enableButton(2, false);
-				try {
-                    Customer cust = rmk.DataModel.getInstance().customerInfo.getCustomerByID(selectedCustomer);
-                	buttonBar.enableButton(2, cust.isDealer());
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
-		    }
-		    buttonBar.enableButton(0, !lsm.isSelectionEmpty());
-		    buttonBar.enableButton(1, !lsm.isSelectionEmpty());
-		}
-	    });
-	table.addMouseListener(new MouseAdapter(){
-		public void mouseClicked(MouseEvent e){
-		    if (e.getClickCount() == 2){
-			actionPerformed(new ActionEvent(this,1,"CustomerDetails"));
-		    }
-		}
-	    } );
+//	table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//	ListSelectionModel rowSM = table.getSelectionModel();
+//	rowSM.addListSelectionListener(new ListSelectionListener(){
+//		public void valueChanged(ListSelectionEvent e) {
+//		    if (e.getValueIsAdjusting()) return; //Ignore extra messages.
+//		    ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+//		    if (!lsm.isSelectionEmpty()) {
+//			int row=lsm.getMinSelectionIndex();
+//				selectedCustomer = ((Long)sorter.getValueAt(row,0)).longValue();
+//				buttonBar.enableButton(1, false);
+////				buttonBar.enableButton(2, false);
+//				try {
+//                    Customer cust = rmk.DataModel.getInstance().customerInfo.getCustomerByID(selectedCustomer);
+//                	buttonBar.enableButton(2, cust.isDealer());
+//                } catch (Exception e1) {
+//                    e1.printStackTrace();
+//                }
+//		    }
+//		    buttonBar.enableButton(0, !lsm.isSelectionEmpty());
+//		    buttonBar.enableButton(1, !lsm.isSelectionEmpty());
+//		}
+//	    });
+//	table.addMouseListener(new MouseAdapter(){
+//		public void mouseClicked(MouseEvent e){
+//		    if (e.getClickCount() == 2){
+//			actionPerformed(new ActionEvent(this,1,"CustomerDetails"));
+//		    }
+//		}
+//	    } );
 
       	JScrollPane scrollPane = new JScrollPane(table);
 
@@ -110,6 +108,19 @@ public class CustomerListPanel extends JPanel implements ActionListener{
 //    	setPreferredSize(new Dimension(325,125));
     }
     
+	//==========================================================
+	protected void doubleClick() {
+		parent.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int) selectedItem);
+//		actionPerformed(new ActionEvent(this, 1, "InvoiceDetails"));
+	}
+	
+	protected long selectedItem(int row) {
+		long val = ((Long) sorter.getValueAt(row, 0)).longValue();
+		buttonBar.enableButton(0, true);
+		buttonBar.enableButton(1, true);
+		buttonBar.enableButton(2, true);
+		return val;
+	}
 	public void setParent(IScreen screen){
 		parent = screen;
 	}
@@ -123,6 +134,9 @@ public class CustomerListPanel extends JPanel implements ActionListener{
 
     public void actionPerformed(ActionEvent e) {
 	String command = e.getActionCommand().toUpperCase();
+	
+	
+	
     ErrorLogger.getInstance().logDebugCommand(command);
 
 	ActionEvent event=null;
@@ -154,18 +168,11 @@ public class CustomerListPanel extends JPanel implements ActionListener{
 	if(!listeners.contains(listener)) listeners.addElement(listener);
     }
     public void setData(rmk.gui.DBGuiModel model){
-	setData(model.getCustomerData());
+    	Vector custData = model.getCustomerData();
+    	setData(custData);
     }
 
-    public void setData(Vector lst){	
-	customerData.setValues(lst);
-	sorter.tableChanged(new javax.swing.event.TableModelEvent(sorter));
-	sorter.sortByColumn(1, true);
-	setVisible(true);
-    }
-//      public void setMore(boolean more){
-//  	buttonBar.enableButton(0, more);
-//      }
+
     public static void main(String args[])
 	throws Exception
     {
@@ -174,7 +181,7 @@ public class CustomerListPanel extends JPanel implements ActionListener{
 
 }
 //===========================================================
-class CustomerListTableModel extends AbstractTableModel {
+class CustomerListTableModel extends carpus.gui.DataListPanelTableModel {
     String[] columnNames= new String[]{"Index", "CustomerName", "PhoneNumber", "Dealer", "Flagged"};
     Object[][] data= new Object[0][columnNames.length];
     boolean[] dateColumn = new boolean[]{false, false, false, false, false};

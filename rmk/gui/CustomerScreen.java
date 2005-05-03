@@ -30,23 +30,18 @@ public class CustomerScreen extends Screen{
 		getContentPane().setLayout(new BoxLayout(getContentPane(),BoxLayout.Y_AXIS));
 		custPanel = new rmk.gui.ScreenComponents.CustomerInfoPanel();
 		custPanel.setParent(this);
-		//	custPanel.addActionListener(this);
 		getContentPane().add(custPanel);
 		
 		custAddPanel = new rmk.gui.ScreenComponents.CustomerAddressPanel();
 		custAddPanel.setParent(this);
-		//	custAddPanel.addActionListener(this);
 		getContentPane().add(custAddPanel);
-		//    	getContentPane().add(custPanel);
 		
 		detailPanel = new rmk.gui.ScreenComponents.CustomerDetailPanel();
 		detailPanel.setParent(this);
-		//	detailPanel.addActionListener(this);
 		getContentPane().add(detailPanel);
 		
 		invoicePanel = new rmk.gui.ScreenComponents.InvoiceListPanel();
 		invoicePanel.setParent(this);
-		//	invoicePanel.addActionListener(this);
 		getContentPane().add(invoicePanel);
 		//  	invoicePanel.addFocusListener(this);
 		
@@ -183,10 +178,7 @@ public class CustomerScreen extends Screen{
 	}
 	
 	//==========================================================
-	public void internalFrameActivated(
-			javax.swing.event.InternalFrameEvent e) {
-		//			ErrorLogger.getInstance().logMessage(
-		//				this.getClass().getName() + ":" + "Window Activated.");
+	public void internalFrameActivated(javax.swing.event.InternalFrameEvent e) {
 		int id = (int) ((Customer) custPanel.getData()).getCustomerID();
 		if (id == 0)
 			custPanel.grabFocus();
@@ -197,8 +189,6 @@ public class CustomerScreen extends Screen{
 				custAddPanel.grabFocus();
 		}
 		ApplicationMenu.getInstance().pushScreenToTopOfStack(this);
-		
-		//		  	("Internal frame activated", e);
 	}
 
 	public void addNewInvoice(){
@@ -218,9 +208,7 @@ public class CustomerScreen extends Screen{
 		Vector invList = model.getInvoiceData();
 		if (invList == null) invList = new Vector();
 		invList.add(inv);
-		//            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + invList.size() + ":"
-		//                    + ((Invoice) invList.get(invList.size() - 1)).getInvoice());
-		
+
 		model.setInvoiceData(invList);
 		model.setInvoiceItemsData(null);
 
@@ -241,8 +229,7 @@ public class CustomerScreen extends Screen{
 	}
     //==========================================================
 	public void processCommand(String command, Object from){
-		//	    public void actionPerformed(ActionEvent e) {
-		//		String command = e.getActionCommand().toUpperCase().trim();
+
 		ErrorLogger.getInstance().TODO();
 		
 //		if (command.equals("CANCEL")) { //cancel
@@ -277,66 +264,9 @@ public class CustomerScreen extends Screen{
 //		} else if (command.equals("CUSTOMER DETAIL CHANGED")) { //INFO CHANGED
 //			editedDetail = true;
 //			
-//		} else if (command.equals("INVOICEDETAILS")) { // INVOICE DETAILS
-//			// request
-//			long invoiceID = invoicePanel.getSelectedItemID();
-//			if (invoiceID == 0) {
-//				invoicePanel.grabFocus();
-//				return;
-//			}
-//			//		Invoice inv = sys.invoiceInfo.getInvoice(invoiceID);
-//			Invoice inv = (Invoice) invoicePanel.getSelectedItem();
-//			if (model == null) model = new DBGuiModel();
-//			rmk.ScreenController.getInstance()
-//			.displayInvoiceDetails(inv, model);
-//			
-//		} else if (command.equals("INVOICEREPORT")) { // INVOICE DETAILS request
-//			long invoiceNumber = invoicePanel.getSelectedItemID();
-//			
-//			int format = HtmlReportDialog.LONG_FORMAT;
-//			Customer cust = (Customer) custPanel.getData();
-//			if (cust.isDealer()) format = HtmlReportDialog.SHORT_FORMAT;
-//			
-//			rmk.gui.Dialogs.report(HtmlReportDialog.INVOICE_REPORT, format,
-//					(int) invoiceNumber);
-//			
 //		} else if (command.equals("ADDINVOICE")) { // New INVOICE request
 //			addNewInvoice();
 //			return;
-//		} else if (command.equals("PAYMENTS")) { //PaymentInfo Display
-//			//  	    long invoiceID = invoicePanel.getSelectedItem();
-//			Invoice invoice = (Invoice) invoicePanel.getSelectedItem();
-//			if (invoice == null) {
-//				invoicePanel.grabFocus();
-//				return;
-//			}
-//			
-//			//	    rmk.database.dbobjects.Invoice selectedInvoice =
-//			// rmk.DataModel.getInstance().invoiceInfo.getInvoice(invoiceID);
-//			Vector invoices = null;
-//			if (customer != null) invoices = customer.getInvoices();
-//			if (invoices == null) {
-//				invoices = model.getInvoiceData();
-//				if (invoices != null
-//						&& invoices.size() > 0
-//						&& ((Invoice) invoices.get(0)).getInvoice() != invoice
-//						.getInvoice()) {
-//					invoices = new Vector();
-//				}
-//			}
-//			if (invoices == null) invoices = new Vector();
-//			if (!invoices.contains(invoice)) invoices.add(invoice);
-//			if (invoices == null || invoices.size() == 1) // empty or single invoice
-//				model.setInvoiceData(invoices);
-//			else { // move to end?	    
-//				invoices.remove(invoice);
-//				invoices.add(invoice);
-//			}
-//			
-//			Vector paymentInfo = rmk.DataModel.getInstance().financialInfo
-//			.getInvoicePayments(invoice.getInvoice());
-//			model.setPaymentsData(paymentInfo);
-//			rmk.ScreenController.getInstance().invoicePayments(model);
 //		} else if (command.equals("SAVE")) { // Save INFO
 //			saveData();
 //		} else if (command.equals("INVOICE_SAVED")) { // INVOICE DETAILS request
@@ -349,6 +279,10 @@ public class CustomerScreen extends Screen{
 //		}
 //		buttonBar.enableButton(0, editedInfo || editedAddress || editedDetail);
 //		//  	parentFrame.actionPerformed(e);
+	}
+	
+	public void displayPayments(Customer customer, Invoice invoice){
+		rmk.ScreenController.getInstance().invoicePayments(customer, invoice);
 	}
 	
 	public void updateOccured(DBObject itemChanged, int changeType, DBObject parentItem){
@@ -410,6 +344,13 @@ public class CustomerScreen extends Screen{
 			rmk.ScreenController.getInstance().displayInvoiceDetails(inv, model);
 		}
 		break;
+		
+		case ScreenController.BUTTON_F7:
+		{
+			Invoice inv = (Invoice) invoicePanel.getSelectedItem();
+			displayPayments(customer, inv);
+		}
+		
 		
 		case ScreenController.BUTTON_DISPLAY_INVOICE:
 		{		

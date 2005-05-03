@@ -3,6 +3,7 @@ package rmk;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import rmk.database.dbobjects.Customer;
 import rmk.database.dbobjects.Invoice;
 import rmk.gui.*;
 
@@ -398,15 +399,34 @@ public class ScreenController {
 			Desktop.getInstance().add(screen);
 			screen.setData(data);
 			select(screen);
-			//	    screen.setVisible(true);
-			//	    screen.toFront();
-			//		screen.grabFocus();
 		} catch (Exception e) {
 			ErrorLogger.getInstance().logError(
 					"ScreenController:invoicePayments", e);
 		} // end of try-catch
 	}
 
+	public void invoicePayments(Customer customer, Invoice invoice){
+		try {
+			InvoicePaymentsScreen screen = new InvoicePaymentsScreen();
+			DBGuiModel model = new DBGuiModel();
+			
+			Vector invoices = new Vector();
+			invoices.add(invoice);
+			model.setInvoiceData(invoices);
+
+			Vector custVector = new Vector();
+			custVector.add(customer);
+			model.setCustomerData(custVector);
+			
+			invoicePayments(model);
+		} catch (Exception e) {
+			ErrorLogger.getInstance().logError(
+					"ScreenController:invoicePayments", e);
+		} // end of try-catch
+
+	}
+	
+	
 	public void invoiceSearch() {
 		ErrorLogger.getInstance().logDebug("", true);
 

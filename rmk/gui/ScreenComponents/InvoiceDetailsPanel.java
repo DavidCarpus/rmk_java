@@ -354,11 +354,8 @@ implements ActionListener
     //========================================================
     public void actionPerformed(ActionEvent e){
         String command = e.getActionCommand().toUpperCase();
-        ErrorLogger.getInstance().logDebugCommand(command);
 
-        boolean optionChanged = false;
-        ActionEvent event=null;
-        ErrorLogger.getInstance().logDebugCommand(command);
+//        boolean optionChanged = false;
         
         if(command.equals("EDIT NOTES") || command.equals("ADD NOTES")){
             String text = rmk.gui.Dialogs.getEditNote(currentNotes, "Notes", rmk.gui.Dialogs.MAX_LEN_INVOICE_NOTES, true);
@@ -379,68 +376,11 @@ implements ActionListener
     	}else if(command.equals("F3")){
     		parent.updateOccured(null,ScreenController.BUTTON_F3, null);
     		return;
-    		
-        } else if(command.equals("DISCOUNT")){
-            double newDisc = discountPercentage;
-            if(newDisc < 1) newDisc *= 100;
-            String reply=JOptionPane.showInputDialog("NewDiscount?", ""+newDisc);
-            if(reply == null || reply.equals("")) return;  // NO change	    
-            try {
-                newDisc = Double.parseDouble(reply);
-                ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "newDisc:" + newDisc);
-                
-                if(discountPercentage != newDisc){
-                    discountPercentage = newDisc;
-                    invoice.setDiscountPercentage(discountPercentage);
-                    parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
-//                    event = new ActionEvent(this, 1, "INVOICECHANGED");
-                }
-            } catch (Exception err){
-            } // end of try-catch
+        } else if(command.equals("SHOP SALE")){
+        	if(switchToShopSale())
+        		parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);        
             return;
             
-            //---------------------------------
-        } else if(command.equals("SAME SHIP ADDRESS")){
-            shipAddressPanel.setVisible(false);
-            parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
-            optionChanged = true;
-            return;
-            //---------------------------------
-        } else if(command.equals("SHIPPING ADDRESS")){
-            shipAddressPanel.setVisible(true);
-            parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
-            optionChanged = true;
-            return;
-            //---------------------------------
-        } else if(command.equals("SHOP SALE")){
-            shipAddressPanel.setVisible(false);
-            long difference=0;
-            if(invoice.getDateEstimated() != null)
-                difference = invoice.getDateEstimated().getTimeInMillis()
-                - (new java.util.GregorianCalendar()).getTimeInMillis();
-            long days = difference / (1000 * 60 * 60 * 24);
-            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ difference + ":" + days);
-            if(days > 7){
-                invoice.setDateEstimated(new java.util.GregorianCalendar());
-                ((LabeledTextField)txtFields[FIELD_DATEESTIMATED]).setValue(
-                        dateFormatter.format(invoice.getDateEstimated().getTime()));
-                
-            }
-            invoice.setShopSale(true);
-            updateTaxRate(invoice);
-            parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, null);
-            optionChanged = true;
-            double storedTaxrate = invoice.getTaxPercentage();
-            if(storedTaxrate <= 0){
-                taxRate = sys.financialInfo.getInvoiceTaxRate(invoice);
-            }
-            return;
-        } else if(command.equals("EST_UP_WEEK")){
-            adjustEstDate(-7);
-            event = new ActionEvent(this, 1, "INVOICECHANGED");
-        } else if(command.equals("EST_DOWN_WEEK")){
-            adjustEstDate(7);
-            event = new ActionEvent(this, 1, "INVOICECHANGED");
         } else if(command.equals("TAXRATE")){
             if(taxRate < 1) taxRate *= 100.0;
             double oldRate = taxRate;
@@ -459,6 +399,51 @@ implements ActionListener
             }else
             	ErrorLogger.getInstance().logMessage("TaxRate not changed");
             return;
+            
+            
+        } else if(command.equals("DISCOUNT")){
+            double newDisc = discountPercentage;
+            if(newDisc < 1) newDisc *= 100;
+            String reply=JOptionPane.showInputDialog("NewDiscount?", ""+newDisc);
+            if(reply == null || reply.equals("")) return;  // NO change	    
+            try {
+                newDisc = Double.parseDouble(reply);
+                ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "newDisc:" + newDisc);
+                
+                if(discountPercentage != newDisc){
+                    discountPercentage = newDisc;
+                    invoice.setDiscountPercentage(discountPercentage);
+                    parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
+//                    event = new ActionEvent(this, 1, "INVOICECHANGED");
+                }
+            } catch (Exception err){
+            } // end of try-catch
+            return;            
+            //---------------------------------
+        } else if(command.equals("SAME SHIP ADDRESS")){
+            shipAddressPanel.setVisible(false);
+            invoice.setShopSale(false);
+            invoice.setShippingInfo("");
+            parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
+//            optionChanged = true;
+            return;
+            //---------------------------------
+        } else if(command.equals("SHIPPING ADDRESS")){
+            shipAddressPanel.setVisible(true);
+            invoice.setShopSale(false);
+            invoice.setShippingInfo(" ");
+            parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
+//            optionChanged = true;
+            return;
+            //---------------------------------
+            
+//        } else if(command.equals("EST_UP_WEEK")){
+//            adjustEstDate(-7);
+//            event = new ActionEvent(this, 1, "INVOICECHANGED");
+//        } else if(command.equals("EST_DOWN_WEEK")){
+//            adjustEstDate(7);
+//            event = new ActionEvent(this, 1, "INVOICECHANGED");
+
             
         } else if(command.equals("<")){
             GregorianCalendar date = DateFunctions.gregorianFromString(((LabeledTextField)txtFields[FIELD_DATEESTIMATED]).getValue());
@@ -482,6 +467,31 @@ implements ActionListener
         
         ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
         ErrorLogger.getInstance().TODO();
+    }
+    
+    //--------------------------------------------------------
+    boolean switchToShopSale(){
+        shipAddressPanel.setVisible(false);
+        long difference=0;
+        if(invoice.getDateEstimated() != null)
+            difference = invoice.getDateEstimated().getTimeInMillis()
+            - (new java.util.GregorianCalendar()).getTimeInMillis();
+        long days = difference / (1000 * 60 * 60 * 24);
+        ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ difference + ":" + days);
+        if(days > 7){
+            invoice.setDateEstimated(new java.util.GregorianCalendar());
+            ((LabeledTextField)txtFields[FIELD_DATEESTIMATED]).setValue(
+                    dateFormatter.format(invoice.getDateEstimated().getTime()));
+            
+        }
+        invoice.setShopSale(true);
+        updateTaxRate(invoice);
+        double storedTaxrate = invoice.getTaxPercentage();
+        if(storedTaxrate <= 0){
+            taxRate = sys.financialInfo.getInvoiceTaxRate(invoice);
+        }
+        
+        return true;
     }
     //--------------------------------------------------------
     void adjustEstDate(int days){
@@ -637,20 +647,26 @@ implements ActionListener
         ((LabeledTextField)txtFields[FIELD_PONUMBER]).setValue(invoice.getPONumber());
         
         taxRate = invoice.getTaxPercentage();
-        
-        shopSale.setSelected(invoice.isShopSale());
-        String shipAddress = invoice.getShippingInfo();
-        if(shipAddress == null) shipAddress = "";
-        
+              
         if(updateTaxRate(invoice)){
             setEdited(true);
             setPrimaryDataItem(invoice);
             if(! loading)
             	editingOccured();
-//            notifyListeners(new ActionEvent(this, 1, "INVOICECHANGED"));
         }
         
-        discountPercentage = invoice.getDiscountPercentage();
+        setShopOptions();
+        discountPercentage = invoice.getDiscountPercentage();               
+
+        loading = false;
+//      txtFields[i++].setValue(""+invoice.get());
+    }
+    
+    public void setShopOptions(){
+        String shipAddress = invoice.getShippingInfo();
+        if(shipAddress == null) shipAddress = "";
+        
+        shopSale.setSelected(invoice.isShopSale());
         
         if(invoice.isShopSale()){
 //          ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "shopSale");	    
@@ -663,11 +679,7 @@ implements ActionListener
             sameShippingAddress.setSelected(true);
             shipAddressPanel.setVisible(false);
         }
-        
-//      sameShippingAddress.setSelected(!shopSale.isSelected() && instructions.length() == 0);
-        loading = false;
-//      shippAddressPanel.setVisible(!sameShippingAddress.isSelected());
-//      txtFields[i++].setValue(""+invoice.get());
+//        shipAddressPanel.setVisible(!sameShippingAddress.isSelected());
     }
         
     public double getTaxChange(){

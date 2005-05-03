@@ -146,6 +146,7 @@ implements ActionListener,  ListSelectionListener
         InvoiceEntries generatedKnife = getKnife(item);
 
         // if changing an existing knife
+        double price=0;
         if(originalKnife != null){ 
             // get old features, and change the entryID on them
             // AND total price up
@@ -158,7 +159,6 @@ implements ActionListener,  ListSelectionListener
                         feature.setEntryID(generatedKnife.getInvoiceEntryID());
                     }
                 } else{
-                    double price=0;
                     price = priceTable.getPartPrice(DataModel.getCurrentYear(), (int)generatedKnife.getPartID());
 
                     for(Enumeration enum=existingFeatures.elements(); enum.hasMoreElements();){
@@ -170,8 +170,9 @@ implements ActionListener,  ListSelectionListener
                     originalKnife.setPrice(price);
                 }
             } else{
-                double price=0;
                 price = priceTable.getPartPrice(DataModel.getCurrentYear(), (int)generatedKnife.getPartID());
+                int qty = detailPanel.getQuantity();
+                price *= qty;
                 originalKnife.setPrice(price);
             }
         } else{ // otherwise, new Knife
@@ -196,7 +197,7 @@ implements ActionListener,  ListSelectionListener
         	parent.updateOccured(generatedKnife,ScreenController.UPDATE_EDIT, null);
         else
         	parent.updateOccured(generatedKnife,ScreenController.LIST_ITEM_SELECTED, null);
-//        actionPerformed(new ActionEvent(list, 1, "INVOICEITEMDETAILSCHANGE"));
+
         int year = sys.invoiceInfo.getPricingYear(invoice);
 
         //TODO: Neet to go through parent screen with messages

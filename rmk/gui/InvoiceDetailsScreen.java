@@ -93,11 +93,7 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		super("Invoice Details");
 		setData(data);
 	}
-	
-	//----------------------------------------------------------
-	//      public void processKeyEvent(KeyEvent e){
-	//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ e);
-	//      }
+
 	//==========================================================
 	public boolean isEdited() {
 		return (editedInvoice || editedCustomer);
@@ -267,13 +263,7 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 				invoiceEntriesList.setData(model);
 				invoiceDetailPnl.setEdited(false);
 			}
-			//--------------------------------
-			//   	    double newTaxes = sys.financialInfo.getInvoiceTaxes(inv);
-			//  	    double taxChange = newTaxes-originalInvoiceTaxes;
-			//  	    taxChange = Math.floor(taxChange*100+0.5)/100;
-			
-			//  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":tax Change"+ ":" + 
-			//  			       taxChange);
+
 			if (newInv)
 				addEntry();
 			
@@ -570,9 +560,7 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 			ErrorLogger.getInstance().TODO();
 		}
 	}
-	
-		//	    public void actionPerformed(ActionEvent e) {
-		//	        String command = e.getActionCommand().toUpperCase().trim();
+
 	public void processCommand(String command, Object from){
 		boolean inShippingAddressField=false;
 		ErrorLogger.getInstance().logDebugCommand(command);
@@ -716,33 +704,11 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 				invoiceEntriesList.grabFocus();
 			//			invoiceEntriesList.selectedItem(lastItemID);
 			
-			
-//		} else if (command.startsWith("KNIFECOUNTS")) { //Knife count for estimatedDate
-//			String dateStr = command.substring(command.indexOf("-") + 1);
-//			java.util.GregorianCalendar date = carpus.util.DateFunctions
-//			.gregorianFromString(dateStr);
-//			Dialogs.showKnifeCounts(date);
-//			
 			//-----------------------------
 		} else if (command.equals("DBMODELCHANGED-KNIFEDATA")) { //INFO CHANGED
 			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
 			loadItemList(model);
-			//-----------------------------
-//		} else if (command.equals("SHIP")) { // Ship it
-//			shipInvoice();
-			// -------------------------
-//		} else if (command.equals("CUSTOMERDETAILS")) {
-//			Invoice invoice = invoiceDetailPnl.getData();
-//			rmk.gui.IScreen screen = rmk.ScreenController.getInstance()
-//			.getCustomerScreen(invoice);
-//			
-//			if (screen == null) {
-//				rmk.ScreenController.getInstance().displayCustomer(
-//						invoice.getCustomerID());
-//			} else {
-//				screen.setData(model);
-//				screen.bringToFront();
-//			}
+
 			//-----------------------------
 		} else if (command.equals("LISTEXPAND")) {
 			expandedList = !expandedList;
@@ -908,16 +874,26 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 			buttonBar.enableButton(0, true);
 		}
 		break;
+		
 		case ScreenController.BUTTON_SELECTION_DETAILS:
+		{
 			ApplicationMenu.getInstance().pushScreenToTopOfStack(this);
-		//		id = e.getID();
 			editEntry(id);
+		}
+		break;
+		
 		case ScreenController.BUTTON_SAVE:
+		{
 			saveData();
+		}
 		break;
+		
 		case ScreenController.BUTTON_KNIFE_COUNT:
+		{
 			Dialogs.showKnifeCounts(invoice.getDateEstimated());
+		}
 		break;
+		
 		case ScreenController.BUTTON_DISPLAY_INVOICE:
 		{
 			int format = HtmlReportDialog.LONG_FORMAT;

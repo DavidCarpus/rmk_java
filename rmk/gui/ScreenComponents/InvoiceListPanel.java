@@ -136,6 +136,9 @@ implements ActionListener, FocusListener{
 		} else if(command.equals("CANCEL")){
 			parent.buttonPress(ScreenController.BUTTON_CANCEL, 0);
 			return;
+		} else if (command.equals("PAYMENTS")){
+			parent.buttonPress(ScreenController.BUTTON_F7, (int) getSelectedItemID());
+			return;
 		}
 		
 		ErrorLogger.getInstance().logDebugCommand(command);
