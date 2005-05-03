@@ -326,6 +326,9 @@ public class CustomerScreen extends Screen{
 	}
 	
 	public void buttonPress(int button, int id) {
+
+		ErrorLogger.getInstance().logButton(button, id);
+		
 		switch(button){
 		case ScreenController.BUTTON_CANCEL:
 			defaultCancelAction();

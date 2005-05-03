@@ -6,6 +6,8 @@ package rmk;
 import java.io.*;
 import java.util.Date;
 
+import rmk.database.dbobjects.DBObject;
+
 import Configuration.Config;
 
 public class ErrorLogger implements carpus.util.LoggerInterface{
@@ -191,11 +193,35 @@ public class ErrorLogger implements carpus.util.LoggerInterface{
     	log(mesg);
     }
     
+    public void logButton(int button, int id){
+    	String caller = getCallerFunction();
+    	caller = caller.substring(caller.indexOf("("));
+    	
+    	String mesg = "Button:" + caller + ":" +  button + " : " + id;
+    	log(mesg);
+    }
+    
+    public void logUpdate(DBObject itemChanged, int changeType, DBObject parentItem){
+    	String mesg = "ScreenUpdate:";
+
+    	String caller = getCallerFunction();
+    	caller = caller.substring(caller.indexOf("("));
+    	mesg += caller + "";
+
+    	mesg += "" + itemChanged + " : ";
+    	mesg += "" + parentItem;    	
+    	
+    	log(mesg);
+    }
+    
     public void TODO(){
     	String caller = getCallerFunction();
     	String mesg = "***** Unimplemented Functionallity *****:" + caller;
-    	log(mesg);
-    	
+
+    	String trace = stkTrace("ErrorLogger"); 
+    	mesg+= trace;
+
+    	log(mesg);    	
     }
     
 }

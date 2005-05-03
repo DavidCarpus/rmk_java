@@ -354,6 +354,9 @@ public class InvoiceItemScreen extends Screen{
 		String itemName="";
 		if(itemChanged != null) itemName = itemChanged.getClass().getName();
 		
+		ErrorLogger.getInstance().logUpdate(itemChanged,changeType,parentItem);
+
+		
 		switch(changeType){
 		case ScreenController.LIST_ITEM_SELECTED: // SET_KNIFE_MODEL
 		{
@@ -381,6 +384,7 @@ public class InvoiceItemScreen extends Screen{
 			if(itemName.indexOf("InvoiceEntryAdditions") > 0){
 				InvoiceEntryAdditions feature = (InvoiceEntryAdditions)itemChanged;
 				feature.setEntryID(knife.getInvoiceEntryID());
+				
 				knife.addFeature(feature);
 				if(itemPanel.addFeature(feature)){
 					// price update query
@@ -406,6 +410,13 @@ public class InvoiceItemScreen extends Screen{
 		break;
 		case ScreenController.UPDATE_EDIT:
 		{
+			if(itemName.indexOf("InvoiceEntryAdditions") > 0){
+				if(itemPanel.featureChange()){
+					((JButton)buttonBar.getButton(0)).setEnabled(true);
+				}else{
+					ErrorLogger.getInstance().TODO();
+				}				
+			}
 			//			InvoiceEntryAdditions feature = (InvoiceEntryAdditions)itemChanged;
 			((JButton)buttonBar.getButton(0)).setEnabled(true);
 		}
@@ -418,6 +429,9 @@ public class InvoiceItemScreen extends Screen{
 	}
 	
 	public void buttonPress(int button, int id) {
+
+		ErrorLogger.getInstance().logButton(button, id);
+		
 		switch(button){
 		case ScreenController.BUTTON_CANCEL:
 		{			

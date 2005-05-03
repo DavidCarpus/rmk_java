@@ -102,7 +102,6 @@ implements ActionListener,  ListSelectionListener
 
         if (command.equals("INVOICEITEMDETAILSCHANGE")) { //INVOICE FEATURE CHANGE
             setEdited(true);
-    		//TODO: Neet to go through parent screen with messages
             if(!loading)
             	parent.updateOccured(originalKnife,ScreenController.UPDATE_EDIT, null);
             else
@@ -199,7 +198,7 @@ implements ActionListener,  ListSelectionListener
         	parent.updateOccured(generatedKnife,ScreenController.LIST_ITEM_SELECTED, null);
 
         int year = sys.invoiceInfo.getPricingYear(invoice);
-
+        detailPanel.setPricingYear(year);
         //TODO: Neet to go through parent screen with messages
         //        notifyListeners(new ActionEvent(this, (int)generatedKnife.getPartID(), "SET_KNIFE_MODEL|" + year));
         

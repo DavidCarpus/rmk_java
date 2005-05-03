@@ -85,8 +85,8 @@ public class InvoiceItemFeaturesPanel extends JPanel{
 						    ""+feature.getPrice()
 						    );
 	if(newPrice == null) return;
-	feature.setPrice(Double.parseDouble(newPrice));
-	notifyListeners("INVOICEFEATUREEDITED");	
+	feature.setPrice(Double.parseDouble(newPrice));	
+	parent.updateOccured(feature, ScreenController.UPDATE_EDIT, null);
     }
 //-----------------------------------------------------------------
     public boolean addFeature(InvoiceEntryAdditions newFeature){

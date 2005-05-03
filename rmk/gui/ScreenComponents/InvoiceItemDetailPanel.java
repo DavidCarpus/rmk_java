@@ -321,5 +321,7 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 		comments.setText("");
 		selectionPanel.clear();
 	}
-
+	public void setPricingYear(int year){
+		entryPanel.setPricingYear(year);
+	}
 }

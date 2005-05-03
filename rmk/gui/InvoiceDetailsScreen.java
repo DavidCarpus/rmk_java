@@ -783,6 +783,8 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		String itemName="";
 		if(itemChanged != null) itemName = itemChanged.getClass().getName();
 
+		ErrorLogger.getInstance().logUpdate(itemChanged,changeType,parentItem);
+
 		switch(changeType){
 		case ScreenController.UPDATE_EDIT:
 		{				
@@ -843,6 +845,8 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 	public void buttonPress(int button, int id) {
 		Invoice invoice = invoiceDetailPnl.getData();
 
+		ErrorLogger.getInstance().logButton(button, id);
+		
 		switch(button){
 		case ScreenController.BUTTON_CANCEL:
 			if (invoiceNumber == 0) { // remove 0 invoice from model

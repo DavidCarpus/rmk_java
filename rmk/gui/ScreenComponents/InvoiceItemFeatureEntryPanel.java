@@ -7,6 +7,7 @@ import rmk.DataModel;
 import rmk.ErrorLogger;
 import rmk.ScreenController;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
+import rmk.database.dbobjects.PartPrices;
 import rmk.database.dbobjects.Parts;
 import rmk.gui.DBGuiModel;
 
@@ -19,6 +20,7 @@ public class InvoiceItemFeatureEntryPanel
 //===============================================================
 {
     DBGuiModel model;
+    int priceYear = 0;
     rmk.DataModel sys = rmk.DataModel.getInstance();
     JTextField field = new JTextField("",3);
 
@@ -52,6 +54,13 @@ public class InvoiceItemFeatureEntryPanel
 		String enteredCode = field.getText();
 		Parts part = DataModel.getInstance().partInfo.getPartFromCode(enteredCode);		
 		newFeature.setPartID(part.getPartID());
+		if(!enteredCode.toUpperCase().equals(enteredCode)){ // lower case, set price to 0(zero)
+			newFeature.setPrice(0);
+		} else{
+//			int priceYear = DataModel.getCurrentYear();
+			PartPrices price = sys.pricetable.getPartPriceObject(priceYear, (int) part.getPartID());
+			newFeature.setPrice(price.getPrice());
+		}
 		newFeature.setShortDescription(enteredCode.toUpperCase());
 		setEdited(true);
     	parent.updateOccured(newFeature, ScreenController.UPDATE_ADD, null);
@@ -67,7 +76,7 @@ public class InvoiceItemFeatureEntryPanel
 //-----------------------------------------------------------------
     public void setData(DBGuiModel model ){}
 
-	
+    public void setPricingYear(int year){this.priceYear = year;}	
     
 }
 
