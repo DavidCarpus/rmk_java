@@ -280,8 +280,8 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 
 		if (currKnife == null)
 			currKnife = new InvoiceEntries(0);
-		else
-			ErrorLogger.getInstance().logMessage("setting ItemDetailPanel:" + currKnife);
+//		else
+//			ErrorLogger.getInstance().logMessage("setting ItemDetailPanel:" + currKnife);
 		
 		Vector invoices = model.getInvoiceData();
 		invoice = (Invoice) invoices.get(invoices.size() - 1);
@@ -290,7 +290,7 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 		if (currKnife.getFeatures() != null) {
 			features = (Vector) currKnife.getFeatures();
 		}
-		ErrorLogger.getInstance().logMessage("Updating ItemDetailFeatures:" + features);
+//		ErrorLogger.getInstance().logMessage("Updating ItemDetailFeatures:" + features);
 		model.setInvoiceItemAttributesData(features);
 		selectionPanel.setData(model);
 

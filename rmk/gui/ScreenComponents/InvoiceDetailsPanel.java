@@ -578,31 +578,77 @@ implements ActionListener
             index = data.size()-1;
         }
         Invoice invoice= (Invoice )data.get(index);
-        setData((carpus.database.DBObject)(Invoice )invoice);
-        invoice.setDiscountPercentage(discountPercentage);
-        updatePaymentInfo(invoice);
-        setPrimaryDataItem(invoice);
-
-        paymentButton.setEnabled((invoice.getInvoice() != 0));
-//      // paymentButton not relevent if invoice hasn't been saved
-//      } else{
-//      paymentSummary.setInvoice(invoice);
-//      }
-        
-        currentNotes=invoice.getComment();
-        notesButton.setToolTipText(currentNotes);
-
-        String notesButtonLabel = "Add Notes";
-        if(currentNotes != null && currentNotes.length() <=0 ) currentNotes = null;
-        if(currentNotes != null){
-            notesButtonLabel = "Edit Notes";
-            notesButton.setForeground(rmk.gui.InvoiceDetailsScreen.DK_GREEN);
-        } else{
-            notesButton.setForeground(Color.BLACK);
-        }
-        notesButton.setText(notesButtonLabel);
+        setData(invoice);
     }
 
+    
+    public void setData(Invoice invoice){
+    	this.invoice = invoice;
+    	loading = true;
+    	
+    	JFormattedTextField numField;
+    	
+    	((LabeledTextField)txtFields[FIELD_INVOICE]).setValue(""+invoice.getInvoice());	
+    	((LabeledTextField)txtFields[FIELD_DATEORDERED]).setValue(invoice.getDateOrdered()!= null?
+    			dateFormatter.format(invoice.getDateOrdered().getTime())
+				: "");
+    	((LabeledTextField)txtFields[FIELD_DATEESTIMATED]).setValue(invoice.getDateEstimated()!= null?
+    			dateFormatter.format(invoice.getDateEstimated().getTime())
+				: "");
+    	((LabeledTextField)txtFields[FIELD_DATESHIPPED]).setValue(invoice.getDateShipped()!= null?
+    			dateFormatter.format(invoice.getDateShipped().getTime())
+				: "");
+    	//    ((LabeledTextField)txtFields[FIELD_TOTALRETAIL]).setValue(invoice.getTotalRetail());
+    	((LabeledTextField)txtFields[FIELD_TOTALRETAIL]).setValue(sys.financialInfo.getTotalRetail(invoice));
+    	
+    	String info = invoice.getShippingInfo();
+    	if(info!= null)
+    		info =  info.replace('|', '\n');
+    	
+    	((JTextArea)txtFields[FIELD_SHIPPINGINFO]).setText(info!= null? info:"");
+    	
+    	((LabeledTextField)txtFields[FIELD_SHIPPINGINSTRUCTIONS]).setValue(invoice.getShippingInstructions()!= null?
+    			invoice.getShippingInstructions():"");
+    	
+    	//    ((JTextField)txtFields[FIELD_SHIPPINGCOST]).setText(""+invoice.getShippingAmount());
+    	((LabeledTextField)txtFields[FIELD_SHIPPINGCOST]).setValue(""+invoice.getShippingAmount());
+    	
+    	((LabeledTextField)txtFields[FIELD_PONUMBER]).setValue(invoice.getPONumber());
+    	
+    	taxRate = invoice.getTaxPercentage();
+    	
+    	if(updateTaxRate(invoice)){
+    		setEdited(true);
+    		setPrimaryDataItem(invoice);
+    		if(! loading)
+    			editingOccured();
+    	}
+    	
+    	setShopOptions(invoice);
+    	discountPercentage = invoice.getDiscountPercentage();               
+    	
+    	loading = false;
+    	
+    	invoice.setDiscountPercentage(discountPercentage);
+    	updatePaymentInfo(invoice);
+    	setPrimaryDataItem(invoice);
+    	
+    	//      // paymentButton not relevent if invoice hasn't been saved
+    	paymentButton.setEnabled((invoice.getInvoice() != 0));
+    	
+    	currentNotes=invoice.getComment();
+    	notesButton.setToolTipText(currentNotes);
+    	
+    	String notesButtonLabel = "Add Notes";
+    	if(currentNotes != null && currentNotes.length() <=0 ) currentNotes = null;
+    	if(currentNotes != null){
+    		notesButtonLabel = "Edit Notes";
+    		notesButton.setForeground(rmk.gui.InvoiceDetailsScreen.DK_GREEN);
+    	} else{
+    		notesButton.setForeground(Color.BLACK);
+    	}
+    	notesButton.setText(notesButtonLabel);	
+    }
     //--------------------------------------------------------
     public void updatePaymentInfo(Invoice invoice){
         if(invoice.getInvoice() == 0){ 
@@ -614,55 +660,11 @@ implements ActionListener
         paymentSummary.setInvoice(invoice);
     }
     //--------------------------------------------------------
-    public void setData(carpus.database.DBObject data){
-        loading = true;
-        invoice = (Invoice) data;	
-        JFormattedTextField numField;
-        
-        ((LabeledTextField)txtFields[FIELD_INVOICE]).setValue(""+invoice.getInvoice());	
-        ((LabeledTextField)txtFields[FIELD_DATEORDERED]).setValue(invoice.getDateOrdered()!= null?
-                dateFormatter.format(invoice.getDateOrdered().getTime())
-                : "");
-        ((LabeledTextField)txtFields[FIELD_DATEESTIMATED]).setValue(invoice.getDateEstimated()!= null?
-                dateFormatter.format(invoice.getDateEstimated().getTime())
-                : "");
-        ((LabeledTextField)txtFields[FIELD_DATESHIPPED]).setValue(invoice.getDateShipped()!= null?
-                dateFormatter.format(invoice.getDateShipped().getTime())
-                : "");
-//      ((LabeledTextField)txtFields[FIELD_TOTALRETAIL]).setValue(invoice.getTotalRetail());
-        ((LabeledTextField)txtFields[FIELD_TOTALRETAIL]).setValue(sys.financialInfo.getTotalRetail(invoice));
-        
-        String info = invoice.getShippingInfo();
-        if(info!= null)
-            info =  info.replace('|', '\n');
-        
-        ((JTextArea)txtFields[FIELD_SHIPPINGINFO]).setText(info!= null? info:"");
-        
-        ((LabeledTextField)txtFields[FIELD_SHIPPINGINSTRUCTIONS]).setValue(invoice.getShippingInstructions()!= null?
-                invoice.getShippingInstructions():"");
-        
-//      ((JTextField)txtFields[FIELD_SHIPPINGCOST]).setText(""+invoice.getShippingAmount());
-        ((LabeledTextField)txtFields[FIELD_SHIPPINGCOST]).setValue(""+invoice.getShippingAmount());
-        
-        ((LabeledTextField)txtFields[FIELD_PONUMBER]).setValue(invoice.getPONumber());
-        
-        taxRate = invoice.getTaxPercentage();
-              
-        if(updateTaxRate(invoice)){
-            setEdited(true);
-            setPrimaryDataItem(invoice);
-            if(! loading)
-            	editingOccured();
-        }
-        
-        setShopOptions();
-        discountPercentage = invoice.getDiscountPercentage();               
+//    public void setData(carpus.database.DBObject data){
 
-        loading = false;
-//      txtFields[i++].setValue(""+invoice.get());
-    }
+//    }
     
-    public void setShopOptions(){
+    public void setShopOptions(Invoice invoice){
         String shipAddress = invoice.getShippingInfo();
         if(shipAddress == null) shipAddress = "";
         

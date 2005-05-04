@@ -142,7 +142,8 @@ public class ScreenController {
 
 			Desktop.getInstance().add(screen);
 			screen.setData(model);
-			ErrorLogger.getInstance().logDebug("" + selectedInvoice, true);
+//			ErrorLogger.getInstance().logDebug("" + selectedInvoice, true);
+			ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction() + ":" + selectedInvoice, false);
 			select(screen);
 
 			//			screen.setVisible(true);
@@ -170,8 +171,9 @@ public class ScreenController {
 			Vector customers = new Vector();
 			customer = sys.customerInfo.getCustomerByID(customerID);
 
-			ErrorLogger.getInstance().logDebug("" + customer, true);
-
+//			ErrorLogger.getInstance().logDebug("" + customer, true);
+			ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction() + ":" + customer, false);
+			
 			customers.add(customer);
 			model.setCustomerData(customers);
 
@@ -224,7 +226,8 @@ public class ScreenController {
 	}
 
 	public void displayHistoryList() {
-		ErrorLogger.getInstance().logDebug("", true);
+//		ErrorLogger.getInstance().logDebug("", true);
+		ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction() + ":displayHistoryList()", false);
 		try {
 			InvoiceHistoryScreen screen = new InvoiceHistoryScreen();
 			Desktop.getInstance().add(screen);
@@ -335,7 +338,8 @@ public class ScreenController {
 			title += " Item: ";
 			Vector invoiceItem = data.getKnifeData();
 			if (invoiceItem != null) {
-				ErrorLogger.getInstance().logDebug("" + invoiceItem, true);
+//				ErrorLogger.getInstance().logDebug("" + invoiceItem, true);
+				ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction()  + ":invoiceItem()" + ":" + invoiceItem, false);
 				title += ((rmk.database.dbobjects.InvoiceEntries) invoiceItem
 						.get(0)).getInvoiceEntryID();
 				int year = sys.invoiceInfo.getPricingYear(inv.getInvoice());
@@ -470,8 +474,9 @@ public class ScreenController {
 			rmk.database.dbobjects.Invoice invoice) {
 		rmk.gui.IScreen screen;
 		String title = "";
-		ErrorLogger.getInstance().logDebug("" + invoice, true);
-
+//		ErrorLogger.getInstance().logDebug("" + invoice, true);
+		ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction()   + ":getCustomerScreen()" + ":" + invoice, false);
+		
 		title = "Customer : " + invoice.getCustomerID();
 		return rmk.gui.ApplicationMenu.getInstance().findScreen(title);
 	}

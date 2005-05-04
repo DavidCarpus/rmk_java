@@ -337,7 +337,7 @@ public class InvoiceInfo {
 		}
 
 		int year = date.get(Calendar.YEAR);
-		ErrorLogger.getInstance().logMessage("InvoiceInfo" + "Inv (" + invoice.getInvoice() + ") year:" + year + " Dealer?:" + dealer + " date used=" + dateUsed);
+//		ErrorLogger.getInstance().logMessage("InvoiceInfo" + "Inv (" + invoice.getInvoice() + ") year:" + year + " Dealer?:" + dealer + " date used=" + dateUsed);
 		return year;
 	}
 

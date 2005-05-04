@@ -68,7 +68,7 @@ public class InvoiceEntryAdditions extends DBObject{
 	String results="";
 	results +=  "Iea:" + getAdditionID() 
 	    + ": Eid:" + (int)getEntryID() 
-	    + " Pid " + getPartID()
+	    + " #" + getPartID()
 	    + " $" + getPrice()
 	    ;
 	return "[" + results +"]";

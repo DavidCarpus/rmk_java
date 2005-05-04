@@ -18,7 +18,7 @@ public class Application extends JFrame implements ActionListener {
     Desktop desktop;
     rmk.DataModel sys;
     BasicToolBar toolbar;
-    public static final String version="2005_05_03c";
+    public static final String version="2005_05_04a";
 
     //============================================================================
     public Application() throws Exception{

@@ -70,19 +70,17 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		"Acknowledgment");
 		buttonBar.addButton(null, "Ship", "Ship", "Ship This Invoice");
 		buttonBar.getButton(0).setForeground(new Color(255, 12, 11));
+		buttonBar.getButton(0).setMnemonic(KeyEvent.VK_V); // Save Button
 		buttonBar.getButton(2).setMnemonic(KeyEvent.VK_I); // Invoice Button
 		buttonBar.getButton(3).setMnemonic(KeyEvent.VK_K); // Acknowledgment Button
 		buttonBar.getButton(4).setMnemonic(KeyEvent.VK_P); // Ship Button
 //		ButtonBarTranslator translator = new ButtonBarTranslator(this, buttonBar);
-		
 		
 		KeyStroke listExpand = KeyStroke.getKeyStroke(
 				java.awt.event.KeyEvent.VK_F11, 0);
 		this.registerKeyboardAction(this, "listExpand", listExpand,
 				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		
-
-		//  	customerPnl.setBackground(Color.RED);
     	SignalProcessor.getInstance().addScreen(this);
 
 		setPreferredSize(new Dimension(915, 640));
@@ -102,7 +100,6 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 	//==========================================================
 	public void setData(DBGuiModel model) {
 		this.model = model;
-		//		model.removeActionListener(this);
 		
 		java.util.Vector data = model.getInvoiceData();
 		if (data == null) {
@@ -124,23 +121,22 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		}
 		
 		setInvoice(invoice);
-		
-		buttonBar.getButton(2).setMnemonic(KeyEvent.VK_I);
-		buttonBar.getButton(0).setMnemonic(KeyEvent.VK_V);
-		
+
 		buttonBar.enableButton(2, (invoiceNumber != 0));
 		buttonBar.enableButton(3, (invoiceNumber != 0));
 	}
 	
-	void setInvoice(Invoice invoice){
+	public void setInvoice(Invoice invoice){
+		
 		customerPnl.setData(model);
-		invoiceDetailPnl.setData(model);
+		invoiceDetailPnl.setData(invoice);
 		
 		String newTitle = "Invoice:" + invoice.getID();
 		newTitle += " (" + invoiceEntriesList.getTotalKnives() + ") Knives";
 		updateTitle(newTitle);
 		
-		loadItemList(model);
+		loadItemList(invoice.getItems());
+//		loadItemList(model.getInvoiceItemsData());
 		invoiceDetailPnl.updatePaymentInfo(invoice);
 		
 		String shipButtonLabel = "Ship";
@@ -150,20 +146,21 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 	}
 	
 	//----------------------------------------------------------
-	void loadItemList(DBGuiModel model) {
-		java.util.Vector data = model.getInvoiceItemsData();
-		removeBlankItems(data);
+//	void loadItemList(DBGuiModel model) {
+	void loadItemList(java.util.Vector items) {
+//		java.util.Vector items = model.getInvoiceItemsData();
+		removeBlankItems(items);
 		// sort by invEntryID
 		//		InvoiceEntries
-		if(data != null){
-			Object[] items = data.toArray();
-			Arrays.sort(items, new rmk.comparators.InvoiceEntries());		
+		if(items != null){
+			Object[] itemArray = items.toArray();
+			Arrays.sort(itemArray, new rmk.comparators.InvoiceEntries());		
 			Vector sortedData = new Vector();
-			for(int i=0; i< items.length; i++){
-				sortedData.add(items[i]);
+			for(int i=0; i< itemArray.length; i++){
+				sortedData.add(itemArray[i]);
 			}
-			data = sortedData;
-			model.setInvoiceItemsData(data);
+			items = sortedData;
+			model.setInvoiceItemsData(items);
 		}
 		
 		invoiceEntriesList.setData(model);
@@ -255,7 +252,7 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 			model.setInvoiceData(outputList);
 			
 			if (inv.getID().intValue() > 0) {
-				loadItemList(model);
+				loadItemList(inv.getItems());
 				editedInvoice = false;
 				invoiceDetailPnl.setData(model);
 				invoiceDetailPnl.updatePaymentInfo(inv);
@@ -322,7 +319,8 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		buttonBar.enableButton(0, editedInvoice || editedCustomer);
 		buttonBar.enableButton(2, (invoiceNumber != 0));
 		buttonBar.enableButton(3, (invoiceNumber != 0));
-		loadItemList(model);
+//		loadItemList(model);
+		loadItemList(inv.getItems());
 		setInvoice(inv);
 		//		model.addActionListener(this);
 	}
@@ -422,7 +420,8 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 						saveEntry(inv, entry);
 						updateOccured((DBObject) entry, ScreenController.UPDATE_ADD, inv );
 						//						updatePaymentSummary(inv);
-						loadItemList(model);
+//						loadItemList(model);
+						loadItemList(inv.getItems());
 						invoiceEntriesList.selectLast();
 						
 						model.setKnifeData(null);
@@ -513,7 +512,8 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 					Vector items = inv.getItems();
 					items.remove(item);
 				}
-				loadItemList(model);
+//				loadItemList(model);
+				loadItemList(inv.getItems());
 				model.setKnifeData(invoicesItems);
 				inv.setItems(invoicesItems);
 				updateOccured((DBObject) item, ScreenController.UPDATE_REMOVE, inv );
@@ -672,7 +672,8 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 			updateOccured((DBObject) entry, ScreenController.UPDATE_ADD, inv );
 			//			updatePaymentSummary(inv);
 			
-			loadItemList(model);
+//			loadItemList(model);
+			loadItemList(inv.getItems());
 			//-----------------------------
 		} else if (command.equals("INVOICEENTRYCHANGED")
 				|| command.equals("ITEMSAVE")) { //INFO CHANGED
@@ -681,7 +682,9 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 			//					+ invList.size());
 			Vector items = model.getInvoiceItemsData();
 			removeBlankItems(items);
-			loadItemList(model);
+//			loadItemList(model);
+			loadItemList(items);
+			
 			Invoice detailInv = invoiceDetailPnl.getData();
 			Invoice inv=null;
 			for(Enumeration list = invList.elements(); list.hasMoreElements();){
@@ -707,7 +710,10 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 			//-----------------------------
 		} else if (command.equals("DBMODELCHANGED-KNIFEDATA")) { //INFO CHANGED
 			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
-			loadItemList(model);
+//			loadItemList(model);
+			Invoice detailInv = invoiceDetailPnl.getData();
+			loadItemList(detailInv.getItems());
+//			loadItemList(model);
 
 			//-----------------------------
 		} else if (command.equals("LISTEXPAND")) {
@@ -789,9 +795,15 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		case ScreenController.UPDATE_EDIT:
 		{				
 			if(parentName.indexOf(".Invoice") > 0 || itemName.indexOf(".Invoice") > 0){
-				Invoice invoice = (Invoice) parentItem;
-				editedInvoice = invoice.isEdited();
-				setInvoice(invoice);
+				Invoice changedInvoice = (Invoice) parentItem;
+				if(itemName.indexOf("InvoiceEntries") > 0){
+					// item changed was knive entry, don't need to force a save just for this
+				} else{
+					editedInvoice = changedInvoice.isEdited();
+				}
+				Invoice thisScreensInvoice = invoiceDetailPnl.getData();
+				if(changedInvoice.getInvoice() == thisScreensInvoice.getInvoice())
+					setInvoice(changedInvoice);
 			}else
 				ErrorLogger.getInstance().TODO();
 		}
@@ -802,7 +814,8 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 			Vector invList = model.getInvoiceData();
 			Vector items = model.getInvoiceItemsData();
 			removeBlankItems(items);
-			loadItemList(model);
+//			loadItemList(model);
+			loadItemList(items);
 			Invoice detailInv = invoiceDetailPnl.getData();
 			Invoice inv=null;
 			for(Enumeration list = invList.elements(); list.hasMoreElements();){
@@ -869,13 +882,13 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		case ScreenController.BUTTON_ADD:
 		{
 			addEntry();
-			buttonBar.enableButton(0, true);
+//			buttonBar.enableButton(0, true);
 		}
 		break;
 		case ScreenController.BUTTON_REMOVE:
 		{
 			removeEntry(id);
-			buttonBar.enableButton(0, true);
+//			buttonBar.enableButton(0, true);
 		}
 		break;
 		

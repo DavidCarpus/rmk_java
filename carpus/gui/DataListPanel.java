@@ -230,7 +230,7 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 	//----------------------------------------------------------
 	public abstract void setData(rmk.gui.DBGuiModel model);
 
-	public void setData(Vector lst) {
+	public boolean setData(Vector lst) {
 		data = lst;
 		if (lst != null) {
 			for (Enumeration enum = lst.elements(); enum.hasMoreElements();) {
@@ -243,6 +243,8 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 		sorter.tableChanged(new javax.swing.event.TableModelEvent(sorter));
 		sorter.sortByColumn(0, true);
 		setVisible(true);
+		if(lst == null || lst.size() <= 0 ) return false;
+		else return true;
 	}
 
 	//----------------------------------------------------------

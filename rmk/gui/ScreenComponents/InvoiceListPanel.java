@@ -160,27 +160,22 @@ implements ActionListener, FocusListener{
 	//------------------------------------------
 	public void setData(rmk.gui.DBGuiModel model) {
 		this.model = model;
-		boolean sort = true;
-		//  	Vector data;
 
 		if (model.getCustomerData() != null) {
 			Customer currentCustomer =
 				(Customer) model.getCustomerData().get(0);
 			customer = currentCustomer;
 		}
-		setData(model.getInvoiceData());
-		if (data == null || data.size() == 0) {
+		// Invoice data processing
+		if(setData(model.getInvoiceData())){
+			buttonBar.enableButton(0, true);
+		} else{
 			ErrorLogger.getInstance().logMessage(
 				this.getClass().getName() + ":" + "Null data?:" + data);
-			sort = false;
 			buttonBar.enableButton(0, false);
-		} else {
-			buttonBar.enableButton(0, true);
 		}
 
-		if (sort)
-			sorter.sortByColumn(0, true);
-
+		// Customer data processing
 		data = model.getCustomerData();
 		if (data != null){
 			Customer cust = (rmk.database.dbobjects.Customer) data.get(0);
@@ -192,6 +187,8 @@ implements ActionListener, FocusListener{
 		setVisible(true);
 	}
 }
+
+
 	//======================================================
 	//======================================================
 	class InvoiceListTableModel extends carpus.gui.DataListPanelTableModel {

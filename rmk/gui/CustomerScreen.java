@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
+import java.util.Enumeration;
 import java.util.Vector;
 
 import rmk.ErrorLogger;
@@ -46,6 +47,8 @@ public class CustomerScreen extends Screen{
 		//  	invoicePanel.addFocusListener(this);
 		
 		getContentPane().add(buttonBar);
+		
+		SignalProcessor.getInstance().addScreen(this);
 		
 		setPreferredSize(new Dimension(825,640));
 	}
@@ -305,6 +308,20 @@ public class CustomerScreen extends Screen{
 			}else if(itemName.indexOf("Address")>0){
 				editedAddress = true;
 				buttonBar.enableButton(0, true);
+			}else if(itemName.indexOf("InvoiceEntries")>0){
+				// parent item should be invoice
+				// replace it in the current "model"
+				
+				Vector invData = model.getInvoiceData();
+				for(Enumeration invoices = invData.elements();invoices.hasMoreElements();){
+					Invoice currInv = (Invoice) invoices.nextElement();
+					if(currInv.getInvoice() == ((Invoice)parentItem).getInvoice()){
+						invData.remove(currInv);
+						invData.add(parentItem);
+						break;
+					}
+				}
+				invoicePanel.setData(invData);
 			} else{
 				ErrorLogger.getInstance().TODO();
 //				addNewInvoice();

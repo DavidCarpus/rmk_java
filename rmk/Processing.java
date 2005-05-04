@@ -177,7 +177,8 @@ public class Processing {
         if (screen != null) {
             model = ((rmk.gui.InvoiceDetailsScreen) screen).getModel();
             model = updateModelsInvoice(model, invoice);
-            ((rmk.gui.InvoiceDetailsScreen) screen).setData(model);
+//            ((rmk.gui.InvoiceDetailsScreen) screen).setData(model);
+            ((rmk.gui.InvoiceDetailsScreen) screen).setInvoice(invoice);
         }
         //---------------------------------------
         // Customer Details Screen?

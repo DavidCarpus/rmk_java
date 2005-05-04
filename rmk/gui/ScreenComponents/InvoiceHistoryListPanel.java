@@ -23,9 +23,6 @@ import carpus.gui.DataListPanelTableModel;
 
 /**
  * @author carpus
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class InvoiceHistoryListPanel 
 extends DataListPanel 
@@ -84,18 +81,12 @@ implements ActionListener, FocusListener {
 	 */
 	public void setData(DBGuiModel model) {
 		this.model = model;
-		boolean sort = true;
-		//  	Vector data;
 
-		setData(model.getInvoiceData());
-		if (data == null || data.size() == 0) {
-			ErrorLogger.getInstance().logMessage(
-				this.getClass().getName() + ":" + "Null data?:" + data);
-			sort = false;
-		}
-
-		if (sort)
+		if(setData(model.getInvoiceData())){
 			sorter.sortByColumn(3, false);
+		} else{
+			ErrorLogger.getInstance().logMessage("Null data?");
+		}
 
 		setVisible(true);
 	}

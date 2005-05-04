@@ -1,9 +1,6 @@
 package rmk.gui;
 
 import javax.swing.*;
-
-import rmk.ErrorLogger;
-
 import java.awt.event.*;
 import java.util.Vector;
 import java.util.Enumeration;
@@ -256,7 +253,7 @@ implements ActionListener
     	removeWindowMenuItem(title);
     	addWindowMenuItem(title);
     	
-    	ErrorLogger.getInstance().logMessage("Screen:" + screen.getTitle() + " is not in STACK.");
+//    	ErrorLogger.getInstance().logMessage("Screen:" + screen.getTitle() + " is not in STACK.");
     }
     public void updateScreenTitle(String from, String newTitle){
 		removeWindowMenuItem(from);

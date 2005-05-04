@@ -109,7 +109,11 @@ public class InvoiceEntries extends DBObject{
 
     public String toString(){
 	String results="";
-	results +=  "Ie:" + getInvoiceEntryID() + ":" + getInvoice() + " $" + getPrice() + " " + getPartID();
+	results +=  "Ie:" + getInvoiceEntryID() + ":" + getInvoice() + " $" + getPrice() + " ";
+	String desc =getPartDescription();
+	if(desc == null || desc.length()<=0) desc = "#"+getPartID(); 
+	results += desc;
+	
 	if(getComment() != null && getComment().trim().length() > 0)
 	    results +=  "**" + getComment() + "**";
 	if(items != null)

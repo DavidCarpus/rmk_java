@@ -358,6 +358,11 @@ public class InvoiceItemScreen extends Screen{
 
 		
 		switch(changeType){
+		case ScreenController.UPDATE_CANCELED:
+		{
+			defaultCancelAction();
+		}
+		break;
 		case ScreenController.LIST_ITEM_SELECTED: // SET_KNIFE_MODEL
 		{
 			if(itemName.indexOf("InvoiceEntries") > 0){
