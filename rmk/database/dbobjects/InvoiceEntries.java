@@ -7,6 +7,7 @@ import java.util.Vector;
 public class InvoiceEntries extends DBObject{
     Vector items=null;
     int partType=0;
+    Invoice parent=null;
 
     public static final int[] lengths={Fixed.LONG_SIZE, Fixed.FLOAT_SIZE, Fixed.LONG_SIZE, 10, 
 				       Fixed.INT_SIZE, Fixed.CURRENCY_SIZE, Fixed.MEMO_SIZE, Fixed.BOOLEAN_SIZE};
@@ -60,6 +61,7 @@ public class InvoiceEntries extends DBObject{
 	if(items == null){
 	    items = new Vector();
 	}
+	feature.parent = this;
 	feature.setEntryID(getInvoiceEntryID());
 	items.add(feature);
     }
@@ -161,34 +163,6 @@ public class InvoiceEntries extends DBObject{
 	transfering = false;
     }
 
-    public static void main(String args[]) throws Exception{
-	carpus.database.PostgresDB db = new carpus.database.PostgresDB();
-	db.connect();
-	String fileName=Configuration.Config.getDataFileLocation("F_InvoiceEntries");
-
-	carpus.database.Fixed fixed = new carpus.database.Fixed();
-	BufferedInputStream in = (new BufferedInputStream( new FileInputStream(fileName)));
-	int row=0;
-	byte[] currInput = new byte[getTotalFieldLengths_txt()+3]; // CR-LF
-	Object[] lst;
-	while( in.read(currInput)!= -1
-){
-//   && row < 200){
-//  	    if(row < 5){
-		lst = fixed.getArray(new String(currInput),lengths);
-//  		lst = fixed.getArrayUntrimed(new String(currInput),lengths);
-		System.out.println(fixed.list(lst));
-
-//  		fixed.list(lst);
-  		InvoiceEntries item = new InvoiceEntries(lst);
-    		System.out.print(row);
-      		System.out.println(":" + item.getInvoiceEntryID());
-  		System.out.println(item);		
-//      		java.util.Vector outputLst = new java.util.Vector();
-//  		outputLst.add(item);
-//        		if(db.saveItems("InvoiceEntries", outputLst) == null) return;
-//  	    }
-	    row++;
-	}
-    }   
+    public void setParent(Invoice invoice){parent = invoice;}
+    public Invoice getParent(){return parent;}
 }

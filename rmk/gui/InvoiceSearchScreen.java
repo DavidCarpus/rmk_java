@@ -116,7 +116,10 @@ public class InvoiceSearchScreen extends Screen {
 		ErrorLogger.getInstance().TODO();
 	}
 	
-
+    public void setData(DBObject item){
+    	ErrorLogger.getInstance().TODO();
+    }
+    
 	JPanel getDatePanel(){
 		DatePanel datePanel = new DatePanel();
 		datePanel.setParent(this);

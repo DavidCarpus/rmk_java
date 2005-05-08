@@ -97,10 +97,12 @@ public class PartsScreen extends Screen{
     }
     //----------------------------------------------------------
     public void setData(DBGuiModel model){
-	setActive(active);
-	buttonBar.enableButton(0, isEdited());
-//  	partsList.setData(sys.partInfo.getParts());
-	// null method, load data from DB
+    	setData((DBObject)null);
+    }
+    public void setData(DBObject item){	
+    	setActive(active);
+    	buttonBar.enableButton(0, isEdited());
+//    	 null method, load data from DB
     }
     //==========================================================
     private void saveData(){

@@ -8,6 +8,7 @@ import java.util.*;
 import rmk.ErrorLogger;
 import rmk.ScreenController;
 import rmk.SignalProcessor;
+import rmk.database.dbobjects.Customer;
 import rmk.database.dbobjects.DBObject;
 import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
@@ -16,12 +17,11 @@ import rmk.database.dbobjects.Invoice;
 public class InvoiceItemScreen extends Screen{
 	rmk.gui.ScreenComponents.InvoiceItemPanel itemPanel;
 	rmk.gui.ScreenComponents.KnifeFeaturesPanel featurePanel;
-	DBGuiModel model;
+
 	boolean loading = false;
-	InvoiceEntries knife=null;
+	InvoiceEntries currentKnife=null;
 	Invoice invoice = null;
 	Vector originalFeatures=null;
-	rmk.DataModel sys = rmk.DataModel.getInstance();
 	
 	//==========================================================
 	public InvoiceItemScreen(){
@@ -50,72 +50,44 @@ public class InvoiceItemScreen extends Screen{
 		return itemEdited;
 	}
 	//==========================================================
-	public void setData(DBGuiModel model){		
+	public void setData(DBObject item){
 		if(loading) 
 			return;
 		loading = true;
+		if(item == null){ ErrorLogger.getInstance().TODO(); }
 		
-		InvoiceEntries currKnife=null;
-		this.model = model;
-		Vector data = model.getKnifeData();
-		if(data != null && data.size() > 0){
-			currKnife = (InvoiceEntries)data.get(0);
-		} else{
-			currKnife = new InvoiceEntries(0);
+		currentKnife = (InvoiceEntries)item;
+		Vector additions = currentKnife.getFeatures();
+		if(additions == null){
+			additions = sys.invoiceInfo.getInvoiceEntryAdditions(currentKnife.getInvoiceEntryID());
+			currentKnife.setFeatures(additions);
 		}
+	
+		if(additions != null)
+			originalFeatures = (Vector) additions.clone();
+		else
+			originalFeatures = null;
 		
-		data = model.getInvoiceData();
+		invoice = currentKnife.getParent();
+		Customer customer = invoice.getParent();
 		
-		originalFeatures = null;
-		if(data != null){
-			invoice = (Invoice)data.get(0);
-			double percentage = -1;
-			percentage = invoice.getDiscountPercentage();
-			if(currKnife != null){
-				Vector additions = currKnife.getFeatures();
-				if(additions == null){
-					additions = sys.invoiceInfo.getInvoiceEntryAdditions(currKnife.getInvoiceEntryID());
-					model.setInvoiceItemAttributesData(additions);
-					currKnife.setFeatures(additions);
-				}
-				if(currKnife.getFeatures() != null)
-					originalFeatures = (Vector)currKnife.getFeatures().clone();
-			}
-		}
-		double initialPrice=0;
-		if(currKnife != null)
-			initialPrice =currKnife.getPrice();
-		itemPanel.clearData();
-		
-		data = model.getKnifeData();
-		if(data != null && currKnife != null){
-			data.remove(currKnife);
-			data.add(currKnife);
-		}
-		model.setKnifeData(data);
-		
-		itemPanel.setData(model);
-		
-		int knifeID=0;
-		if(currKnife != null)
-			knifeID = (int)currKnife.getID().longValue();
-		
-		knife = currKnife;
-		//      boolean markEdited = (knifeID == 0 || entry.getPrice() != initialPrice);
-		//        InvoiceEntries entry = itemPanel.getData();
-		//        boolean markEdited = (currKnife.getPrice() != initialPrice);
-		//        itemPanel.setEdited(markEdited);
-		buttonBar.enableButton(0,isEdited());
-		
+		itemPanel.setData(item);
 		loading = false;
-		//        model.addActionListener(this);
 		pack();
 	}
+
+
+	
 	//==========================================================
 	Vector getFeaturesChanged(Vector original, Vector current){
 		Vector results = new Vector();
+		if(original == null && current == null) return null;		
+		
 		if(original == null) // nothing to begin with
 			return current;
+		if(current == null) // nothing now
+			return original;
+		
 		for(int currentIndex=0; currentIndex < current.size(); currentIndex++){
 			InvoiceEntryAdditions feature = (InvoiceEntryAdditions)current.get(currentIndex);
 			if(featureInArrayIsDifferent(feature, original)){
@@ -126,8 +98,9 @@ public class InvoiceItemScreen extends Screen{
 	}
 	//----------------------------------------------------------
 	Vector getFeaturesRemoved(Vector original, Vector current){
-		if(original == null) return new Vector(); // nothing to start with, nothing could be removed
-		if(current == null) return current; // nothing left, everything was removed
+		if(original == null || original.size()==0) return null; // nothing to start with, nothing could be removed
+		if(current == null || current.size()==0) return original; // nothing left, everything was removed
+		if(original == current) return null; // same exact vector
 		
 		Vector results = new Vector();
 		for(int originalIndex=0; originalIndex < original.size(); originalIndex++){
@@ -167,12 +140,12 @@ public class InvoiceItemScreen extends Screen{
 		
 		if(match == null) // same partid
 			return true;
-		if(match.getPrice() != feature.getPrice()){
-			// Price change
+		
+		if(match.getPrice() != feature.getPrice()){ // Price change
 			return true;
 		}
 		
-		if(feature.isEdited()) return true;
+//		if(feature.isEdited()) return true;
 		
 		return false;
 	}
@@ -210,133 +183,44 @@ public class InvoiceItemScreen extends Screen{
 	//==========================================================
 	public void saveData() {
 		InvoiceEntries possibleNewKnife = itemPanel.getData();
-		
-		boolean newknife = false;
-		boolean changedKnife=false;
-		//        model.removeActionListener(this);
-		
-		InvoiceEntries currKnife = knife;
+		InvoiceEntries currKnife = currentKnife;
+
 		long oldPartID = possibleNewKnife.getPartID();
 		long newPartID = (currKnife != null?currKnife.getPartID():0);
-		if (oldPartID != newPartID) { // NEW
-			// knife?
-			newknife = true;
+		if (oldPartID != newPartID) { // save knife
+			Vector invoiceEntries = new Vector();
+			invoiceEntries.add(possibleNewKnife);
+			Configuration.Config.getDB().saveItems( "InvoiceEntries", invoiceEntries);
+			currentKnife.getParent().getItems().remove(currentKnife);
+			currentKnife.getParent().getItems().add(possibleNewKnife);
 		}
-		if(possibleNewKnife.getInvoiceEntryID() > 0){
-			changedKnife = true;
-		}
+		possibleNewKnife.setParent(currentKnife.getParent());
 		
-		Vector invoiceEntries = model.getKnifeData();
-		if(newknife)
-			invoiceEntries = new Vector();
+		Vector changedFeatures = getFeaturesChanged(currentKnife.getFeatures(), originalFeatures);
+		Vector removedFeatures = getFeaturesRemoved(originalFeatures, currentKnife.getFeatures());
 		
-		if (newknife && changedKnife){
-			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Remove OLD knife and features.");
-			long idOfOriginal = possibleNewKnife.getInvoiceEntryID();
-			sys.invoiceInfo.removeInvoiceEntryAndAdditions(idOfOriginal);
-			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + possibleNewKnife.getInvoice());
-			
-			Vector invData = model.getInvoiceItemsData();
-			if(invData.contains(knife)){
-				invData.remove(knife); // remove old knife from list
-				model.setInvoiceItemsData(invData);
-				//                model.setInvoiceItemAttributesData(null);
-			}
-			knife = possibleNewKnife;
-			knife.setInvoiceEntryID(0);
-		}
-		if(currKnife == null){
-			currKnife = possibleNewKnife;
+		if(removedFeatures != null){ //remove features
+			for(Enumeration items = removedFeatures.elements(); items.hasMoreElements();){
+				InvoiceEntryAdditions feature = (InvoiceEntryAdditions)items.nextElement();
+				sys.invoiceInfo.removeAdditionID(feature.getAdditionID());
+			}			
 		}
 		
-		Vector currentFeatures = model.getInvoiceItemAttributesData();
-		if (currentFeatures == null) {
-			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"
-					+ "saveData:currentFeatures == null");
-			currentFeatures = new Vector();
-		}
-		model.setInvoiceItemAttributesData(currentFeatures);
-		
-		//      	Vector invoiceEntries = model.getInvoiceItemsData();
-		if (invoiceEntries == null) 
-			invoiceEntries = new Vector();
-		
-		if (currKnife.getID().intValue() == 0) { // new knife
-			invoiceEntries.remove(currKnife);
-			invoiceEntries.add(currKnife);
-		}
-		invoiceEntries.remove(currKnife);
-		invoiceEntries.remove(knife);
-		invoiceEntries.add(currKnife);
-		knife = currKnife;
-		
-		Vector savedInvoiceEntries;
-		
-		currKnife.setPartID(possibleNewKnife.getPartID());
-		currKnife.setQuantity(possibleNewKnife.getQuantity());
-		currKnife.setComment(possibleNewKnife.getComment());
-		currKnife.setPrice(possibleNewKnife.getPrice());
-		currKnife.setInvoice((long)possibleNewKnife.getInvoice());
-		savedInvoiceEntries = Configuration.Config.getDB().saveItems(
-				"InvoiceEntries", invoiceEntries);
-		
-		Vector removedFeatures = getFeaturesRemoved(originalFeatures,
-				currentFeatures);
-		if (removedFeatures.size() > 0) {
-			Configuration.Config.getDB().removeItems("InvoiceEntryAdditions",
-					removedFeatures);
-		}
-		
-		Vector changedFeatures = getFeaturesChanged(originalFeatures,
-				currentFeatures);
-		for (Enumeration enum = changedFeatures.elements(); enum
-		.hasMoreElements();) {
-			InvoiceEntryAdditions feature = (InvoiceEntryAdditions) enum
-			.nextElement();
-			feature.setEntryID(knife.getInvoiceEntryID());
-			System.out.print("setFeatureEID:" + knife.getInvoiceEntryID());
-		}
-		
-		Configuration.Config.getDB().saveItems("InvoiceEntryAdditions",
-				changedFeatures);
-		
-		String newTitle="Invoice:" + (int) currKnife.getInvoice() + " Item:" + currKnife.getInvoiceEntryID();
-		updateTitle(newTitle);
-		
-		invoiceEntries = model.getInvoiceItemsData();
-		if (!invoiceEntries.contains(currKnife)) // add knife to invoice entries if
-			// not there
-			invoiceEntries.add(currKnife);
-		
-		
-		currKnife.setFeatures(currentFeatures);
-		Configuration.Config.getDB().saveItems("InvoiceEntryAdditions",
-				currentFeatures);
-		//      	ErrorLogger.getInstance().logMessage(this.getClass().getName() +
-		// ":model.setKnifeData:"+ savedInvoiceEntries);
-		savedInvoiceEntries.remove(currKnife);
-		savedInvoiceEntries.add(currKnife);
-		model.setKnifeData(savedInvoiceEntries);
-		
-		Vector invItems = model.getInvoiceItemsData();
-		invItems.remove(currKnife);
-		invItems.add(currKnife);
-		model.setInvoiceItemsData(invItems);
-		
-		//        itemPanel.loading = true;
-		setData(model);
-		//        itemPanel.loading = false;
-
-		// knife.getID().longValue());
-		itemPanel.setEdited(knife.getID().longValue() == 0);
-		buttonBar.enableButton(0, isEdited());
-		
-		invoice.setItems(invItems);
-		
-		SignalProcessor.getInstance().notifyUpdate(this,currKnife,ScreenController.UPDATE_EDIT,invoice);
-		//        notifyListeners("ITEMSAVE");
+		itemPanel.setEdited(false);
+		Configuration.Config.getDB().saveItems( "InvoiceEntryAdditions", possibleNewKnife.getFeatures());
+		SignalProcessor.getInstance().notifyUpdate(this,possibleNewKnife,ScreenController.UPDATE_EDIT,possibleNewKnife.getParent());
 		defaultCancelAction();
 	}
+	
+	boolean differentFeatures(Vector features1, Vector features2){
+		boolean results=false;
+		if(features1 == null && features2 == null) return false;		
+		if(features1 == null || features2 == null) return true;
+		
+		// TODO: loop through to find differences
+		return results;
+	}
+	
 	void updateTitle(String newTitle){
 		String oldTitle=this.getTitle();
 		if(!oldTitle.equalsIgnoreCase(newTitle)){
@@ -345,7 +229,7 @@ public class InvoiceItemScreen extends Screen{
 		}
 	}
 	public InvoiceEntries getItem(){
-		return knife;
+		return currentKnife;
 	}
 	
 	public void updateOccured(DBObject itemChanged, int changeType, DBObject parentItem){
@@ -372,8 +256,8 @@ public class InvoiceItemScreen extends Screen{
 				itemPanel.selectListItem(entry.getPartID());
 			} else if(itemName.indexOf("InvoiceEntryAdditions") > 0){
 				InvoiceEntryAdditions feature = (InvoiceEntryAdditions)itemChanged;
-				feature.setEntryID(knife.getInvoiceEntryID());
-				knife.addFeature(feature);
+				feature.setEntryID(currentKnife.getInvoiceEntryID());
+				currentKnife.addFeature(feature);
 				if(itemPanel.addFeature(feature)){
 					((JButton)buttonBar.getButton(0)).setEnabled(true);
 				} else{
@@ -388,11 +272,12 @@ public class InvoiceItemScreen extends Screen{
 		{
 			if(itemName.indexOf("InvoiceEntryAdditions") > 0){
 				InvoiceEntryAdditions feature = (InvoiceEntryAdditions)itemChanged;
-				feature.setEntryID(knife.getInvoiceEntryID());
+				feature.setEntryID(currentKnife.getInvoiceEntryID());
 				
-				knife.addFeature(feature);
+				currentKnife.addFeature(feature);
 				if(itemPanel.addFeature(feature)){
 					// price update query
+					itemPanel.moveBackToFeatureEntry();
 				}
 				((JButton)buttonBar.getButton(0)).setEnabled(true);
 			} else if(itemName.indexOf("InvoiceEntries") > 0){
@@ -405,8 +290,11 @@ public class InvoiceItemScreen extends Screen{
 		case ScreenController.UPDATE_REMOVE:
 		{
 			InvoiceEntryAdditions feature = (InvoiceEntryAdditions)itemChanged;	
+//			feature.getParent().getFeatures().remove(feature);
+//			currentKnife.getFeatures().remove(feature);
 			if(itemPanel.featureChange()){
 				((JButton)buttonBar.getButton(0)).setEnabled(true);
+				itemPanel.moveBackToFeatureEntry();
 			}else{
 				ErrorLogger.getInstance().TODO();
 			}

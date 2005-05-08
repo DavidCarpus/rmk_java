@@ -209,6 +209,8 @@ public class CustomerInfoPanel extends carpus.gui.DataEntryPanel{
 		setEdited(false);
 		if(customer == null) return;
 		
+		setPrimaryDataItem(customer);
+		
 		dealerLabel.setVisible(customer.isDealer());
 		txtFields[FIELD_PREFIX].setValue(customer.getPrefix());
 		txtFields[FIELD_FIRSTNAME].setValue(customer.getFirstName());

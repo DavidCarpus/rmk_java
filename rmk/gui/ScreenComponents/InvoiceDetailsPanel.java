@@ -212,9 +212,6 @@ implements ActionListener
         
         c.gridy++;
         c.gridx = 0;
-//      JFormattedTextField results = new JFormattedTextField(NumberFormat.getPercentInstance());
-        
-//      JTextField shipping = carpus.gui.FormattedTextFields.getCurrencyField(0);
         JTextField shipping = new JTextField(7);
         field = new LabeledTextField("Shipping    $",shipping);
         gridbag.setConstraints(field, c);
@@ -226,9 +223,6 @@ implements ActionListener
         JTextField shipped = new JTextField("", 8);
         shipped.setEditable(false);
         shipped.setFocusable(false);
-//      txt.setDisabledTextColor(Color.white);
-//      txt.setForeground(Color.white);
-//      txt.setBackground(Color.black);
         
         field = new LabeledTextField("Shipped ",shipped);
         gridbag.setConstraints(field, c);
@@ -249,15 +243,10 @@ implements ActionListener
         c.gridx = 0;
         c.gridwidth = 3;
         c.fill = GridBagConstraints.BOTH;
-//      JTextPane pane = new JTextPane();
         
         shippingAddress.setFont(new Font("Serif", Font.BOLD, 14));
         
         shippingAddress.setPreferredSize(new Dimension(320,80));
-//      pane.setMaximumSize(new Dimension(120,70));
-//      pane.setPreferredSize(new Dimension(100,50));
-//      field = new LabeledTextField("Shipping Address",pane,"");
-        
         JScrollPane  shippingPane = new JScrollPane(shippingAddress);
         
 //      JPanel pnl = new JPanel();
@@ -360,6 +349,7 @@ implements ActionListener
         if(command.equals("EDIT NOTES") || command.equals("ADD NOTES")){
             String text = rmk.gui.Dialogs.getEditNote(currentNotes, "Notes", rmk.gui.Dialogs.MAX_LEN_INVOICE_NOTES, true);
             if(text == null || (currentNotes != null && currentNotes.equalsIgnoreCase(text))) return; // NO change
+            text =  text.replace('\n', '|');
             if(currentNotes != null && currentNotes.equalsIgnoreCase(text)) return; // NO change
             currentNotes = text;
             invoice.setComment(currentNotes);
@@ -424,6 +414,7 @@ implements ActionListener
             shipAddressPanel.setVisible(false);
             invoice.setShopSale(false);
             invoice.setShippingInfo("");
+            ((JTextArea)txtFields[FIELD_SHIPPINGINFO]).setText("");
             parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
 //            optionChanged = true;
             return;
@@ -431,7 +422,7 @@ implements ActionListener
         } else if(command.equals("SHIPPING ADDRESS")){
             shipAddressPanel.setVisible(true);
             invoice.setShopSale(false);
-            invoice.setShippingInfo(" ");
+            ((JTextArea)txtFields[FIELD_SHIPPINGINFO]).setText(" ");
             parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
 //            optionChanged = true;
             return;

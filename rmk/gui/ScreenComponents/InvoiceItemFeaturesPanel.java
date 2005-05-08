@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import rmk.ErrorLogger;
 import rmk.ScreenController;
+import rmk.database.dbobjects.DBObject;
 import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
 import rmk.database.dbobjects.Parts;
@@ -15,16 +16,18 @@ import rmk.gui.Dialogs;
 import rmk.gui.IScreen;
 
 import java.awt.Dimension;
-import java.awt.event.*;
+//import java.awt.event.*;
 
 public class InvoiceItemFeaturesPanel extends JPanel{
 
     DefaultListModel selectedItems = new DefaultListModel();
     rmk.DataModel sys = rmk.DataModel.getInstance();
-    DBGuiModel model;
+//    DBGuiModel model;
+    Vector currentFeatures;
     Vector listeners;
     IScreen parent=null;
-
+    carpus.gui.DataEntryPanel parentPanel=null;
+    
     public InvoiceItemFeaturesPanel(){
 	JList selections = new JList(selectedItems);
 	selections.setVisibleRowCount(6);
@@ -53,9 +56,11 @@ public class InvoiceItemFeaturesPanel extends JPanel{
 		    case 1:
 			editFeaturePrice(newIndex);
 			break;
+//			parent.moveBackToFeatureEntry();
 		    default:
 			// do nothing
 		    }
+		    this.clearSelection();
 		}
 	    };
 	selections.setSelectionModel(selectionModel);
@@ -107,13 +112,13 @@ public class InvoiceItemFeaturesPanel extends JPanel{
 	    sortFeatureList();
 	}
 
-	Vector features = model.getInvoiceItemAttributesData();
-	if(features == null){ // no features in model?, add empty Vector
-	    features = new Vector();
-	    model.setInvoiceItemAttributesData(features);
-	}
+//	Vector features = model.getInvoiceItemAttributesData();
+//	if(features == null){ // no features in model?, add empty Vector
+//	    features = new Vector();
+//	    model.setInvoiceItemAttributesData(features);
+//	}
 
-	for(Enumeration enum=features.elements(); enum.hasMoreElements();){
+	for(Enumeration enum=currentFeatures.elements(); enum.hasMoreElements();){
 	    InvoiceEntryAdditions addition = (InvoiceEntryAdditions)enum.nextElement();
 	    if(addition.getPartID()  == newFeature.getPartID()){ // already in list...
 	    	if(addition == newFeature)
@@ -123,9 +128,9 @@ public class InvoiceItemFeaturesPanel extends JPanel{
 	    }
 	}
 	// Add to model
-	InvoiceEntries knife= (InvoiceEntries )model.getKnifeData().get(0);
-	newFeature.setEntryID(knife.getInvoiceEntryID()); // set features entryID to match the current knife's
-	features.add(newFeature); // add it to the vector of knife's feature
+//	InvoiceEntries knife= (InvoiceEntries )model.getKnifeData().get(0);
+//	newFeature.setEntryID(knife.getInvoiceEntryID()); // set features entryID to match the current knife's
+	currentFeatures.add(newFeature); // add it to the vector of knife's feature
 
 //    	notifyListeners("INVOICEFEATUREADDED");	
 	parent.updateOccured(newFeature, ScreenController.UPDATE_ADD, null);
@@ -134,20 +139,20 @@ public class InvoiceItemFeaturesPanel extends JPanel{
       }
 //-----------------------------------------------------------------
     void sortFeatureList(){
-	Vector items = new Vector();
-	// copy all elements to vector - items
-	for(int type=0; type < 100; type++){
-	    for(Enumeration elements = selectedItems.elements(); elements.hasMoreElements(); ){
-		ListObject item =  ((ListObject)elements.nextElement());
-		InvoiceEntryAdditions addition =  item.getAddition();
-		if(sys.partInfo.getPartTypeFromID((int)addition.getPartID()) == type)
-		    items.add(item);
-	    }
-	}
-	selectedItems.clear();
-	for(Enumeration elements = items.elements(); elements.hasMoreElements(); ){
-	    selectedItems.addElement(elements.nextElement());
-	}
+    	Vector items = new Vector();
+    	// copy all elements to vector - items
+    	for(int type=0; type < 100; type++){
+    		for(Enumeration elements = selectedItems.elements(); elements.hasMoreElements(); ){
+    			ListObject item =  ((ListObject)elements.nextElement());
+    			InvoiceEntryAdditions addition =  item.getAddition();
+    			if(sys.partInfo.getPartTypeFromID((int)addition.getPartID()) == type)
+    				items.add(item);
+    		}
+    	}
+    	selectedItems.clear();
+    	for(Enumeration elements = items.elements(); elements.hasMoreElements(); ){
+    		selectedItems.addElement(elements.nextElement());
+    	}
 //  	for(int item = 0; item <  items.size(); item++){
 //  	    selectedItems.addElement(items.get(item));
 //  	    InvoiceEntryAdditions addition =  ((ListObject)items.get(item)).getAddition();
@@ -162,13 +167,13 @@ public class InvoiceItemFeaturesPanel extends JPanel{
     public void removeFeature(int index){
   	int partID = (int)((ListObject)selectedItems.get(index)).getID();
 	
-	Vector features = model.getInvoiceItemAttributesData();
+//	Vector features = model.getInvoiceItemAttributesData();
 	InvoiceEntryAdditions addition=null;
-  	for(int featureIndex=0;featureIndex < features.size(); featureIndex++){
-  	    addition = (InvoiceEntryAdditions)features.get(featureIndex);
+  	for(int featureIndex=0;featureIndex < currentFeatures.size(); featureIndex++){
+  	    addition = (InvoiceEntryAdditions)currentFeatures.get(featureIndex);
   	    if(addition.getPartID()  == partID){ // remove from list...
-  	    	features.remove(featureIndex);
-  	    	model.setInvoiceItemAttributesData(features);
+  	    	currentFeatures.remove(featureIndex);
+//  	    	model.setInvoiceItemAttributesData(features);
   	    	break;
   	    }
   	}
@@ -183,9 +188,30 @@ public class InvoiceItemFeaturesPanel extends JPanel{
 	return selectedItems.size();
     }	
 
+	public void setData(DBObject item){
+		InvoiceEntries knife = (InvoiceEntries) item;
+		Vector features=knife.getFeatures();
+		if(features == null) return;
+		currentFeatures = features;
+		blankOutFeatures();
+		for(Enumeration lst=features.elements(); lst.hasMoreElements();){
+			InvoiceEntryAdditions feature = (InvoiceEntryAdditions)lst.nextElement();
+			if(feature.getPartID() > 0){
+				feature.setEntryID(knife.getInvoiceEntryID());
+				addFeature(feature);
+			}else{
+				ErrorLogger.getInstance().logMessage("Feature missing partID?:" + feature);
+			}
+		}
+		sortFeatureList();
+//		ErrorLogger.getInstance().TODO();
+	}
+	void blankOutFeatures(){
+		selectedItems.clear();
+	}
 //-----------------------------------------------------------------
     public void setData(DBGuiModel model){
-	this.model=model;
+//	this.model=model;
 //  	InvoiceEntries knife= (InvoiceEntries )model.getKnifeData().get(0);
   	Vector lst = model.getInvoiceItemAttributesData();
 	if(lst == null) return;
@@ -240,22 +266,24 @@ public class InvoiceItemFeaturesPanel extends JPanel{
 	return false;
     }
 
-
+    public void setParentPanel(carpus.gui.DataEntryPanel parentPnl){
+    	parentPanel = parentPnl;
+    }
 
 //-----------------------------------------------------------------
-    public void notifyListeners(String msg){
-	notifyListeners(new ActionEvent(this,1,msg));
-    }
-    public void notifyListeners(ActionEvent event){
-	if(listeners == null) return;
-	for(Enumeration enum=listeners.elements(); enum.hasMoreElements();){
-	    ((ActionListener)enum.nextElement()).actionPerformed(event);
-	}
-    }
-    public void addActionListener(ActionListener listener){
-	if(listeners == null) listeners = new Vector();
-	if(!listeners.contains(listener)) listeners.addElement(listener);
-    }
+//    public void notifyListeners(String msg){
+//	notifyListeners(new ActionEvent(this,1,msg));
+//    }
+//    public void notifyListeners(ActionEvent event){
+//	if(listeners == null) return;
+//	for(Enumeration enum=listeners.elements(); enum.hasMoreElements();){
+//	    ((ActionListener)enum.nextElement()).actionPerformed(event);
+//	}
+//    }
+//    public void addActionListener(ActionListener listener){
+//	if(listeners == null) listeners = new Vector();
+//	if(!listeners.contains(listener)) listeners.addElement(listener);
+//    }
 //-----------------------------------------------------------------
     public double getFeaturesTotalCosts(double discount){
 	double results=0;
@@ -272,7 +300,7 @@ public class InvoiceItemFeaturesPanel extends JPanel{
     }
 
 //-----------------------------------------------------------------
-    public void clear(){
-	selectedItems.clear();
-    }
+//    public void clear(){
+//	selectedItems.clear();
+//    }
 }

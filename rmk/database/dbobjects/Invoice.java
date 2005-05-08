@@ -11,7 +11,8 @@ import rmk.ErrorLogger;
 public class Invoice extends DBObject{
     Vector items=null;
     Boolean dealer=null;
-
+    Customer parent=null;
+    
     public static final int[] lengths={
 	Fixed.LONG_SIZE, Fixed.DATE_SIZE, Fixed.DATE_SIZE, 
 	Fixed.DATE_SIZE, Fixed.DATE_SIZE, Fixed.LONG_SIZE, 
@@ -92,7 +93,13 @@ public class Invoice extends DBObject{
     public void setPickUp(boolean value){values[20] = new Boolean(value);setEdited();}
     public void setShopSale(boolean value){values[21] = new Boolean(value);setEdited();}
     public void setItems(Vector lst){
-	items = lst;
+    	items = lst;
+    	if(items == null) return;
+    	
+    	for(java.util.Enumeration enum = items.elements(); enum.hasMoreElements();){
+    		InvoiceEntries entry = (InvoiceEntries)enum.nextElement();
+    		entry.setParent(this);
+    	}
     }
 
 
@@ -232,39 +239,8 @@ public class Invoice extends DBObject{
 	setShopSale(recordSet.getBoolean("ShopSale"));
 	transfering = false;
     }
-    public static void main(String args[]) throws Exception{
-	int startRow = 0;
-	String fileName=Configuration.Config.getDataFileLocation("Invoices");
-	ErrorLogger.getInstance().logMessage("\nXFer: " + fileName);	
+    
 
-	carpus.database.Fixed fixed = new carpus.database.Fixed();
-	BufferedInputStream in = (new BufferedInputStream( new FileInputStream(fileName)));
-	int row=0;
-	byte[] currInput = new byte[Invoice.getTotalFieldLengths_txt()+2]; // CR-LF
-	Object[] lst;
-	while( in.read(currInput)!= -1 ){
-	    if(row%100 == 0) System.out.print(row + "-");
-	    if(row > startRow ){
-		lst = fixed.getArray(new String(currInput),Invoice.lengths);
-		Invoice invoice = new Invoice(lst);
-		if(invoice.getComment() != null){
-		    ErrorLogger.getInstance().logMessage(invoice.getComment());
-		}
-//  		java.util.Vector outputLst = new java.util.Vector();
-//      		outputLst.add(invoice);
-//    		if(db.saveItems("Invoices", outputLst) == null) return;
-      	    }
-	    row++;
-	}
-//  	carpus.database.DBInterface db = Configuration.Config.getDB();
-//  // 	carpus.database.PostgresDB db = new carpus.database.PostgresDB();
-//  	db.connect();
-//  	java.util.Vector lst = db.getItems("Invoices", "customerid = 1");
-
-//        for(int i=0; i < lst.size(); i++){
-//  	  Invoice item = (Invoice)lst.get(i);
-//  	  ErrorLogger.getInstance().logMessage(item);      
-//        }
-
-    }   
+    public void setParent(Customer customer){parent = customer;}
+    public Customer getParent(){return parent;}
 }

@@ -87,7 +87,9 @@ public class CustomerSelectionScreen extends Screen{
 		customerListPanel.setData(model);
 		buttonBar.enableButton(3,true);
     }
-
+    public void setData(DBObject item){
+    	ErrorLogger.getInstance().TODO();
+    }
 
     public void updateOccured(DBObject itemChanged, int changeType, DBObject parentItem){
 		ErrorLogger.getInstance().TODO();

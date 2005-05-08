@@ -302,6 +302,22 @@ public class InvoiceInfo {
 		return false;
 	}
 
+	public boolean removeAdditionID(long additionID){
+		try {
+			db.execute("Delete from InvoiceEntryAdditions where AdditionID  = "
+					+ additionID);
+			return true;
+		} catch (java.sql.SQLException e) {
+			carpus.database.Logger
+			.getInstance().logError("" + e.getMessage()
+					+ " while  removeInvoiceEntryAndAdditions" + additionID, e);
+
+		}
+		//  	return db.getItems("InvoiceEntryAdditions", "EntryID =" + entryID);
+		return false;
+	}
+	
+	
 	//==========================================================
 	public boolean isDealerInvoice(Invoice invoice) {
 		boolean dealer = false;

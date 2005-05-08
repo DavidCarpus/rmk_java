@@ -18,7 +18,7 @@ public class Application extends JFrame implements ActionListener {
     Desktop desktop;
     rmk.DataModel sys;
     BasicToolBar toolbar;
-    public static final String version="2005_05_04a";
+    public static final String version="2005_05_08";
 
     //============================================================================
     public Application() throws Exception{
@@ -210,7 +210,18 @@ public class Application extends JFrame implements ActionListener {
 
 //        	rmk.ScreenController.getInstance().displayCustomer(230); // 18422, 1, 5, 7, 80000, 23705
 	//1005 - sullivan's
-	rmk.ScreenController.getInstance().displayHistoryList();
+//	rmk.ScreenController.getInstance().displayHistoryList();
+    	
+    	DBGuiModel model = new DBGuiModel();
+    	Invoice inv = sys.invoiceInfo.getInvoice(48250);
+    	Customer cust = null;
+		try {			cust = sys.customerInfo.getCustomerByID(inv.getCustomerID());
+		} catch (Exception e) {			e.printStackTrace();		}
+		
+		Vector custLst=new Vector();
+    	custLst.add(cust);
+    	model.setCustomerData(custLst);
+    	rmk.ScreenController.getInstance().displayInvoiceDetails(inv,new DBGuiModel());
 	
 //	DBGuiModel model = new DBGuiModel();
 //	Invoice inv = sys.invoiceInfo.getInvoice(44417);

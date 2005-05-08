@@ -9,7 +9,8 @@ public interface IScreen {
 	public void processCommand(String command, Object from);
 
     public boolean bringToFront();
-    public void setData(DBGuiModel model);
+//    public void setData(DBGuiModel model);
+    public void setData(DBObject item);
 	public void setVisible(boolean val);
 	public void toFront();
 	public void grabFocus();

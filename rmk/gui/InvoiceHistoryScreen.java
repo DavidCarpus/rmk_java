@@ -81,7 +81,9 @@ public class InvoiceHistoryScreen extends Screen {
 	public void setData(DBGuiModel model) {
 		invoiceHistoryListPanel.setData(model);
 	}
-
+    public void setData(DBObject item){
+    	ErrorLogger.getInstance().TODO();
+    }
 
     public void updateOccured(DBObject itemChanged, int changeType, DBObject parentItem){
 		ErrorLogger.getInstance().TODO();

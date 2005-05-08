@@ -192,7 +192,7 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
                 x += 3;
             g2.setFont(newFont);
             g2.drawString(segment.text, x, y);
-            if ((segment.format & BOLD) > 0)  x += 2;
+//            if ((segment.format & BOLD) > 0)  x += 2;
             FontMetrics metrics = g2.getFontMetrics();
             double txtLen = metrics.charsWidth(segment.text.toCharArray(), 0,
             		segment.text.length());
@@ -201,71 +201,9 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
                 g2.draw(new Line2D.Double(x, y + 1, x + txtLen, y + 1));
             }
             x += txtLen;
+            
             g2.setFont(originalFont);
         }
-        //  	g2.setFont(currFont);
-        //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+
-        // originalFont.getStyle());
-
-//        outTxt = txt;
-//        while ((formatStart = formatStart(txt)) >= 0) {
-//
-//            if (formatStart != 0) {
-//                outTxt = txt.substring(0, txt.indexOf("<"));
-//                // write out txt so far
-//                int style = Font.PLAIN;
-//                //  		int style = currFont.getStyle();
-//                if (bold > 0) style = style | Font.BOLD;
-//                if (italic > 0) style = style | Font.ITALIC;
-//
-//                //    		Font newFont = new
-//                // Font(originalFont.getFontName(),style,originalFont.getSize());
-//                Font newFont = originalFont.deriveFont(style);
-//
-////                x -= 3; // not sure why this is needed
-//                if (style != Font.PLAIN) 
-//                    x += 3;
-//                g2.setFont(newFont);
-//                g2.drawString(outTxt, x, y);
-//                if (bold > 0) x += 2;
-//                FontMetrics metrics = g2.getFontMetrics();
-//                double txtLen = metrics.charsWidth(outTxt.toCharArray(), 0,
-//                        outTxt.length());
-//
-//                if (underline > 0) {
-//                    g2.draw(new Line2D.Double(x, y + 1, x + txtLen, y + 1));
-//                }
-//                x += txtLen;
-//
-//                txt = txt.substring(txt.indexOf("<"));
-//            }
-//            if (txt.trim().length() == 0) return;
-//            String style = txt.substring(0, txt.indexOf(">") + 1).toUpperCase();
-//
-//            if (style.equals("<I>")) {
-//                italic++;
-//            }
-//            if (style.equals("</I>")) {
-//                italic--;
-//            }
-//            if (style.equals("<B>")) {
-//                bold++;
-//            }
-//            if (style.equals("</B>")) {
-//                bold--;
-//            }
-//            if (style.equals("<U>")) {
-//                underline++;
-//            }
-//            if (style.equals("</U>")) {
-//                underline--;
-//            }
-//
-//            txt = txt.substring(style.length());
-//        }
-//        g2.setFont(originalFont);
-//        if (outTxt.equals(txt)) // NO Formatting, but still need to display
-//                g2.drawString(outTxt, x, y);
     }
 
     public static String unformatted(String txt) {

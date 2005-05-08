@@ -5,7 +5,8 @@ import carpus.database.Fixed;
 
 public class InvoiceEntryAdditions extends DBObject{
     int partType=0;
-
+    InvoiceEntries parent=null;
+    
     public static final int[] lengths={Fixed.LONG_SIZE, Fixed.FLOAT_SIZE, 
 				       Fixed.LONG_SIZE, Fixed.CURRENCY_SIZE};
     public static final String[] fields={"AdditionID","EntryID","PartID","Price"};
@@ -29,6 +30,14 @@ public class InvoiceEntryAdditions extends DBObject{
 	setID(new Long(ID));
 	setDefaults();
     }
+    public InvoiceEntryAdditions(InvoiceEntryAdditions oldAddition){
+    	super(fields);
+    	setAdditionID(oldAddition.getAdditionID());
+    	setEntryID(oldAddition.getEntryID());
+    	setPartID(oldAddition.getPartID());
+    	setPrice(oldAddition.getPrice());
+    }
+
     private void setDefaults(){
 	setEntryID(0);
 	setPartID(0);
@@ -48,6 +57,8 @@ public class InvoiceEntryAdditions extends DBObject{
     public int getPartType(){ return partType;}
     public void setPartType(int type){partType = type;}
 
+    public void setParent(InvoiceEntries entry){ parent = entry; }
+    public InvoiceEntries getParent(){return parent;}
 
     public void setValues(ResultSet  recordSet) throws Exception{
 	// 	setAdditionID(recordSet.getInt("AdditionID"));
@@ -96,7 +107,7 @@ public class InvoiceEntryAdditions extends DBObject{
     public String deactivateSql(long id) throws Exception{
 	return deactivateSql("InvoiceEntryAdditions", "AdditionID", id);
     }
-
+    
     public static void main(String args[]) throws Exception{
 	carpus.database.PostgresDB db = new carpus.database.PostgresDB();
 	db.connect();

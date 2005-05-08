@@ -539,11 +539,11 @@ public class ReportDataInvoicesList {
 		this.endDate = new java.util.GregorianCalendar(year, month, 1);
 		endDate.add(Calendar.MONTH, 1);
 		endDate.add(Calendar.DAY_OF_MONTH, -1);
-		ErrorLogger.getInstance().logMessage(this.getClass().getName() + "Ordered:" + DataModel.db.dateStr(startDate) + ":"
+		ErrorLogger.getInstance().logMessage("Ordered:" + DataModel.db.dateStr(startDate) + ":"
 				+ DataModel.db.dateStr(endDate));
 		invoices = sys.invoiceInfo.getInvoicesByDate("dateOrdered", startDate,
 				endDate);
-		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":invoices.size:"
+		ErrorLogger.getInstance().logMessage(":invoices.size:"
 				+ invoices.size());
 	}
 	//------------------------------------------------------------------------
@@ -603,7 +603,7 @@ public class ReportDataInvoicesList {
 	int addInvoiceItems(Vector results, Invoice inv) {
 		Object items[] = inv.getItems().toArray();
 		int totalQty=0;
-		int COMMENT_CHARS = 40;
+		int COMMENT_CHARS = 30;
 		Arrays.sort(items, new rmk.comparators.BladeListItems());
 		for (int i = 0; i < items.length; i++) {
 			String info[] = blankInfo(cols);
@@ -629,23 +629,28 @@ public class ReportDataInvoicesList {
 				String comment = "";
 				String originalComment = entry.getComment();
 				if(originalComment == null) originalComment="";
-				// if bold item, transfer to comments also
-				ArrayList parsedText = BaseReport.parseFormattedText(featureList);
-		        for(int segmentIndex=0; segmentIndex< parsedText.size(); segmentIndex++){
-		        	FormattedText segment = (FormattedText) parsedText.get(segmentIndex);
-		        	boolean etchSpec = segment.text.trim().startsWith("ET");
-		            if (!etchSpec && (segment.format & BaseReport.BOLD) > 0){
-		            	comment += "<B>" + segment.text + "</B> ";
-		            	if(originalComment.indexOf(segment.text.trim()) >= 0)
-		            		if(!etchSpec)
-		            			originalComment = originalComment.replaceAll(segment.text.trim(), "");
-		            }
-					// if Underline item, transfer to comments also
-					// remove underline though
-//		            !segment.text.trim().startsWith("ET") &&  
-		            if ((segment.format & BaseReport.UNDERLINE) > 0) // etched Item
-		            	comment += segment.text;
-		        }
+				
+				// XFER certain features to comments section 
+//				if(featureList != null && featureList.trim().length() > 0){
+//					// if bold item, transfer to comments also
+//					ArrayList parsedText = BaseReport.parseFormattedText(featureList);
+//					for(int segmentIndex=0; segmentIndex< parsedText.size(); segmentIndex++){
+//						FormattedText segment = (FormattedText) parsedText.get(segmentIndex);
+//						boolean etchSpec = segment.text.trim().startsWith("ET");
+//						if (!etchSpec && (segment.format & BaseReport.BOLD) > 0){
+//							comment += "<B>" + segment.text + "</B> ";
+//							if(originalComment.indexOf(segment.text.trim()) >= 0)
+//								if(!etchSpec)
+//									originalComment = originalComment.replaceAll(segment.text.trim(), "");
+//						}
+//						// if Underline item, transfer to comments also
+//						// remove underline though
+//						//		            !segment.text.trim().startsWith("ET") &&  
+//						if ((segment.format & BaseReport.UNDERLINE) > 0) // etched Item
+//							comment += segment.text;
+//					}
+//				}
+				
 				info[3] = featureList;
 
 				if(originalComment != null && originalComment.indexOf("[") >= 0){
@@ -695,18 +700,22 @@ public class ReportDataInvoicesList {
 			}
 
 			if (sys.partInfo.partIsSheath(feature.getPartID()))
-				partCode = "<B>" + partCode + "</B>";
+				partCode = bold(partCode);
 			if (partCode.equals("RDH") 
 					|| partCode.equals("LS1") || partCode.equals("LS2") || partCode.equals("LS3")
 					|| partCode.equals("NP") || partCode.equals("NPB") || partCode.equals("NPN") )
-				partCode = "<B>" + partCode + "</B>";
+				partCode = bold(partCode);
 			if (sys.partInfo.partIsNamePlate(feature.getPartID()))
-				partCode = "<B> " + partCode + " </B>";
+				partCode = bold(partCode);
 			if (sys.partInfo.partIsEtching(feature.getPartID()))
-				partCode = "<B> " + partCode + " </B>";
+				partCode = bold(partCode);
 			results += partCode + " ";
 		}
-		return results;
+		results = results.replaceAll("  ", " ");
+		return results.trim();
+	}
+	String bold(String str){
+		return "<B>" + str + "</B>";
 	}
 	//------------------------------------------------------------------------
 	//------------------------------------------------------------------------

@@ -6,6 +6,7 @@ import java.awt.event.*;
 
 import rmk.ErrorLogger;
 import rmk.ScreenController;
+import rmk.database.dbobjects.DBObject;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
@@ -47,7 +48,8 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 	LabeledTextField[] txtFields = new LabeledTextField[4];
 
 	JTextPane comments = new JTextPane();
-
+	int lastQty=0;
+	
 	rmk.database.PartPriceTable priceTable = rmk.DataModel.getInstance().pricetable;
 	InvoiceItemFeatureEntryPanel entryPanel = new InvoiceItemFeatureEntryPanel();
 	
@@ -69,6 +71,8 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 		txtFields[FIELD_QUANTITY] = field;
 		txtField.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent e) {
+				int qty = getQuantity();
+				if(qty != lastQty)
 				actionPerformed(new ActionEvent(txtFields[FIELD_QUANTITY], 1,
 						"QUANTITY_CHANGED"));
 			}
@@ -119,13 +123,16 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		JScrollPane scrollPane = new JScrollPane(mainPanel);
-		selectionPanel.addActionListener(this);
+		selectionPanel.setParentPanel(this);
 		add(scrollPane);
 
 		setFieldEditCheck(txtFields, "InvoiceItemDetailsChange", this);
 		setPreferredSize(new Dimension(250, 300));
 	}
-	
+    public void moveBackToFeatureEntry(){
+    	entryPanel.grabFocus();
+    }
+    
 	public void setParent(IScreen screen){
 		entryPanel.setParent(screen);
 		selectionPanel.setParent(screen);
@@ -214,12 +221,12 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 		double oldPrice = knife.getPrice();
 		int year = sys.invoiceInfo.getPricingYear(invoice);			
 		double price = priceTable.getPartPrice(year, (int) partID);
-		int quantity = getQuantity();
+		lastQty	= getQuantity();
 
 		price += selectionPanel.getFeaturesTotalCosts(0); // want to display
 														  // retail discount=0%
-		double oldTotal = oldPrice * quantity;
-		double total = price * quantity;
+		double oldTotal = oldPrice * lastQty;
+		double total = price * lastQty;
 		if (oldTotal > 0 && oldTotal != total
 				&& !rmk.gui.Dialogs.yesConfirm("Update Price?"))
 			return false;
@@ -266,10 +273,45 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 		price = price.replaceAll(",",""); // remove commas
 		knife.setPrice(Double.parseDouble(price));
 		String qty = txtFields[FIELD_QUANTITY].getValue();
-		knife.setQuantity(Integer.parseInt(qty));
+		lastQty = Integer.parseInt(qty);
+		knife.setQuantity(lastQty);
+		
 		return knife;
 	}
 
+	public void setData(DBObject item){
+		loading = true;
+		InvoiceEntries knifeItem = (InvoiceEntries) item;
+//		ErrorLogger.getInstance().TODO();
+		invoice = knifeItem.getParent();
+		Vector features = knifeItem.getFeatures();
+		selectionPanel.setData(item);
+		
+		updateFields(knifeItem);
+		
+		featureChange();
+
+		knife = knifeItem;
+		loading = false;
+		setEdited(false);
+	}
+	
+	void updateFields(InvoiceEntries knifeItem){
+		lastQty = knifeItem.getQuantity();		
+		txtFields[FIELD_QUANTITY].setValue("" + lastQty);
+		
+		NumberFormat formatter = NumberFormat.getNumberInstance();
+		formatter.setMaximumFractionDigits(2);
+		formatter.setMinimumFractionDigits(2);
+		txtFields[FIELD_PRICE].setValue(""
+				+ formatter.format(knifeItem.getPrice()));
+		txtFields[FIELD_DISCOUNT].setValue(discountPercentage);
+		comments.setText(knifeItem.getComment());
+		//  	txtFields[FIELD_COMMENT].setValue(knife.getComment());
+		long partID = knifeItem.getPartID();
+		txtFields[FIELD_MODEL].setValue(sys.partInfo.getPartCodeFromID(partID));		
+	}
+	
 	//-----------------------------------------------------------------
 	public void setData(DBGuiModel model) {		
 		InvoiceEntries currKnife = knife;
@@ -294,7 +336,9 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 		model.setInvoiceItemAttributesData(features);
 		selectionPanel.setData(model);
 
-		txtFields[FIELD_QUANTITY].setValue("" + currKnife.getQuantity());
+		lastQty = currKnife.getQuantity();		
+		txtFields[FIELD_QUANTITY].setValue("" + lastQty);
+		
 		NumberFormat formatter = NumberFormat.getNumberInstance();
 		formatter.setMaximumFractionDigits(2);
 		formatter.setMinimumFractionDigits(2);
@@ -319,7 +363,7 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 		txtFields[FIELD_PRICE].setValue("0.00");
 		txtFields[FIELD_DISCOUNT].setValue("" + discountPercentage);
 		comments.setText("");
-		selectionPanel.clear();
+		selectionPanel.blankOutFeatures();
 	}
 	public void setPricingYear(int year){
 		entryPanel.setPricingYear(year);

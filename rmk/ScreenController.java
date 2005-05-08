@@ -4,7 +4,9 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import rmk.database.dbobjects.Customer;
+import rmk.database.dbobjects.DBObject;
 import rmk.database.dbobjects.Invoice;
+import rmk.database.dbobjects.InvoiceEntries;
 import rmk.gui.*;
 
 import java.awt.*;
@@ -28,6 +30,8 @@ public class ScreenController {
 	public static final int UPDATE_SAVE=7;
 	public static final int ENTER_KEY=8;
 	
+	public static final int VALIDATION_FAILED=9;
+
 	
 	public static final int BUTTON_SELECTION_UNKNOWN=0;
 	public static final int BUTTON_SELECTION_DETAILS=1;
@@ -213,7 +217,7 @@ public class ScreenController {
 			PartsScreen screen = new PartsScreen();
 			Desktop.getInstance().add(screen);
 
-			screen.setData(null);
+			screen.setData((DBObject)null);
 			select(screen);
 			//
 			//	    screen.setVisible(true);
@@ -316,10 +320,11 @@ public class ScreenController {
 		InvoiceItemScreen screen = null;
 		Desktop.getInstance().setCursor(
 				Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+		Invoice inv = null;
 		try {
 			screen = new InvoiceItemScreen();
 			Vector invoiceLst = data.getInvoiceData();
-			Invoice inv = null;
+
 			if (invoiceNum > 0) {
 				for (Enumeration lst = invoiceLst.elements(); lst
 						.hasMoreElements();) {
@@ -336,26 +341,46 @@ public class ScreenController {
 				title += inv.getInvoice();
 
 			title += " Item: ";
-			Vector invoiceItem = data.getKnifeData();
-			if (invoiceItem != null) {
-//				ErrorLogger.getInstance().logDebug("" + invoiceItem, true);
-				ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction()  + ":invoiceItem()" + ":" + invoiceItem, false);
-				title += ((rmk.database.dbobjects.InvoiceEntries) invoiceItem
-						.get(0)).getInvoiceEntryID();
-				int year = sys.invoiceInfo.getPricingYear(inv.getInvoice());
-				title += " Year-" + year;
-				ErrorLogger.getInstance().logMessage(
-						"DispInvItem:" + invoiceItem);
+			Vector invoiceItems = data.getKnifeData();
+			InvoiceEntries item = null;
+			if (invoiceItems != null) {
+				if(itemNum > 0){
+					for (java.util.Enumeration enum = invoiceItems.elements(); enum.hasMoreElements();) {
+						InvoiceEntries currItem = (InvoiceEntries) enum.nextElement();
+						if(currItem.getInvoiceEntryID() == itemNum){
+							item=currItem;
+							break;
+						}
+						
+					}
+				}
+				ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction()  + ":invoiceItem()" + ":" + invoiceItems, false);
 			} else {
 				ErrorLogger.getInstance().logDebug("No item (New?)", false);
 			}
+			if(item != null){
+				title += item.getInvoiceEntryID();
+				ErrorLogger.getInstance().logMessage(
+						"DispInvItem:" + invoiceItems);
+			}
+			int year = sys.invoiceInfo.getPricingYear(inv.getInvoice());
+			title += " Year-" + year;
+
 			invoiceLst.remove(inv);
 			invoiceLst.insertElementAt(inv, 0);
 
+			Customer customer = (Customer)data.getCustomerData().get(0);
+			
 			screen.setTitle(title);
 
 			Desktop.getInstance().add(screen);
-			screen.setData(data);
+
+			if(item == null) // new item
+				item = new InvoiceEntries(0);
+			
+			item.setParent(inv);
+			inv.setParent(customer);
+			((InvoiceItemScreen)screen).setData(item);
 			select(screen);
 			//  	    screen.addActionListener(parent);
 		} catch (Exception e) {

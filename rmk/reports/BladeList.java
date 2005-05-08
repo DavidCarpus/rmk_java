@@ -189,7 +189,8 @@ public class BladeList extends BaseReport implements ReportInterface {
 		int rowsRendered = 0;
 		int rowLocation = -(fontHeight + 3);
 		String labels[] = {"Invoice", "Qty", "Model", "Features", "Comments"};
-		int colLocations[] = {6, 40, 60, 130, 325};
+//		int colLocations[] = {6, 40, 60, 130, 325};
+		int colLocations[] = {6, 40, 60, 130, 345};
 		g2.setColor(HIGHLIGHT_COLOR);
 		g2.fill3DRect(1, rowLocation-fontHeight+4, (int)region.width-1, fontHeight+1, false) ;
 		g2.setColor(Color.BLACK);

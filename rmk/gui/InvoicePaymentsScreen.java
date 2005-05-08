@@ -113,7 +113,9 @@ public class InvoicePaymentsScreen extends Screen {
 
         }
     }
-
+    public void setData(DBObject item){
+    	ErrorLogger.getInstance().TODO();
+    }
     //------------------------------------------------------------------
     private void saveData() {
         if (editedInvoice) {
@@ -316,7 +318,7 @@ public class InvoicePaymentsScreen extends Screen {
                 rmk.ScreenController.getInstance().displayInvoiceDetails(
                         invoice, model);
             } else {
-                screen.setData(model);
+                ((InvoiceDetailsScreen)screen).setData(model);
                 screen.bringToFront();
             }
             // -------------------------
@@ -329,7 +331,7 @@ public class InvoicePaymentsScreen extends Screen {
                 rmk.ScreenController.getInstance().displayCustomer(
                         invoice.getCustomerID());
             } else {
-                screen.setData(model);
+            	((CustomerScreen)screen).setData(model);
                 screen.bringToFront();
             }
             // -------------------------

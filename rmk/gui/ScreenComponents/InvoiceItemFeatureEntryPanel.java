@@ -34,9 +34,16 @@ public class InvoiceItemFeatureEntryPanel
 	KeyAdapter ka = new KeyAdapter(){
 		public void keyPressed(KeyEvent e){
 		    int code = e.getKeyCode();	
-		    if(code == KeyEvent.VK_ENTER){
-			//Key pressed is the Enter key. 
-			actionPerformed(new ActionEvent(this, 0, "EnteredNewEntry"));
+		    if(code == KeyEvent.VK_ENTER){ //Key pressed is the Enter key. 
+		    	if(e.isControlDown()){
+		    		parent.buttonPress(ScreenController.BUTTON_SAVE,0);
+		    	}else{
+		    		InvoiceEntryAdditions newFeature = addEnteredItem();
+		    		if(newFeature != null){
+		    			parent.updateOccured(newFeature, ScreenController.UPDATE_ADD, null);
+		    			field.grabFocus();
+		    		}
+		    	}
 		    }
 		}
 	    };
@@ -44,14 +51,13 @@ public class InvoiceItemFeatureEntryPanel
 	field.setFocusAccelerator('E');
 	field.addKeyListener(ka);
     }
-//-----------------------------------------------------------------
-    public void actionPerformed(ActionEvent e) {
-	String command = e.getActionCommand().toUpperCase().trim();
-    ErrorLogger.getInstance().logDebugCommand(command);
-
-    if (command.equals("ENTEREDNEWENTRY")) { //removed feature
+    
+    public InvoiceEntryAdditions addEnteredItem(){
+    	String enteredCode = field.getText();
+    	if(enteredCode == null || enteredCode.trim().length()==0) return null; // nothing entered
+    	
 		InvoiceEntryAdditions newFeature = new InvoiceEntryAdditions(0);
-		String enteredCode = field.getText();
+		
 		Parts part = DataModel.getInstance().partInfo.getPartFromCode(enteredCode);		
 		newFeature.setPartID(part.getPartID());
 		if(!enteredCode.toUpperCase().equals(enteredCode)){ // lower case, set price to 0(zero)
@@ -63,15 +69,19 @@ public class InvoiceItemFeatureEntryPanel
 		}
 		newFeature.setShortDescription(enteredCode.toUpperCase());
 		setEdited(true);
-    	parent.updateOccured(newFeature, ScreenController.UPDATE_ADD, null);
     	field.setText("");
-//	    ActionEvent event = new ActionEvent(this, 0, "EnteredNewEntry-" + field.getText());
-//	    field.setText("");
-//	    notifyListeners(event);
-    	
-	} else{
-	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
-	}
+    	return newFeature;
+    }
+    
+    public void moveBackToFeatureEntry(){
+    	field.grabFocus();
+    }
+    
+//-----------------------------------------------------------------
+    public void actionPerformed(ActionEvent e) {
+	String command = e.getActionCommand().toUpperCase().trim();
+    ErrorLogger.getInstance().logDebugCommand(command);
+    ErrorLogger.getInstance().TODO();
     }
 //-----------------------------------------------------------------
     public void setData(DBGuiModel model ){}

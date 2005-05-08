@@ -39,9 +39,6 @@ implements ActionListener
 			ListObject item = ((ListObject)options[id].get(newIndex));
 			InvoiceEntryAdditions addition = item.getAddition();
 			parent.updateOccured(addition, ScreenController.LIST_ITEM_SELECTED, null);
-//			notifyListeners(new ActionEvent(item.getAddition(),
-//							(int)item.getID(),
-//							"ADDFEATURE"));
 		    }
 		};
 	    fields[fieldIndex].setSelectionModel(selectionModel);
@@ -63,38 +60,30 @@ implements ActionListener
     }
 //-----------------------------------------------------------------
     public void actionPerformed(ActionEvent e) {
-	String command = e.getActionCommand().toUpperCase().trim();
-    ErrorLogger.getInstance().logDebugCommand(command);
-
-  	if (command.startsWith("SET_KNIFE_MODEL|")) { //SET_KNIFE_MODEL
-	    int year = Integer.parseInt(command.substring(command.indexOf("|")+1));
-	    setKnifeModel(e.getID(),year);
-//  	    sys.invoiceInfo.getInvoiceFromEntryID
-
-  	} else if (command.startsWith("INVOICEFEATURECHANGE")){
-	    // ignore this message
-  	} else {
-	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command);
-  	}
+    	String command = e.getActionCommand().toUpperCase().trim();
+    	ErrorLogger.getInstance().logDebugCommand(command);
+    	
+    	if (command.startsWith("SET_KNIFE_MODEL|")) { //SET_KNIFE_MODEL
+    		int year = Integer.parseInt(command.substring(command.indexOf("|")+1));
+    		setKnifeModel(e.getID(),year);
+    		//  	    sys.invoiceInfo.getInvoiceFromEntryID
+    		
+    	} else if (command.startsWith("INVOICEFEATURECHANGE")){
+    		// ignore this message
+    	} else {
+    		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command);
+    	}
     }
     
 
 	public void setParent(IScreen screen){
 		parent = screen;
 	}
-	
-////-----------------------------------------------------------------
-//    public void addActionListener(ActionListener listener){
-//	if(listeners == null) listeners = new Vector();
-//	if(!listeners.contains(listener)) listeners.addElement(listener);
-//    }
 //-----------------------------------------------------------------
     public void setKnifeModel(int model, int year){
-//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":setKnifeModel(int model, int year)"+ model + ":" + year);
-	for (int type = 1; type < options.length; type++){
-	    loadFeatureField(model, year, options[type], type*10);
-	}
-//  	loadFeatureField(model, year, options[options.length-1], 99); // load misc lst
+    	for (int type = 1; type < options.length; type++){
+    		loadFeatureField(model, year, options[type], type*10);
+    	}
     }
 //-----------------------------------------------------------------
     public void notifyListeners(ActionEvent event){
@@ -122,26 +111,19 @@ implements ActionListener
 
 	fieldModel.clear();
 	int listIndex=0;
-//	rmk.database.PartPriceTable priceTable = rmk.database.PartPriceTable.getInstance();
 
 	for(int partIndex=0; partIndex < partArray.length; partIndex++){
-	    Parts part = (Parts)partArray[partIndex];
-//  	    Parts part = (Parts)parts.get(partIndex);
-	    if(sys.partInfo.validPartType(knifeModel, (int)part.getPartID())){
-		InvoiceEntryAdditions feature = new InvoiceEntryAdditions(0);
-		feature.setPartID(part.getPartID());
-//  		feature.setEntryID(knife.getInvoiceEntryID());
-		double price = rmk.DataModel.getInstance().pricetable.getPartPrice(year, (int)part.getPartID());
-		feature.setPrice(price);
-
-		fieldModel.addElement(new ListObject(feature,0));
-	    }
+		Parts part = (Parts)partArray[partIndex];
+		
+		if(sys.partInfo.validPartType(knifeModel, (int)part.getPartID())){
+			InvoiceEntryAdditions feature = new InvoiceEntryAdditions(0);
+			feature.setPartID(part.getPartID());
+			//  		feature.setEntryID(knife.getInvoiceEntryID());
+			double price = rmk.DataModel.getInstance().pricetable.getPartPrice(year, (int)part.getPartID());
+			feature.setPrice(price);
+			
+			fieldModel.addElement(new ListObject(feature,0));
+		}
 	}
     }
-//-----------------------------------------------------------------
-//-----------------------------------------------------------------
-      public static void main(String args[]) throws Exception{
-  	rmk.gui.Application.main(args);
-      }
-//-----------------------------------------------------------------
 }

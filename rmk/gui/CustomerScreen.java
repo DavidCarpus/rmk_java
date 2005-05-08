@@ -91,6 +91,12 @@ public class CustomerScreen extends Screen{
 		//		model.addActionListener(this);
 		this.pack();
 	}
+
+    public void setData(DBObject item){
+    	ErrorLogger.getInstance().TODO();
+    }
+    
+    
 	public void updateInvPrice(Invoice invoice){
 		if(model.getInvoiceData() != null){
 			Vector invoiceData = model.getInvoiceData();

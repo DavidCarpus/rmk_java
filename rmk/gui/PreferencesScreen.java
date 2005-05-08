@@ -119,9 +119,10 @@ public class PreferencesScreen extends Screen {
 		return edited;
 	}
 
-	public void setData(DBGuiModel model) {} // not used for this screen
-	
-	
+	public void setData(DBGuiModel model) {} // not used for this screen	
+    public void setData(DBObject item) {} // not used for this screen
+    
+    
     public void updateOccured(DBObject itemChanged, int changeType, DBObject parentItem){
 		switch(changeType){
 		case ScreenController.UPDATE_SAVE:

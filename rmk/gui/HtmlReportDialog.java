@@ -4,11 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import carpus.gui.BasicToolBar;
-//import javax.print.*;
 
 import rmk.ErrorLogger;
-import rmk.ScreenController;
-import rmk.database.dbobjects.DBObject;
 import rmk.reports.BaseReport;
 
 public class HtmlReportDialog extends JDialog implements ActionListener{

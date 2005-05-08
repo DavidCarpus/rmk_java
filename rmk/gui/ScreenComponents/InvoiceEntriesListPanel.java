@@ -145,22 +145,35 @@ implements ActionListener, FocusListener{
 		return (int)dataModel.getColTotal(InvoiceEntriesListTableModel.COL_QUANTITY);
     }
 
-    //----------------------------------------------------------
-	public void setData(rmk.gui.DBGuiModel model) {
-		java.util.Vector data = model.getInvoiceItemsData();
-		setData(data);
+    public void setDataInvItems(Invoice inv, Vector invItems){
+		setData(invItems);
 		sorter.sortByColumn(1, true);
 		
-		data = model.getInvoiceData();
-		if (data == null)
-			return;
-		Invoice invoice = (Invoice) data.get(data.size() - 1);
-
-		if (invoice.getInvoice() != 0)
+		if (inv.getInvoice() != 0)
 			buttonBar.enableButton(1, true);
 
 		buttonBar.enableButton(0, false);
 		buttonBar.enableButton(2, false);
+   	
+    }
+    
+    //----------------------------------------------------------
+	public void setData(rmk.gui.DBGuiModel model) {
+		ErrorLogger.getInstance().TODO();
+//		java.util.Vector data = model.getInvoiceItemsData();
+//		setData(data);
+//		sorter.sortByColumn(1, true);
+//		
+//		data = model.getInvoiceData();
+//		if (data == null)
+//			return;
+//		Invoice invoice = (Invoice) data.get(data.size() - 1);
+//
+//		if (invoice.getInvoice() != 0)
+//			buttonBar.enableButton(1, true);
+//
+//		buttonBar.enableButton(0, false);
+//		buttonBar.enableButton(2, false);
 	}
     
 	//----------------------------------------------------------

@@ -653,8 +653,8 @@ public class FinancialInfo {
                 }
                 if (zip > 0) {
                     if (prev.length() == 2) return prev.toUpperCase();
-                    ErrorLogger.getInstance().logMessage("**zip:" + zip);
-                    ErrorLogger.getInstance().logMessage("**prev:" + prev);
+//                    ErrorLogger.getInstance().logMessage("**zip:" + zip);
+//                    ErrorLogger.getInstance().logMessage("**prev:" + prev);
                 }
             } else if(curr.equalsIgnoreCase("APO")){
                 return curr;
