@@ -1,17 +1,15 @@
 package rmk.database.dbobjects;
+
 import java.sql.*;
-import java.io.*;
 import carpus.database.Fixed;
 import carpus.util.DateFunctions;
-
 import java.util.Vector;
-
-import rmk.ErrorLogger;
 
 public class Invoice extends DBObject{
     Vector items=null;
     Boolean dealer=null;
     Customer parent=null;
+    Vector payments = null;
     
     public static final int[] lengths={
 	Fixed.LONG_SIZE, Fixed.DATE_SIZE, Fixed.DATE_SIZE, 
@@ -243,4 +241,7 @@ public class Invoice extends DBObject{
 
     public void setParent(Customer customer){parent = customer;}
     public Customer getParent(){return parent;}
+
+    public void setPayments(Vector paymentLst){payments = paymentLst;}
+    public Vector getPayments(){return payments;}
 }

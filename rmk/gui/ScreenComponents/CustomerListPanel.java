@@ -167,10 +167,16 @@ public class CustomerListPanel
 	if(listeners == null) listeners = new Vector();
 	if(!listeners.contains(listener)) listeners.addElement(listener);
     }
-    public void setData(rmk.gui.DBGuiModel model){
-    	Vector custData = model.getCustomerData();
-    	setData(custData);
-    }
+    
+//    public boolean setData(Vector customers){
+//    	customerList = customers;
+//    	return true;
+//    }
+    
+//    public void setData(rmk.gui.DBGuiModel model){
+//    	Vector custData = model.getCustomerData();
+//    	setData(custData);
+//    }
 
 
     public static void main(String args[])

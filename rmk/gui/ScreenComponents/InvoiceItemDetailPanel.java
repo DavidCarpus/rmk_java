@@ -14,7 +14,6 @@ import rmk.database.dbobjects.InvoiceEntryAdditions;
 import java.text.NumberFormat;
 import java.util.Vector;
 import carpus.gui.*;
-import rmk.gui.DBGuiModel;
 import rmk.gui.IScreen;
 
 //===============================================================
@@ -285,7 +284,7 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 //		ErrorLogger.getInstance().TODO();
 		invoice = knifeItem.getParent();
 		Vector features = knifeItem.getFeatures();
-		selectionPanel.setData(item);
+		selectionPanel.setData(features);
 		
 		updateFields(knifeItem);
 		
@@ -313,28 +312,23 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 	}
 	
 	//-----------------------------------------------------------------
-	public void setData(DBGuiModel model) {		
+//	public void setData(DBGuiModel model) {		
+	public void setData(InvoiceEntries knife, Vector knifeFeatures) {		
 		InvoiceEntries currKnife = knife;
 		loading = true;
-		Vector entries = model.getKnifeData();
-		if (entries != null && entries.size() > 0)
-			currKnife = (InvoiceEntries) entries.get(entries.size() - 1);
-
+		
 		if (currKnife == null)
 			currKnife = new InvoiceEntries(0);
-//		else
-//			ErrorLogger.getInstance().logMessage("setting ItemDetailPanel:" + currKnife);
 		
-		Vector invoices = model.getInvoiceData();
-		invoice = (Invoice) invoices.get(invoices.size() - 1);
+		invoice = knife.getParent();
 
 		Vector features = null;
 		if (currKnife.getFeatures() != null) {
 			features = (Vector) currKnife.getFeatures();
 		}
 //		ErrorLogger.getInstance().logMessage("Updating ItemDetailFeatures:" + features);
-		model.setInvoiceItemAttributesData(features);
-		selectionPanel.setData(model);
+//		model.setInvoiceItemAttributesData(features);
+		selectionPanel.setData(knifeFeatures);
 
 		lastQty = currKnife.getQuantity();		
 		txtFields[FIELD_QUANTITY].setValue("" + lastQty);

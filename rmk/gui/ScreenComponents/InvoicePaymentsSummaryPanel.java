@@ -63,7 +63,7 @@ public class InvoicePaymentsSummaryPanel
 
 		rmk.DataModel sys = rmk.DataModel.getInstance();
 		double totalPayments =
-			sys.financialInfo.getTotalInvoicePayments(invoice.getInvoice());
+			sys.financialInfo.getTotalInvoicePayments(invoice);
 		double discount = sys.financialInfo.getTotalInvoiceDiscount(invoice);
 		double retail = sys.financialInfo.getTotalRetail(invoice);
 		double shipping = invoice.getShippingAmount();

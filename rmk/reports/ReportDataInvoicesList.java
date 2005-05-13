@@ -381,7 +381,7 @@ public class ReportDataInvoicesList {
 	}
 	//------------------------------------------------------------------------
 	void addInvoiceTaxInfo(Vector results, Invoice invoice) {
-		double totalPayments = sys.financialInfo.getTotalInvoicePayments(invoice.getInvoice());
+		double totalPayments = sys.financialInfo.getTotalInvoicePayments(invoice);
 		double discount = sys.financialInfo.getTotalInvoiceDiscount(invoice);
 		double retail = sys.financialInfo.getTotalRetail(invoice);
 		double shipping = invoice.getShippingAmount();
@@ -477,7 +477,7 @@ public class ReportDataInvoicesList {
 		else
 			info[6] = "" + currencyFormat.format(taxes);
 			
-		double paid = sys.financialInfo.getTotalInvoicePayments(inv.getInvoice());
+		double paid = sys.financialInfo.getTotalInvoicePayments(inv);
 		info[7] = "" + currencyFormat.format(paid);
 		
 //		info[8] = "" + currencyFormat.format(due +taxes - paid);

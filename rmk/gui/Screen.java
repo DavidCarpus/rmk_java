@@ -29,7 +29,10 @@ abstract class Screen
     protected BasicToolBar buttonBar = new BasicToolBar(null, new String[] {"Save", "Cancel"}, 
 				     new String[] {"Save", "Cancel"},
 				     new String[] {"Save", "Cancel"});
-    DBGuiModel model=null;
+    
+    // TODO: Get rid of "Model" completly
+//    DBGuiModel model=null;
+    
     Vector listeners=null;
     String title="";
     public Screen(){};
@@ -112,8 +115,8 @@ abstract class Screen
 			buttonPress(ScreenController.BUTTON_CANCEL,0);
 			return true;
 		}
-		if(command.length() > 3) return false;
 		if(!command.startsWith("F")) return false;
+		if(command.length() > 3) return false;
 		int index = Integer.parseInt(command.substring(1));
 		if(index > 0){
 			index += ScreenController.BUTTON_F1 - 1;
@@ -134,12 +137,12 @@ abstract class Screen
 	    return false;
 	}
     }
-    public void setModel(DBGuiModel model){
-	this.model = model;
-    }
-    public DBGuiModel getModel(){
-	return model;
-    }
+//    public void setModel(DBGuiModel model){
+//	this.model = model;
+//    }
+//    public DBGuiModel getModel(){
+//	return model;
+//    }
 
 //============================================================
 

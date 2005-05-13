@@ -76,7 +76,7 @@ public class PartsListPanel extends carpus.gui.DataListPanel  implements ActionL
 	notifyListeners(event);
 	}
 
-	public void setData(rmk.gui.DBGuiModel model){};
+//	public void setData(rmk.gui.DBGuiModel model){};
 
 	public void setData(Collection data) {
 		dataModel.setValues(new Vector(data));

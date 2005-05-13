@@ -197,13 +197,12 @@ public class CustomerDetailPanel
     }
     //----------------------------------------------------------
 
-    public void setData(rmk.gui.DBGuiModel model){
-	this.model = model;
-	java.util.Vector data = model.getCustomerData();
-	if(data != null)
-	    setData((carpus.database.DBObject)data.get(0));
-	else
+//    public void setData(rmk.gui.DBGuiModel model){
+    public void setData(Customer customer){
+	if(customer == null)
 	    ((LabeledTextField)txtFields[FIELD_TERMS]).setValue("1");
+//	else
+//	    setData(customer);
     }
 
     //========================================================

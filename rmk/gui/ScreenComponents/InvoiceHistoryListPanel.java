@@ -28,7 +28,7 @@ public class InvoiceHistoryListPanel
 extends DataListPanel 
 implements ActionListener, FocusListener {
 	Vector invoiceList = new Vector();
-	DBGuiModel model;
+//	DBGuiModel model;
 	IScreen parent = null;
 	
 	public InvoiceHistoryListPanel() {
@@ -79,17 +79,17 @@ implements ActionListener, FocusListener {
 	/* (non-Javadoc)
 	 * @see carpus.gui.DataListPanel#setData(rmk.gui.DBGuiModel)
 	 */
-	public void setData(DBGuiModel model) {
-		this.model = model;
-
-		if(setData(model.getInvoiceData())){
-			sorter.sortByColumn(3, false);
-		} else{
-			ErrorLogger.getInstance().logMessage("Null data?");
-		}
-
-		setVisible(true);
-	}
+//	public void setData(DBGuiModel model) {
+//		this.model = model;
+//
+//		if(setData(model.getInvoiceData())){
+//			sorter.sortByColumn(3, false);
+//		} else{
+//			ErrorLogger.getInstance().logMessage("Null data?");
+//		}
+//
+//		setVisible(true);
+//	}
 
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)

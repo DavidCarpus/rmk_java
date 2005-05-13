@@ -21,7 +21,11 @@ import javax.swing.JPanel;
 import javax.swing.event.InternalFrameEvent;
 
 import rmk.ErrorLogger;
+import rmk.ScreenController;
+import rmk.SignalProcessor;
+import rmk.database.dbobjects.Customer;
 import rmk.database.dbobjects.DBObject;
+import rmk.database.dbobjects.Invoice;
 
 import carpus.gui.BasicToolBar;
 import carpus.gui.DataEntryPanel;
@@ -105,7 +109,7 @@ public class InvoiceSearchScreen extends Screen {
 	}
 
 	public void internalFrameActivated(InternalFrameEvent arg0) {
-		ErrorLogger.getInstance().TODO();
+//		ErrorLogger.getInstance().TODO();
 	}
 
 	public boolean isEdited() {
@@ -113,7 +117,7 @@ public class InvoiceSearchScreen extends Screen {
 	}
 
 	public void setData(DBGuiModel model) {
-		ErrorLogger.getInstance().TODO();
+//		ErrorLogger.getInstance().TODO();
 	}
 	
     public void setData(DBObject item){
@@ -196,7 +200,17 @@ public class InvoiceSearchScreen extends Screen {
      }
     
 	public void buttonPress(int button, int id) {
-		ErrorLogger.getInstance().TODO();
+
+		ErrorLogger.getInstance().logButton(button, id);
+		
+		switch(button){
+		case ScreenController.BUTTON_CANCEL:
+			defaultCancelAction();
+			SignalProcessor.getInstance().removeScreen(this);
+		break;
+		default:
+			ErrorLogger.getInstance().TODO();
+		}	
 	}
 	
 

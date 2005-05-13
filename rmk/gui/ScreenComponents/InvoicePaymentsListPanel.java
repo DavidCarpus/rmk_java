@@ -6,6 +6,8 @@ import carpus.gui.*;
 import rmk.ErrorLogger;
 import rmk.ScreenController;
 import rmk.database.FinancialInfo;
+import rmk.database.dbobjects.Customer;
+import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.Payments;
 import rmk.gui.IScreen;
 
@@ -50,6 +52,9 @@ implements ActionListener{
 		buttonBar.enableButton(0, false);
 		buttonBar.enableButton(1, false);
 		buttonBar.getButton(0).setMnemonic(KeyEvent.VK_A); // Add button
+		
+		
+		
 		add(buttonBar);
 	}
 	//-------------------------------------------
@@ -77,6 +82,9 @@ implements ActionListener{
 		}else if(command.equals("CANCEL")){
 			parent.buttonPress(ScreenController.BUTTON_CANCEL, 0);
 			return;
+		}else if(command.equals("ADD")){
+			parent.buttonPress(ScreenController.BUTTON_ADD, 0);
+			return;
 
 		
 //		}else if(command.equals("ADD")){
@@ -87,22 +95,22 @@ implements ActionListener{
 //		} else {  // Undefined
 //			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Undefined:" + command + "|");
 		}
-		ErrorLogger.getInstance().logMessage("Undefined:" + command + "|");
+		ErrorLogger.getInstance().logMessage("*** Undefined:" + command + "|");
 		ErrorLogger.getInstance().TODO();
 	}
 	//================================================
-	public void setData(rmk.gui.DBGuiModel model){
+	public void setData(Invoice inv, Vector payments){
 		//  	Vector data;
 		//  	data = model.getPaymentsData();
-		setData(model.getPaymentsData());
+		super.setData(payments);
 		//  	invoicePaymentsData.setValues(data);
 		sorter.tableChanged(new javax.swing.event.TableModelEvent(sorter));
 		
 		if(data != null && data.size() > 0){
 			sorter.sortByColumn(5, false); // default - sort by date descending
 		}
-		data = model.getCustomerData();
-		if(data != null && ((rmk.database.dbobjects.Customer)data.get(0)).getCustomerID() > 0){
+		Customer cust = inv.getParent();
+		if(cust != null && cust.getCustomerID() > 0){
 			buttonBar.enableButton(0, true);
 		}
 		setVisible(true);

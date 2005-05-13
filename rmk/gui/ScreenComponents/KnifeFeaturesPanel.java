@@ -111,7 +111,7 @@ implements ActionListener
 
 	fieldModel.clear();
 	int listIndex=0;
-
+	
 	for(int partIndex=0; partIndex < partArray.length; partIndex++){
 		Parts part = (Parts)partArray[partIndex];
 		
@@ -120,10 +120,15 @@ implements ActionListener
 			feature.setPartID(part.getPartID());
 			//  		feature.setEntryID(knife.getInvoiceEntryID());
 			double price = rmk.DataModel.getInstance().pricetable.getPartPrice(year, (int)part.getPartID());
+			if(price < 0){
+				rmk.DataModel.getInstance().pricetable.warnIfBadLookup(false);
+				price = 0;
+			}
 			feature.setPrice(price);
 			
 			fieldModel.addElement(new ListObject(feature,0));
 		}
 	}
+	rmk.DataModel.getInstance().pricetable.warnIfBadLookup(true);
     }
 }

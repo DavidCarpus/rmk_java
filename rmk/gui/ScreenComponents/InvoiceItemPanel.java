@@ -289,12 +289,17 @@ implements ActionListener,  ListSelectionListener
                 if(originalKnife != null)
                     feature.setEntryID(originalKnife.getInvoiceEntryID());
                 double price = priceTable.getPartPrice(year, partID);
-                
+                if(price < 0){
+                	priceTable.warnIfBadLookup(false);
+    				price = 0;
+    			}
+
                 feature.setPrice(price);
                 
                 listData.addElement(new ListObject(feature,0));
             }
         }
+    	priceTable.warnIfBadLookup(true);
     }
     
     public void selectListItem(long partID) {

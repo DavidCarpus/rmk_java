@@ -10,6 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.Vector;
 
 import javax.swing.WindowConstants;
 import javax.swing.event.InternalFrameEvent;
@@ -78,8 +79,8 @@ public class InvoiceHistoryScreen extends Screen {
 	/* (non-Javadoc)
 	 * @see rmk.gui.IScreen#setData(rmk.gui.DBGuiModel)
 	 */
-	public void setData(DBGuiModel model) {
-		invoiceHistoryListPanel.setData(model);
+	public void setData(Vector invoiceLst) {
+		invoiceHistoryListPanel.setData(invoiceLst);
 	}
     public void setData(DBObject item){
     	ErrorLogger.getInstance().TODO();
@@ -99,9 +100,7 @@ public class InvoiceHistoryScreen extends Screen {
 		case ScreenController.BUTTON_SELECTION_DETAILS:
 			long invoiceID = invoiceHistoryListPanel.getSelectedItemID();
 			Invoice inv = sys.invoiceInfo.getInvoice(invoiceID);
-		    model = new DBGuiModel();
-		    
-			rmk.ScreenController.getInstance().displayInvoiceDetails(inv, model);
+			rmk.ScreenController.getInstance().displayInvoiceDetails(inv);
 			break;
 			
 		case ScreenController.BUTTON_F1: // ignore these for this screen

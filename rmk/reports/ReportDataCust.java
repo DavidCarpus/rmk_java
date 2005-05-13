@@ -365,7 +365,7 @@ public class ReportDataCust{
 	double shipping = invoice.getShippingAmount();	
 	double taxPercentage = invoice.getTaxPercentage();
 //  	double taxPercentage = sys.financialInfo.getInvoiceTaxRate(invoice);
-	double payments = sys.financialInfo.getTotalInvoicePayments(invoice.getInvoice());
+	double payments = sys.financialInfo.getTotalInvoicePayments(invoice);
 
 	results[0] += currencyFormatter.format(retail);
 	results[1] += currencyFormatter.format(discount);

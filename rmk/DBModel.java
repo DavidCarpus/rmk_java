@@ -55,12 +55,12 @@ public class DBModel{
     public Vector getAddressData(){	
 	return (Vector)data.get(ADDRESS_DATA);
     }
-    public void setInvoiceData(Vector lst){
-	setData(INVOICE_DATA, lst);
-    }
-    public Vector getInvoiceData(){
-	return (Vector)data.get(INVOICE_DATA);
-    }
+//    public void setInvoiceData(Vector lst){
+//	setData(INVOICE_DATA, lst);
+//    }
+//    public Vector getInvoiceData(){
+//	return (Vector)data.get(INVOICE_DATA);
+//    }
     public void setInvoiceItemsData(Vector lst){
 	setData(INVOICE_ITEMS_DATA, lst);
     }

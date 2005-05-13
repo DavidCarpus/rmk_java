@@ -352,6 +352,7 @@ public class Dialogs {
         }
         return false;
     }
+    
     //--------------------------------------------------------------------------------
     public static boolean shippedItemEditConfirm(String action) {
         String question = "Invoice Alredy shipped!!!\nConfirm " + action + ".";
@@ -362,16 +363,17 @@ public class Dialogs {
         );
     }
     //--------------------------------------------------------------------------------
-    public static Vector initialNewInvoiceEntry(Screen parent, Invoice inv,
+    public static InvoiceEntries initialNewInvoiceEntry(Screen parent, Invoice inv,
             Customer cust, String message) {
         // get initial model entry, mabye...
         PartPriceTable pricetable = sys.pricetable;
         String initialModel = JOptionPane.showInputDialog(message);
 
         if (initialModel == null) { // cancelled
-        	return cancelledInvoiceEntry();
+        	return null;
         } else if (initialModel.length() <= 0) { // OK'd with blank
-        return null; }
+        	return new InvoiceEntries(0); 
+        }
         
         ErrorLogger.getInstance().logDebug("Entered:" + initialModel, false);
         
@@ -410,7 +412,7 @@ public class Dialogs {
         
         int qty = getNumericValue(initialModel + "\nQuantity?", 1);
         if(qty <= 0){
-        	return cancelledInvoiceEntry();
+        	return null;
         }
 
 
@@ -422,12 +424,14 @@ public class Dialogs {
         
         String note = JOptionPane.showInputDialog(initialModel + "\nKnife Comment?");
         if (note == null) {
-        	return cancelledInvoiceEntry();
+        	return null;
         }
         item.setComment(note);
 
         int partID = (int) part.getPartID();
         double price = getFeaturePrice(year, part, pricetable, initialModel);
+        if(price < 0)
+        	sys.pricetable.warnIfBadLookup(false);
         item.setPrice(price * qty);
 
         if (parts.size() > 1) { // features were on list
@@ -441,6 +445,11 @@ public class Dialogs {
                 }
                 if(part != null){
                     price = getPartPrice(part, code, inv.isShopSale(), year, initialModel);
+                    if(price < 0){
+                    	sys.pricetable.warnIfBadLookup(false);
+                    	price = 0;
+                    }
+
                     InvoiceEntryAdditions feature = new InvoiceEntryAdditions(0);
                     feature.setPartID(part.getPartID());
                     feature.setPrice(price);
@@ -452,9 +461,10 @@ public class Dialogs {
                 }
             }
         }
-        Vector data = new Vector();
-        data.add(item);
-        return data;
+        sys.pricetable.warnIfBadLookup(true);
+//        Vector data = new Vector();
+//        data.add(item);
+        return item;
     }
     //--------------------------------------------------------------------------------
     static Vector cancelledInvoiceEntry(){

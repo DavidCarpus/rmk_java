@@ -13,7 +13,7 @@ public class CustomerInfoPanel extends carpus.gui.DataEntryPanel{
 	BasicToolBar buttonBar;
 	JLabel dealerLabel;
 	Customer customer=null;
-	rmk.gui.DBGuiModel model=null;
+//	rmk.gui.DBGuiModel model=null;
 	static final int FIELD_PREFIX=0;
 	static final int FIELD_FIRSTNAME=1;
 	//      static final int FIELD_MIDDLE=2;
@@ -143,16 +143,20 @@ public class CustomerInfoPanel extends carpus.gui.DataEntryPanel{
 	public void actionPerformed(ActionEvent e){};
 	//========================================================
 	public carpus.database.DBObject getData(){
-		java.util.Vector data = model.getCustomerData();
-		Customer customer;
-		if(data != null){
-			customer = (Customer )model.getCustomerData().get(0);
-		} else{
-			data = new java.util.Vector();
+//		java.util.Vector data = model.getCustomerData();
+//		Customer customer;
+//		if(data != null){
+//			customer = (Customer )model.getCustomerData().get(0);
+//		} else{
+//			data = new java.util.Vector();
+//			customer = new Customer(0);
+//			data.add(customer);
+//			model.setCustomerData(data);
+//		}
+		if(customer == null){
 			customer = new Customer(0);
-			data.add(customer);
-			model.setCustomerData(data);
 		}
+		
 		JFormattedTextField numField;
 		String txt="";
 		txt = txtFields[FIELD_PREFIX].getValue();
@@ -194,18 +198,19 @@ public class CustomerInfoPanel extends carpus.gui.DataEntryPanel{
 		return newDiscount;
 	}
 	//--------------------------------------------------------
-	public void setData(rmk.gui.DBGuiModel model){
-		this.model = model;
-		java.util.Vector data = model.getCustomerData();
-		dealerLabel.setVisible(false);
-		if(data != null){
-			customer = (Customer)data.get(0);
-			setData((carpus.database.DBObject)customer);
-		}
-	}
+//	public void setData(rmk.gui.DBGuiModel model){
+//		this.model = model;
+//		java.util.Vector data = model.getCustomerData();
+//		dealerLabel.setVisible(false);
+//		if(data != null){
+//			customer = (Customer)data.get(0);
+//			setData((carpus.database.DBObject)customer);
+//		}
+//	}
+	
 	//--------------------------------------------------------
 	public void setData(carpus.database.DBObject data){
-		Customer customer = (Customer) data;
+		customer = (Customer) data;
 		setEdited(false);
 		if(customer == null) return;
 		

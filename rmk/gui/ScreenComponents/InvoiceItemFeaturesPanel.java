@@ -188,16 +188,17 @@ public class InvoiceItemFeaturesPanel extends JPanel{
 	return selectedItems.size();
     }	
 
-	public void setData(DBObject item){
-		InvoiceEntries knife = (InvoiceEntries) item;
-		Vector features=knife.getFeatures();
+//	public void setData(DBObject item){
+    public void setData(Vector features){
+//		InvoiceEntries knife = (InvoiceEntries) item;
+//		Vector features=knife.getFeatures();
 		if(features == null) return;
 		currentFeatures = features;
 		blankOutFeatures();
 		for(Enumeration lst=features.elements(); lst.hasMoreElements();){
 			InvoiceEntryAdditions feature = (InvoiceEntryAdditions)lst.nextElement();
 			if(feature.getPartID() > 0){
-				feature.setEntryID(knife.getInvoiceEntryID());
+//				feature.setEntryID(knife.getInvoiceEntryID());
 				addFeature(feature);
 			}else{
 				ErrorLogger.getInstance().logMessage("Feature missing partID?:" + feature);

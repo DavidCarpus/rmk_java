@@ -122,7 +122,7 @@ public class Processing {
         }
         return false;
     }
-
+  
     public boolean unShipInvoice(Invoice invoice) {
         if (unsavedScreens(invoice)) { // if screens need to be saved first
             return false;
@@ -171,14 +171,14 @@ public class Processing {
                 .getInvoiceScreen(invoice);
 
         String title;
-        rmk.gui.DBGuiModel model;
+//        rmk.gui.DBGuiModel model;
         // Invoice Details Screen?
         screen = rmk.ScreenController.getInstance().getInvoiceScreen(invoice);
         if (screen != null) {
-            model = ((rmk.gui.InvoiceDetailsScreen) screen).getModel();
-            model = updateModelsInvoice(model, invoice);
-//            ((rmk.gui.InvoiceDetailsScreen) screen).setData(model);
-            ((rmk.gui.InvoiceDetailsScreen) screen).setInvoice(invoice);
+            Invoice currInvoice = ((rmk.gui.InvoiceDetailsScreen) screen).getInvoice();
+            if(updateInvoice(currInvoice, invoice)){
+            	((rmk.gui.InvoiceDetailsScreen) screen).setInvoice(invoice);
+            }
         }
         //---------------------------------------
         // Customer Details Screen?
@@ -186,40 +186,33 @@ public class Processing {
         if (screen != null) {
             //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + "updateScreens_Shipping:"+ "Updating:" +
             // title);
-            model = ((rmk.gui.CustomerScreen) screen).getModel();
-            model = updateModelsInvoice(model, invoice);
-            ((rmk.gui.CustomerScreen) screen).setData(model);
+            Customer customer = ((rmk.gui.CustomerScreen) screen).getCustomer();
+            if(invoice.getCustomerID() == invoice.getCustomerID()){
+            	((rmk.gui.CustomerScreen) screen).setData(customer, customer.getInvoices());
+            }
         }
         // Payments Screen?
         screen = rmk.ScreenController.getInstance().getPaymentsScreen(invoice);
         if (screen != null) {
             //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + "updateScreens_Shipping:"+ "Updating:" +
             // title);
-            model = ((rmk.gui.InvoicePaymentsScreen) screen).getModel();
-            model = updateModelsInvoice(model, invoice);
-            ((rmk.gui.InvoicePaymentsScreen) screen).setData(model);
+        	Invoice currInvoice = ((rmk.gui.InvoicePaymentsScreen) screen).getInvoice();
+        	if(updateInvoice(currInvoice, invoice)){        		
+        		((rmk.gui.InvoicePaymentsScreen) screen).setData(invoice, ((rmk.gui.InvoicePaymentsScreen) screen).getPaymentLst() );
+        	}
         }
     }
 
     //============================================================================
-    public static rmk.gui.DBGuiModel updateModelsInvoice(
-            rmk.gui.DBGuiModel model, Invoice invoice) {
-        Vector invoiceVect = model.getInvoiceData();
-        boolean found = false;
-        for (Enumeration enum = invoiceVect.elements(); enum.hasMoreElements();) {
-            Invoice inv = (Invoice) enum.nextElement();
-            if (inv.getInvoice() == invoice.getInvoice()) {
-                inv.setDateShipped(invoice.getDateShipped());
-                inv.setDateEstimated(invoice.getDateEstimated());
-                inv.setDateOrdered(invoice.getDateOrdered());
-                found = true;
-            }
+    public static boolean updateInvoice(
+    		Invoice currInvoice, Invoice updatedInvoice) {
+        if (currInvoice.getInvoice() == updatedInvoice.getInvoice()) {
+        	currInvoice.setDateShipped(updatedInvoice.getDateShipped());
+        	currInvoice.setDateEstimated(updatedInvoice.getDateEstimated());
+        	currInvoice.setDateOrdered(updatedInvoice.getDateOrdered());
+        	return true;
         }
-        if (!found) {
-            invoiceVect.add(invoice);
-            model.setInvoiceData(invoiceVect);
-        }
-        return model;
+        return false;
     }
 
     //============================================================================

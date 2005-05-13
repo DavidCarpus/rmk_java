@@ -96,6 +96,10 @@ public class InvoiceInfo {
 		return Long.parseLong(db.lookup("InvoiceEntries", "Invoice", "" + id));
 	}
 
+	public Vector savePayments(Vector invPayments){
+		db.saveItems("Payments", invPayments);
+		return invPayments;
+	}
 	//------------------------------------------------------------------------
 	//------------------------------------------------------------------------
 	public Vector getMiniInvoices() {

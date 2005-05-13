@@ -281,7 +281,7 @@ public class FinancialInfo {
     			return 0;
     	}
     			
-		double totalPayments = getTotalInvoicePayments(invoice.getInvoice());
+		double totalPayments = getTotalInvoicePayments(invoice);
 		double discount = getTotalInvoiceDiscount(invoice);
 		double retail = getTotalRetail(invoice);
 		double shipping = invoice.getShippingAmount();
@@ -308,9 +308,11 @@ public class FinancialInfo {
     }
 
     //------------------------------------------------------------------
-    public double getTotalInvoicePayments(long invoice) {
+    public double getTotalInvoicePayments(Invoice invoice) {
         double totalPayments = 0;
-        Vector payments = getInvoicePayments(invoice);
+        Vector payments = invoice.getPayments();
+        if(payments == null)
+        	payments = getInvoicePayments(invoice.getInvoice());
         if (payments != null) {
             for (Enumeration enum = payments.elements(); enum.hasMoreElements();) {
                 Payments payment = (Payments) enum.nextElement();

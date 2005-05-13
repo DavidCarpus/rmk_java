@@ -83,10 +83,14 @@ public class CustomerSelectionScreen extends Screen{
 	}
 	
     }
-    public void setData(DBGuiModel model){
-		customerListPanel.setData(model);
+//  public void setData(DBGuiModel model){
+//	customerListPanel.setData(model);
+//	buttonBar.enableButton(3,true);
+//}
+	public void setData(Vector custList){
+		customerListPanel.setData(custList);
 		buttonBar.enableButton(3,true);
-    }
+	}
     public void setData(DBObject item){
     	ErrorLogger.getInstance().TODO();
     }

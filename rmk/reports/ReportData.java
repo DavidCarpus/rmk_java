@@ -688,8 +688,7 @@ public class ReportData {
         double taxPercentage = invoice.getTaxPercentage();
         if (taxPercentage > 1) taxPercentage /= 100.0;
         //  	double taxPercentage = sys.financialInfo.getInvoiceTaxRate(invoice);
-        double payments = sys.financialInfo.getTotalInvoicePayments(invoice
-                .getInvoice());
+        double payments = sys.financialInfo.getTotalInvoicePayments(invoice);
 
         results[0] += currencyFormatter.format(retail);
         if (discount > 0) results[1] += currencyFormatter.format(discount);

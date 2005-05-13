@@ -7,6 +7,7 @@ import rmk.ErrorLogger;
 import rmk.ScreenController;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.Customer;
+import rmk.database.dbobjects.InvoiceEntries;
 import rmk.gui.IScreen;
 
 import java.util.*;
@@ -23,7 +24,9 @@ implements ActionListener, FocusListener{
 
 //    int customerID=0;
     Customer customer;
-    rmk.gui.DBGuiModel model;
+    Vector invList=null;
+    
+//    rmk.gui.DBGuiModel model;
 
 	public InvoiceListPanel() {
 
@@ -139,6 +142,11 @@ implements ActionListener, FocusListener{
 		} else if (command.equals("PAYMENTS")){
 			parent.buttonPress(ScreenController.BUTTON_F7, (int) getSelectedItemID());
 			return;
+		} else if (command.equals("RELOAD")) { //PaymentInfo Display
+//			model.setInvoiceData(sys.invoiceInfo.getInitialInvoices(customer));
+//			setData(model.getInvoiceData());
+			buttonBar.setButtonLabel(0, "Shipped");
+			return;
 		}
 		
 		ErrorLogger.getInstance().logDebugCommand(command);
@@ -158,16 +166,20 @@ implements ActionListener, FocusListener{
 //		notifyListeners(event);
 	}
 	//------------------------------------------
-	public void setData(rmk.gui.DBGuiModel model) {
-		this.model = model;
-
-		if (model.getCustomerData() != null) {
-			Customer currentCustomer =
-				(Customer) model.getCustomerData().get(0);
-			customer = currentCustomer;
-		}
+//	public void setData(rmk.gui.DBGuiModel model) {
+	public boolean setData(Vector invList) {
+//		this.model = model;
+//
+//		if (model.getCustomerData() != null) {
+//			Customer currentCustomer =
+//				(Customer) model.getCustomerData().get(0);
+//			customer = currentCustomer;
+//		}
+		
+		customer = ((Invoice)invList.get(0)).getParent();
+		
 		// Invoice data processing
-		if(setData(model.getInvoiceData())){
+		if(super.setData(invList)){
 			buttonBar.enableButton(0, true);
 		} else{
 			ErrorLogger.getInstance().logMessage(
@@ -176,15 +188,14 @@ implements ActionListener, FocusListener{
 		}
 
 		// Customer data processing
-		data = model.getCustomerData();
-		if (data != null){
-			Customer cust = (rmk.database.dbobjects.Customer) data.get(0);
-			if(cust.getCustomerID() > 0) 
-				buttonBar.enableButton(2, true);
-		}
+		if(customer != null && customer.getCustomerID() > 0) 
+			buttonBar.enableButton(2, true);
+
 		buttonBar.enableButton(5, customer.getCustomerID() != 0);
 
 		setVisible(true);
+		
+		return true;
 	}
 }
 

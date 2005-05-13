@@ -87,13 +87,13 @@ public class CustomerAddressPanel extends carpus.gui.DataEntryPanel{
 	setData(address);
     }
 
-    public void setData(rmk.gui.DBGuiModel model){
+/*    public void setData(rmk.gui.DBGuiModel model){
 	this.model = model;
 	java.util.Vector data = model.getAddressData();
 	if(data != null)
-	    setData((carpus.database.DBObject)data.get(0));
+	    setData(data.get(0));
     }
-
+*/
     public void actionPerformed(ActionEvent e) {}
     //========================================================
     public void processFocusEvent(FocusEvent e){
@@ -148,15 +148,10 @@ public class CustomerAddressPanel extends carpus.gui.DataEntryPanel{
 	return address;
 
     }
-	private void setData(carpus.database.DBObject data) {
-		if (model == null) {
-			errorLog.logError(
-				this.getClass().getName()
-					+ ":void setData(DBObject data)\n"
-					+ ":Model Missing.\n",
-				new Exception("Design Error"));
-		}
-		Address address = (Address) data;
+    
+	public void setData(Address address) {
+
+//		Address address = (Address) data;
 		if (address == null) {
 			errorLog.logError(
 				this.getClass().getName()
@@ -182,7 +177,7 @@ public class CustomerAddressPanel extends carpus.gui.DataEntryPanel{
 		txtFields[FIELD_STATE].setValue("" + state);
 		txtFields[FIELD_ZIP].setValue("" + address.getZIP());
 		txtFields[FIELD_COUNTRY].setValue("" + address.getCOUNTRY());
-		setPrimaryDataItem(data);
+		setPrimaryDataItem(address);
 		setEdited(false);
 	}
 }

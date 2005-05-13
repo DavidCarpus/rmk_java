@@ -3,11 +3,10 @@ package rmk.gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Enumeration;
 import java.util.Vector;
 import java.util.GregorianCalendar;
 
-import rmk.DataModel;
+//import rmk.DataModel;
 import rmk.ErrorLogger;
 import rmk.ScreenController;
 import rmk.SignalProcessor;
@@ -29,7 +28,8 @@ public class InvoicePaymentsScreen extends Screen {
 
     boolean editedInvoice = false;
 
-    Invoice invoice;
+    Invoice invoice=null;
+    Vector paymentList=null;
 
     public InvoicePaymentsScreen() {
         super("Invoice Details");
@@ -73,10 +73,10 @@ public class InvoicePaymentsScreen extends Screen {
         pack();
     }
 
-    public InvoicePaymentsScreen(DBGuiModel data) {
-        super("Invoice Details");
-        setData(data);
-    }
+//    public InvoicePaymentsScreen(DBGuiModel data) {
+//        super("Invoice Details");
+//        setData(data);
+//    }
 
     public boolean isEdited() {
         return (editedInvoice || editedCustomer);
@@ -89,16 +89,19 @@ public class InvoicePaymentsScreen extends Screen {
     }
 
     //------------------------------------------------------------------
-    public void setData(DBGuiModel model) {
-        this.model = model;
+    public void setData(Invoice inv, Vector payments) {
+    	paymentList = payments;
+    	invoice = inv;
+//        this.model = model;
         //  	ErrorLogger.getInstance().logMessage(model);
-        customerPnl.setData(model);
-        invoiceDetailPnl.setData(model);
-        invoicePaymentsPnl.setData(model);
-        Vector invList = model.getInvoiceData();
-        if (invList.size() > 0) {
+        customerPnl.setData(invoice.getParent());
+        invoiceDetailPnl.setData(invoice);
+        invoicePaymentsPnl.setData(invoice,paymentList);
+        
+//        Vector invList = model.getInvoiceData();
+//        if (invList.size() > 0) {
             // get last entry, it will have id==0 if new
-            invoice = (Invoice) invList.get(invList.size() - 1);
+//            invoice = (Invoice) invList.get(invList.size() - 1);
             if (invoice.getInvoice() == 0) {
                 buttonBar.enableButton(0, true);
                 editedInvoice = true;
@@ -111,7 +114,7 @@ public class InvoicePaymentsScreen extends Screen {
             if (invoice.getDateShipped() != null) shipButtonLabel = "'Un'Ship";
             buttonBar.getButton(4).setText(shipButtonLabel);
 
-        }
+//        }
     }
     public void setData(DBObject item){
     	ErrorLogger.getInstance().TODO();
@@ -119,72 +122,69 @@ public class InvoicePaymentsScreen extends Screen {
     //------------------------------------------------------------------
     private void saveData() {
         if (editedInvoice) {
-            Vector modelLst = model.getInvoiceData();
-            Invoice newData = invoiceDetailPnl.getData();
-            for(Enumeration enum = modelLst.elements(); enum.hasMoreElements();){
-                Invoice lstInv = (Invoice) enum.nextElement();
-                if(lstInv.getInvoice() == newData.getInvoice()){
-                    modelLst.remove(lstInv);
-                    modelLst.add(newData);
-                    newData.setItems(lstInv.getItems());
-                    continue;
-                }
-            }
-            
-            Configuration.Config.getDB().saveItems("Invoice", modelLst);
-            invoiceDetailPnl.setData(model);
-            invoicePaymentsPnl.setData(model);
+//            Vector modelLst = model.getInvoiceData();
+//            Invoice newData = invoiceDetailPnl.getData();
+//            for(Enumeration enum = modelLst.elements(); enum.hasMoreElements();){
+//                Invoice lstInv = (Invoice) enum.nextElement();
+//                if(lstInv.getInvoice() == newData.getInvoice()){
+//                    modelLst.remove(lstInv);
+//                    modelLst.add(newData);
+//                    newData.setItems(lstInv.getItems());
+//                    continue;
+//                }
+//            }
+            Vector invList = new Vector();
+            invList.add(invoice);
+            Configuration.Config.getDB().saveItems("Invoice", invList);
+            invoiceDetailPnl.setData(invoice);
+            invoicePaymentsPnl.setData(invoice, paymentList);
             editedInvoice = false;
         }
         if (editedCustomer) {
-            Vector outputList = model.getCustomerData();
-            Configuration.Config.getDB().saveItems("Customers", outputList);
-            customerPnl.setData(model);
+        	Customer customer = invoice.getParent();
+            Vector custList = new Vector();
+            custList.add(customer);
+            Configuration.Config.getDB().saveItems("Customers", custList);
+            customerPnl.setData(customer);
             editedCustomer = false;
         }
         buttonBar.enableButton(0, editedInvoice || editedCustomer);
     }
 
     //==========================================================
-    private void removeEntry(long invoice, long paymentID) {
-        ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":removeEntry("
-                + invoice + "," + paymentID + ")");
-        Vector outputList = model.getInvoiceData();
+    private void removeEntry(long invoiceNum, long paymentID) {
+
+    	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":removeEntry("
+                + invoiceNum + "," + paymentID + ")");
         rmk.DataModel sys = rmk.DataModel.getInstance();
+        
 
-//        model.removeActionListener(this);
-
-        Vector payments = model.getPaymentsData();
-        //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ": Display: "+
-        // e.getID());
-
-        for (java.util.Enumeration enum = payments.elements(); enum
+        for (java.util.Enumeration enum = paymentList.elements(); enum
                 .hasMoreElements();) {
             Payments payment = (Payments) enum.nextElement();
             if (payment.getPaymentID() == paymentID) {
-                payments.remove(payment);
-                model.setPaymentsData(payments);
+            	paymentList.remove(payment);
             }
         }
         sys.financialInfo.removePayment(paymentID);
-        invoiceDetailPnl.setData(model);
-        invoicePaymentsPnl.setData(model);
-        rmk.Processing.updateScreens_Shipping(sys.invoiceInfo
-                .getInvoice(invoice));
+        invoiceDetailPnl.setData(this.invoice);
+        invoicePaymentsPnl.setData(invoice,paymentList);
+        rmk.Processing.updateScreens_Shipping(invoice);
 
-//        model.addActionListener(this);
     }
 
     //------------------------------------------------------------------
-    private void addEntry(long invoice, long customerID) {
+    private void addEntry(long invoiceNum, long customerID) {
         while (true) { // keep getting payments until valid one is not entered
-            Payments payment = rmk.gui.Dialogs.getPayment(invoice, customerID);
+            Payments payment = rmk.gui.Dialogs.getPayment(invoiceNum, customerID);
             if (payment == null) {
                 invoicePaymentsPnl.requestFocus();
                 return; // valid payment was not entered
             }
+            
             Vector existingPayments = sys.financialInfo
-                    .getInvoicePayments(invoice);
+                    .getInvoicePayments(invoiceNum);
+            
             if (existingPayments == null) // no payments before this one
                     existingPayments = new Vector();
             if(payment.getVCODE() != null && payment.getVCODE().equals("000"))
@@ -192,29 +192,27 @@ public class InvoicePaymentsScreen extends Screen {
             if (!existingPayments.contains(payment))
                     existingPayments.add(payment);
             // save it and update dependent screens
-            existingPayments = DataModel.db.saveItems("Payments",
-                    existingPayments); // save to db
+            existingPayments = sys.invoiceInfo.savePayments(existingPayments); 
             // update cust CC# info IF it's a CC
             if (rmk.database.FinancialInfo.isValidCCNumber(payment
                     .getCheckNumber())) {
+            	String ccNum = payment.getCheckNumber() + "*" + payment.getVCODE();
                 sys.customerInfo
-                        .setCustCCNumber(customerID, payment.getCheckNumber()
-                                + "*" + payment.getVCODE(), payment
+                        .setCustCCNumber(customerID, ccNum , payment
                                 .getExpirationDate());
             }
 
-            model.setPaymentsData(existingPayments); // update model
-            invoicePaymentsPnl.setData(model);
-            invoiceDetailPnl.setData(model);
-            rmk.Processing.updateScreens_Shipping(sys.invoiceInfo
-                    .getInvoice(invoice));
+//            model.setPaymentsData(existingPayments); // update model
+            invoicePaymentsPnl.setData(existingPayments);
+            invoiceDetailPnl.setData(this.invoice);
+            rmk.Processing.updateScreens_Shipping(invoice);
         }
     }
 
     //==========================================================
     public void internalFrameActivated(javax.swing.event.InternalFrameEvent e) {
-        Vector outputList = model.getInvoiceData();
-        Invoice invoice = (Invoice) outputList.get(outputList.size() - 1);
+//        Vector outputList = model.getInvoiceData();
+//        Invoice invoice = (Invoice) outputList.get(outputList.size() - 1);
         addEntry(invoice.getInvoice(), invoice.getCustomerID());
 
         //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "Window
@@ -260,8 +258,8 @@ public class InvoicePaymentsScreen extends Screen {
             buttonBar.enableButton(0, true);
             // -------------------------
         } else if (command.equals("ADD")) { // ADD Payment
-            Vector outputList = model.getInvoiceData();
-            Invoice invoice = (Invoice) outputList.get(outputList.size() - 1);
+//            Vector outputList = model.getInvoiceData();
+//            Invoice invoice = (Invoice) outputList.get(outputList.size() - 1);
             addEntry(invoice.getInvoice(), invoice.getCustomerID());
             // -------------------------
         } else if (command.equals("DELETEPAYMENT")) { // Delete Payment
@@ -270,8 +268,8 @@ public class InvoicePaymentsScreen extends Screen {
             }
 
             long id = invoicePaymentsPnl.getSelectedItemID();
-            Vector outputList = model.getInvoiceData();
-            Invoice invoice = (Invoice) outputList.get(0);
+//            Vector outputList = model.getInvoiceData();
+//            Invoice invoice = (Invoice) outputList.get(0);
             removeEntry(invoice.getInvoice(), id);
             // -------------------------
 
@@ -316,9 +314,9 @@ public class InvoicePaymentsScreen extends Screen {
 
             if (screen == null) {
                 rmk.ScreenController.getInstance().displayInvoiceDetails(
-                        invoice, model);
+                        invoice);
             } else {
-                ((InvoiceDetailsScreen)screen).setData(model);
+                ((InvoiceDetailsScreen)screen).setData(invoice);
                 screen.bringToFront();
             }
             // -------------------------
@@ -331,7 +329,7 @@ public class InvoicePaymentsScreen extends Screen {
                 rmk.ScreenController.getInstance().displayCustomer(
                         invoice.getCustomerID());
             } else {
-            	((CustomerScreen)screen).setData(model);
+            	((CustomerScreen)screen).setData(invoice.getParent(),paymentList);
                 screen.bringToFront();
             }
             // -------------------------
@@ -344,8 +342,8 @@ public class InvoicePaymentsScreen extends Screen {
 		switch(changeType){
 		case ScreenController.UPDATE_ADD:
 		{
-			Vector outputList = model.getInvoiceData();
-			Invoice invoice = (Invoice) outputList.get(outputList.size() - 1);
+//			Vector outputList = model.getInvoiceData();
+//			Invoice invoice = (Invoice) outputList.get(outputList.size() - 1);
 			addEntry(invoice.getInvoice(), invoice.getCustomerID());
 		}
 		break;
@@ -372,8 +370,8 @@ public class InvoicePaymentsScreen extends Screen {
             }
 
 //            long id = invoicePaymentsPnl.getSelectedItemID();
-            Vector outputList = model.getInvoiceData();
-            Invoice invoice = (Invoice) outputList.get(0);
+//            Vector outputList = model.getInvoiceData();
+//            Invoice invoice = (Invoice) outputList.get(0);
             removeEntry(invoice.getInvoice(), id);
 		}
 		break;
@@ -405,11 +403,22 @@ public class InvoicePaymentsScreen extends Screen {
 		}
 		break;
 		
-
+		case ScreenController.BUTTON_ADD:
+		{
+			addEntry(invoice.getInvoice(), invoice.getCustomerID());
+		}
+		break;
 		
 		default:
 			ErrorLogger.getInstance().TODO();
 		}
+	}
+
+	public Invoice getInvoice() {
+		return invoice;
+	}
+	public Vector getPaymentLst(){
+		return paymentList;
 	}
 	
 

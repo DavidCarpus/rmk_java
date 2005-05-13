@@ -6,30 +6,22 @@ import java.util.Vector;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 
+import javax.swing.JOptionPane;
+
 import carpus.database.DBInterface;
 import rmk.database.dbobjects.PartPrices;
+import rmk.database.dbobjects.Parts;
 
 public class PartPriceTable{
-//    private static PartPriceTable instance = new PartPriceTable();
     private static Hashtable prices;
-//      static public DBAccess db;
     public static carpus.database.DBInterface db;
-
+    boolean badLookupWarn = true;
+    
   public PartPriceTable(DBInterface dbase){
 	if(db == null)	db = dbase;
 	if(prices == null) prices = new Hashtable();
     }
 
-    //    private PartPriceTable(){
-//	prices = new Hashtable();
-//	db = Configuration.Config.getDB();
-//    }
-//
-//    public static synchronized PartPriceTable getInstance(){
-//	return instance;
-//    }
-
-    
     public static int getMinYear(){
 	return 2002;
     }
@@ -68,8 +60,12 @@ public class PartPriceTable{
 	return (PartPrices)prices.get(key);
     }
 
+    public void warnIfBadLookup(boolean warn){
+    	badLookupWarn = warn;
+    }
+    
     public double getPartPrice(int year, int partID){
-	double results=0;
+	double results=-1;
 
 	PartPrices partPrice = getPartPriceObject(year, partID);
 	if(partPrice != null){
@@ -77,8 +73,17 @@ public class PartPriceTable{
 //			     " price for:" + partID + ":$" + partPrice.getPrice());
 	    results = partPrice.getPrice();
 	} else {
-	    rmk.ErrorLogger.getInstance().logMessage("Unable to determine " + year +
-						     " price for:" + partID);
+		String message = "Unable to determine " + year + " price for:" ;
+
+		Parts part = rmk.DataModel.getInstance().partInfo.getPart(partID);
+		if(part != null)
+			message += part.getPartCode();
+		message += " ("+partID+")";
+		
+	    rmk.ErrorLogger.getInstance().logMessage(message);
+	    if(badLookupWarn)
+	    	JOptionPane.showMessageDialog(null, message, "Data Entry Errors:",
+	    			JOptionPane.WARNING_MESSAGE);
 	}
 
 	return results;

@@ -61,12 +61,12 @@ public class Application extends JFrame implements ActionListener {
     
     //============================================================================
     void displayCustomers(Vector lst){
-	if(lst.size() == 1){
-	    rmk.ScreenController.getInstance().displayCustomer(((Customer)lst.get(0)).getCustomerID());
-	} else {
-	    DBGuiModel model = new rmk.gui.DBGuiModel(rmk.gui.DBGuiModel.CUSTOMER_DATA, lst);
-	    rmk.ScreenController.getInstance().displayCustomerList(model);
-	}
+    	if(lst.size() == 1){
+    		rmk.ScreenController.getInstance().displayCustomer(((Customer)lst.get(0)).getCustomerID());
+    	} else {
+    		//	    DBGuiModel model = new rmk.gui.DBGuiModel(rmk.gui.DBGuiModel.CUSTOMER_DATA, lst);
+    		rmk.ScreenController.getInstance().displayCustomerList(lst);
+    	}
     }
 //      //============================================================================
 //      void displayInvoice(long invoiceNumber){
@@ -74,27 +74,27 @@ public class Application extends JFrame implements ActionListener {
 //      }
     //============================================================================
     void generalSearch(Vector items){
-	if(items == null || items.size() ==0 || items.get(0) == null) 
-	    return;
-//  	if(items.get(0).
-        Class type = items.get(0).getClass();	
-	Component parent = Desktop.getInstance();;
-	parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
-        if (type == rmk.database.dbobjects.Customer.class){ // customer
-	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "customer");
-	    if(items.size() == 1){
-		rmk.ScreenController.getInstance().displayCustomer(((Customer)items.get(0)).getCustomerID());
-	    } else {
-		DBGuiModel model = new rmk.gui.DBGuiModel(rmk.gui.DBGuiModel.CUSTOMER_DATA, items);
-		rmk.ScreenController.getInstance().displayCustomerList(model);
-	    }
-	} else if (type == rmk.database.dbobjects.Invoice.class){ // invoice
-	    DBGuiModel model = new DBGuiModel();
-	    rmk.ScreenController.getInstance().displayInvoiceDetails((Invoice)items.get(0), model);
-	}
-	parent.setCursor(null);
-
+    	if(items == null || items.size() ==0 || items.get(0) == null) 
+    		return;
+    	//  	if(items.get(0).
+    	Class type = items.get(0).getClass();	
+    	Component parent = Desktop.getInstance();;
+    	parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+    	
+    	if (type == rmk.database.dbobjects.Customer.class){ // customer
+    		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "customer");
+    		if(items.size() == 1){
+    			rmk.ScreenController.getInstance().displayCustomer(((Customer)items.get(0)).getCustomerID());
+    		} else {
+//    			DBGuiModel model = new rmk.gui.DBGuiModel(rmk.gui.DBGuiModel.CUSTOMER_DATA, items);
+    			rmk.ScreenController.getInstance().displayCustomerList(items);
+    		}
+    	} else if (type == rmk.database.dbobjects.Invoice.class){ // invoice
+    		DBGuiModel model = new DBGuiModel();
+    		rmk.ScreenController.getInstance().displayInvoiceDetails((Invoice)items.get(0));
+    	}
+    	parent.setCursor(null);
+    	
     }
     //============================================================================
     //============================================================================
@@ -119,9 +119,7 @@ public class Application extends JFrame implements ActionListener {
 			rmk.ScreenController.getInstance().displayPreferencesScreen();
 			
         } else if (command.startsWith("DEALERLIST")){
-	    Vector lst = sys.customerInfo.getDealers();
-	    DBGuiModel model = new rmk.gui.DBGuiModel(rmk.gui.DBGuiModel.CUSTOMER_DATA, lst);
-	    rmk.ScreenController.getInstance().displayDealerList(model);
+        	rmk.ScreenController.getInstance().displayDealerList(sys.customerInfo.getDealers());
         } else if (command.equals("SHIP")){
 	    shipInvoices();
 	} else if (command.equals("TODO")){
@@ -212,17 +210,21 @@ public class Application extends JFrame implements ActionListener {
 	//1005 - sullivan's
 //	rmk.ScreenController.getInstance().displayHistoryList();
     	
-    	DBGuiModel model = new DBGuiModel();
-    	Invoice inv = sys.invoiceInfo.getInvoice(48250);
-    	Customer cust = null;
-		try {			cust = sys.customerInfo.getCustomerByID(inv.getCustomerID());
-		} catch (Exception e) {			e.printStackTrace();		}
-		
-		Vector custLst=new Vector();
-    	custLst.add(cust);
-    	model.setCustomerData(custLst);
-    	rmk.ScreenController.getInstance().displayInvoiceDetails(inv,new DBGuiModel());
-	
+//    	DBGuiModel model = new DBGuiModel();
+//    	Invoice inv = sys.invoiceInfo.getInvoice(48250);
+//    	Customer cust = null;
+//		try {			cust = sys.customerInfo.getCustomerByID(inv.getCustomerID());
+//		} catch (Exception e) {			e.printStackTrace();		}
+//		
+//		Vector custLst=new Vector();
+//    	custLst.add(cust);
+//    	model.setCustomerData(custLst);
+//    	rmk.ScreenController.getInstance().displayInvoiceDetails(inv,new DBGuiModel());
+
+
+    	rmk.ScreenController.getInstance().invoiceSearch();
+    	
+
 //	DBGuiModel model = new DBGuiModel();
 //	Invoice inv = sys.invoiceInfo.getInvoice(44417);
 //	rmk.ScreenController.getInstance().displayInvoiceDetails(inv, model);

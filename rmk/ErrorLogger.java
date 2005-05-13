@@ -209,7 +209,11 @@ public class ErrorLogger implements carpus.util.LoggerInterface{
     	mesg += caller + "";
 
     	mesg += "" + itemChanged + " : ";
-    	mesg += "" + parentItem;    	
+    	mesg += "" + parentItem + " : ";
+    	if(changeType > 0 && changeType < ScreenController.updateTxt.length)
+    		mesg += "" + ScreenController.updateTxt[changeType];
+    	else
+    		mesg += " UNKNOWN Change Type:" + changeType;    	
     	
     	log(mesg);
     }

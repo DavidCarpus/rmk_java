@@ -144,7 +144,7 @@ implements ActionListener
         JPanel financeButtons = new JPanel();
         paymentButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evnt) {
-            	parent.buttonPress(ScreenController.BUTTON_F6,0);
+            	parent.buttonPress(ScreenController.BUTTON_F7,0);
             }});
         
         discountButton.addActionListener(this);
@@ -554,27 +554,27 @@ implements ActionListener
     }
     
     //--------------------------------------------------------
-    public void setData(rmk.gui.DBGuiModel model){	
-        java.util.Vector data = model.getInvoiceData();
-        if(data == null) {
-            carpus.util.Logger.getInstance().logError(
-                    this.getClass().getName() + ":" +
-                    "void setData(DBGuiModel model)" + ":\n" +
-                    "Invoice data missing from model.\n",
-                    new Exception("Design Error")
-            );
-        }
-        int index=0;
-        if(data.size() > 1){ // passed several invoices, last one is relevent
-            index = data.size()-1;
-        }
-        Invoice invoice= (Invoice )data.get(index);
-        setData(invoice);
-    }
+//    public void setData(rmk.gui.DBGuiModel model){	
+//        java.util.Vector data = model.getInvoiceData();
+//        if(data == null) {
+//            carpus.util.Logger.getInstance().logError(
+//                    this.getClass().getName() + ":" +
+//                    "void setData(DBGuiModel model)" + ":\n" +
+//                    "Invoice data missing from model.\n",
+//                    new Exception("Design Error")
+//            );
+//        }
+//        int index=0;
+//        if(data.size() > 1){ // passed several invoices, last one is relevent
+//            index = data.size()-1;
+//        }
+//        Invoice invoice= (Invoice )data.get(index);
+//        setData(invoice);
+//    }
 
     
-    public void setData(Invoice invoice){
-    	this.invoice = invoice;
+    public void setData(Invoice invData){
+    	invoice = invData;
     	loading = true;
     	
     	JFormattedTextField numField;

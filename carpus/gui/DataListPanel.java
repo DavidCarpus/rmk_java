@@ -228,7 +228,10 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 	}
 
 	//----------------------------------------------------------
-	public abstract void setData(rmk.gui.DBGuiModel model);
+//	public final void setData(rmk.gui.DBGuiModel model)
+//	{
+//		
+//	}
 
 	public boolean setData(Vector lst) {
 		data = lst;

@@ -158,8 +158,8 @@ implements ActionListener, FocusListener{
     }
     
     //----------------------------------------------------------
-	public void setData(rmk.gui.DBGuiModel model) {
-		ErrorLogger.getInstance().TODO();
+//	public void setData(rmk.gui.DBGuiModel model) {
+//		ErrorLogger.getInstance().TODO();
 //		java.util.Vector data = model.getInvoiceItemsData();
 //		setData(data);
 //		sorter.sortByColumn(1, true);
@@ -174,7 +174,7 @@ implements ActionListener, FocusListener{
 //
 //		buttonBar.enableButton(0, false);
 //		buttonBar.enableButton(2, false);
-	}
+//	}
     
 	//----------------------------------------------------------
     public void setMore(boolean more){

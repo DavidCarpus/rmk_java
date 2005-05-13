@@ -52,10 +52,10 @@ public class CustomerScreen extends Screen{
 		
 		setPreferredSize(new Dimension(825,640));
 	}
-	CustomerScreen(DBGuiModel model){
-		this();
-		setData(model);
-	}
+//	CustomerScreen(DBGuiModel model){
+//		this();
+//		setData(model);
+//	}
 	
 	public boolean isEdited(){return editedInfo || editedAddress;}
 	public Vector getEditedData(){
@@ -65,29 +65,42 @@ public class CustomerScreen extends Screen{
 		return results;
 	}
 	
-	public void setData(DBGuiModel model) {
-		this.model = model;
-		customer = (Customer)model.getCustomerData().get(0);
+//	public void setData(DBGuiModel model) {
+	public void setData(Customer customer, Vector invList) {
+//		this.model = model;
+		this.customer = customer;
+//		customer = (Customer)model.getCustomerData().get(0);
 		if(customer.getInvoices() == null){
-			customer.setInvoices(model.getInvoiceData());
+			customer.setInvoices(invList);
 		} else {
 			int custInvCnt = customer.getInvoices().size();
-			int modInvCnt = model.getInvoiceData().size();
+			int modInvCnt = invList.size();
 			Invoice custInv = null;
 			Invoice modInv = null;
 			if(customer.getInvoices() != null && customer.getInvoices().size() >=1)
 				custInv = (Invoice)customer.getInvoices().get(0);
-			if(model.getInvoiceData() != null && model.getInvoiceData().size() >=1)
-				modInv = (Invoice)model.getInvoiceData().get(0);
+			if(invList != null && invList.size() >=1)
+				modInv = (Invoice) invList.get(0);
 			if (custInv != null && modInv!= null 
 					&& custInv.getCustomerID() == modInv.getCustomerID()
 					&& modInvCnt > custInvCnt)
-				customer.setInvoices(model.getInvoiceData());
+				customer.setInvoices(invList);
 		}
-		custPanel.setData(model);
-		custAddPanel.setData(model);
-		invoicePanel.setData(model);
-		detailPanel.setData(model);
+		custPanel.setData(customer);
+		for(Enumeration enum = invList.elements(); enum.hasMoreElements();){
+			Invoice inv = (Invoice) enum.nextElement();
+			inv.setParent(customer);
+		}
+		try {
+			Address address = sys.customerInfo.getCurrentAddress(customer
+					.getCurrentAddress());
+			custAddPanel.setData(address);
+		} catch (Exception e) {
+			// TODO: handle exception
+			ErrorLogger.getInstance().TODO();
+		}
+		invoicePanel.setData(invList);
+		detailPanel.setData(customer);
 		//		model.addActionListener(this);
 		this.pack();
 	}
@@ -98,19 +111,19 @@ public class CustomerScreen extends Screen{
     
     
 	public void updateInvPrice(Invoice invoice){
-		if(model.getInvoiceData() != null){
-			Vector invoiceData = model.getInvoiceData();
-			for (java.util.Enumeration enum = invoiceData.elements(); enum
+		if(customer.getInvoices() != null){
+			Vector invoiceList = customer.getInvoices();
+			for (java.util.Enumeration enum = invoiceList.elements(); enum
 			.hasMoreElements();) {
 				Invoice listInvoice=(Invoice) enum.nextElement();
 				if(listInvoice.getInvoice() == invoice.getInvoice()){
 					if(listInvoice == invoice){ // same reference
-						invoicePanel.setData(model);
+						invoicePanel.setData(invoiceList);
 						return;
 					} else{
-						invoiceData.remove(listInvoice);
-						invoiceData.add(invoice);
-						invoicePanel.setData(model);
+						invoiceList.remove(listInvoice);
+						invoiceList.add(invoice);
+						invoicePanel.setData(invoiceList);
 					}
 					break;
 				}
@@ -143,10 +156,10 @@ public class CustomerScreen extends Screen{
 					return; // invalid data, don't save/continue
 				outputLst.add(cust);
 				outputLst = db.saveItems("Customers", outputLst);
-				model.setCustomerData(outputLst);
+//				model.setCustomerData(outputLst);
 //				updateOccured((DBObject) cust, ScreenController.UPDATE_CHANGE, cust );
-				custPanel.setData(model);
-				detailPanel.setData(model);
+				custPanel.setData(cust);
+				detailPanel.setData(cust);
 				editedInfo = false;
 				editedDetail = false;
 				rmk.ErrorLogger.getInstance().logMessage("Saved CustomerInfo" + outputLst);
@@ -156,7 +169,7 @@ public class CustomerScreen extends Screen{
 				rmk.ErrorLogger.getInstance().logError("ScreenController:displayInvoiceDetails", excep);
 				//  		carpus.database.Logger.getInstance().logError("CustomerInfo:", excep);
 			}
-			invoicePanel.setData(model);
+			invoicePanel.setData(customer.getInvoices());
 		}
 		if(editedAddress){
 			try{
@@ -166,18 +179,18 @@ public class CustomerScreen extends Screen{
 				outputLst = new java.util.Vector();		
 				outputLst.add(address);		
 				outputLst = db.saveItems("Address", outputLst);
-				model.setAddressData(outputLst);
+//				model.setAddressData(outputLst);
 				
 				if(cust.getCurrentAddress() != ((Address)address).getAddressID()){
 					cust.setCurrentAddress(((Address)address).getAddressID());
 					outputLst = new java.util.Vector();
 					outputLst.add(cust);
 					outputLst = db.saveItems("Customers", outputLst);		
-					model.setCustomerData(outputLst);
+//					model.setCustomerData(outputLst);
 					updateOccured((DBObject) address, ScreenController.UPDATE_CHANGE, cust );
 				}
 				
-				custAddPanel.setData(model);
+				custAddPanel.setData(((Address)address));
 				editedAddress = false;
 			} catch (java.lang.Exception excep){
 				carpus.database.Logger.getInstance().logError("AddressInfo:",excep);
@@ -201,27 +214,28 @@ public class CustomerScreen extends Screen{
 	}
 
 	public void addNewInvoice(){
-		Invoice inv = new Invoice(0);
+		Invoice newInv = new Invoice(0);
 		Customer cust = (Customer) custPanel.getData();
-		inv.setCustomerID(cust.getCustomerID());
-		inv.setDiscountPercentage(cust.getDiscount());
-		java.util.GregorianCalendar estimated = (java.util.GregorianCalendar) inv
+		newInv.setCustomerID(cust.getCustomerID());
+		newInv.setDiscountPercentage(cust.getDiscount());
+		java.util.GregorianCalendar estimated = (java.util.GregorianCalendar) newInv
 		.getDateOrdered().clone();
 		estimated.add(Calendar.MONTH, Configuration.Config
 				.getMonthsBacklogged());
 		while (estimated.get(Calendar.DAY_OF_WEEK) != Calendar.THURSDAY) {
 			estimated.add(Calendar.DATE, 1);
 		}
-		inv.setDateEstimated(estimated);
+		newInv.setDateEstimated(estimated);
 		
-		Vector invList = model.getInvoiceData();
-		if (invList == null) invList = new Vector();
-		invList.add(inv);
-
-		model.setInvoiceData(invList);
-		model.setInvoiceItemsData(null);
-
-		Screen screen = rmk.ScreenController.getInstance().newInvoice(model);
+//		Vector invList = model.getInvoiceData();
+//		if (invList == null) invList = new Vector();
+//		invList.add(inv);
+//
+//		model.setInvoiceData(invList);
+//		model.setInvoiceItemsData(null);
+		newInv.setParent(cust);
+		newInv.setItems(null);
+		Screen screen = rmk.ScreenController.getInstance().newInvoice(newInv);
 		
 //		updateOccured((DBObject) inv, ScreenController.UPDATE_EDIT, cust );
 		//            if(screen != null)
@@ -318,14 +332,14 @@ public class CustomerScreen extends Screen{
 				// parent item should be invoice
 				// replace it in the current "model"
 				
-				Vector invData = model.getInvoiceData();
+				Vector invData = customer.getInvoices();
 				for(Enumeration invoices = invData.elements();invoices.hasMoreElements();){
 					Invoice currInv = (Invoice) invoices.nextElement();
 					if(currInv.getInvoice() == ((Invoice)parentItem).getInvoice()){
 						invData.remove(currInv);
 						invData.add(parentItem);
-						break;
 					}
+					currInv.setParent(customer);
 				}
 				invoicePanel.setData(invData);
 			} else{
@@ -366,8 +380,8 @@ public class CustomerScreen extends Screen{
 				return;
 			}
 			Invoice inv = (Invoice) invoicePanel.getSelectedItem();
-			if (model == null) model = new DBGuiModel();
-			rmk.ScreenController.getInstance().displayInvoiceDetails(inv, model);
+//			if (model == null) model = new DBGuiModel();
+			rmk.ScreenController.getInstance().displayInvoiceDetails(inv);
 		}
 		break;
 		
@@ -399,6 +413,11 @@ public class CustomerScreen extends Screen{
 		default:
 			ErrorLogger.getInstance().TODO();
 		}
+	}
+
+
+	public Customer getCustomer() {
+		return customer;
 	}
 	
 }
