@@ -23,9 +23,7 @@ import javax.swing.event.InternalFrameEvent;
 import rmk.ErrorLogger;
 import rmk.ScreenController;
 import rmk.SignalProcessor;
-import rmk.database.dbobjects.Customer;
 import rmk.database.dbobjects.DBObject;
-import rmk.database.dbobjects.Invoice;
 
 import carpus.gui.BasicToolBar;
 import carpus.gui.DataEntryPanel;
@@ -116,9 +114,9 @@ public class InvoiceSearchScreen extends Screen {
 		return edited;
 	}
 
-	public void setData(DBGuiModel model) {
-//		ErrorLogger.getInstance().TODO();
-	}
+//	public void setData(DBGuiModel model) {
+////		ErrorLogger.getInstance().TODO();
+//	}
 	
     public void setData(DBObject item){
     	ErrorLogger.getInstance().TODO();
@@ -126,7 +124,7 @@ public class InvoiceSearchScreen extends Screen {
     
 	JPanel getDatePanel(){
 		DatePanel datePanel = new DatePanel();
-		datePanel.setParent(this);
+		datePanel.setParentScreen(this);
 		return datePanel;
 	}
 	
@@ -209,7 +207,7 @@ public class InvoiceSearchScreen extends Screen {
 			SignalProcessor.getInstance().removeScreen(this);
 		break;
 		default:
-			ErrorLogger.getInstance().TODO();
+	       	ErrorLogger.getInstance().logButton(button, id);
 		}	
 	}
 	

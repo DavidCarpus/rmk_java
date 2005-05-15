@@ -19,6 +19,7 @@ extends
 //  JPanel  
 carpus.gui.DataListPanel
 implements ActionListener{
+	
 	Vector invoicePaymentsList;
 	IScreen parent=null;
 	//================================================

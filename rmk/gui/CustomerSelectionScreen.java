@@ -19,8 +19,7 @@ public class CustomerSelectionScreen extends Screen{
     	getContentPane().setLayout(new BorderLayout());
 
 	customerListPanel = new rmk.gui.ScreenComponents.CustomerListPanel();
-	customerListPanel.setParent(this);
-//	customerListPanel.addActionListener(this);
+	customerListPanel.setParentScreen(this);
 	getContentPane().add(customerListPanel);
 
 	buttonBar = new carpus.gui.BasicToolBar(null, 
@@ -31,10 +30,7 @@ public class CustomerSelectionScreen extends Screen{
 						new String[] 
 	    {"Add", "Cancel"});
 	ButtonBarTranslator translator = new ButtonBarTranslator(this, buttonBar);
-//	buttonBar.addActionListener(this);
 	buttonBar.setLayout( new FlowLayout(FlowLayout.CENTER));
-//  	buttonBar.enableButton(1, false);
-//  	buttonBar.enableButton(1, false);
 	buttonBar.enableButton(3,false);
 
 	getContentPane().add( buttonBar, BorderLayout.SOUTH);
@@ -62,31 +58,25 @@ public class CustomerSelectionScreen extends Screen{
 	}
     //==========================================================
 	public void processCommand(String command, Object from){
-//	    public void actionPerformed(ActionEvent e) {
-//		String command = e.getActionCommand().toUpperCase().trim();
-    ErrorLogger.getInstance().logDebugCommand(command);
-
-        if (command.equals("CANCEL")) { //cancel
-	    defaultCancelAction();
-	    return;
-	} else if (command.equals("CUSTOMERDETAILS")) { //
-	    rmk.ScreenController.getInstance().displayCustomer(customerListPanel.getSelectedItemID());
-	    return;
-	} else if (command.equals("ADD")) { 
-	    rmk.ScreenController.getInstance().newCustomer();
-	    return;	    
-	} else if (command.equals("MERGE")) { 
-	    Dialogs.mergeIntoCustomer(customerListPanel.getSelectedItemID());
-	    return;	    
-	} else {
-	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
+		ErrorLogger.getInstance().logDebugCommand(command);
+		
+		if (command.equals("CANCEL")) { //cancel
+			defaultCancelAction();
+			return;
+		} else if (command.equals("CUSTOMERDETAILS")) { //
+			rmk.ScreenController.getInstance().displayCustomer(customerListPanel.getSelectedItemID());
+			return;
+		} else if (command.equals("ADD")) { 
+			rmk.ScreenController.getInstance().newCustomer();
+			return;	    
+		} else if (command.equals("MERGE")) { 
+			Dialogs.mergeIntoCustomer(customerListPanel.getSelectedItemID());
+			return;	    
+		} else {
+			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
+		}
 	}
-	
-    }
-//  public void setData(DBGuiModel model){
-//	customerListPanel.setData(model);
-//	buttonBar.enableButton(3,true);
-//}
+
 	public void setData(Vector custList){
 		customerListPanel.setData(custList);
 		buttonBar.enableButton(3,true);
@@ -113,7 +103,7 @@ public class CustomerSelectionScreen extends Screen{
 		}
 		break;
 		default:
-			ErrorLogger.getInstance().TODO();
+	       	ErrorLogger.getInstance().logButton(button, id);
 		break;
 		}
 	}

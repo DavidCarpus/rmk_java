@@ -17,7 +17,7 @@ import rmk.database.dbobjects.Invoice;
 
 public class CustomerScreen extends Screen{
 	static int counter;
-	ActionListener parentFrame;    
+//	ActionListener parentFrame;    
 	rmk.gui.ScreenComponents.CustomerInfoPanel custPanel;
 	rmk.gui.ScreenComponents.CustomerAddressPanel custAddPanel;
 	rmk.gui.ScreenComponents.InvoiceListPanel invoicePanel;
@@ -30,34 +30,39 @@ public class CustomerScreen extends Screen{
 		
 		getContentPane().setLayout(new BoxLayout(getContentPane(),BoxLayout.Y_AXIS));
 		custPanel = new rmk.gui.ScreenComponents.CustomerInfoPanel();
-		custPanel.setParent(this);
+		custPanel.setParentScreen(this);
 		getContentPane().add(custPanel);
 		
 		custAddPanel = new rmk.gui.ScreenComponents.CustomerAddressPanel();
-		custAddPanel.setParent(this);
+		custAddPanel.setParentScreen(this);
 		getContentPane().add(custAddPanel);
 		
 		detailPanel = new rmk.gui.ScreenComponents.CustomerDetailPanel();
-		detailPanel.setParent(this);
+		detailPanel.setParentScreen(this);
 		getContentPane().add(detailPanel);
 		
 		invoicePanel = new rmk.gui.ScreenComponents.InvoiceListPanel();
-		invoicePanel.setParent(this);
+		invoicePanel.setParentScreen(this);
 		getContentPane().add(invoicePanel);
-		//  	invoicePanel.addFocusListener(this);
 		
 		getContentPane().add(buttonBar);
 		
 		SignalProcessor.getInstance().addScreen(this);
 		
+        dataPanels[0] = custPanel;
+        dataPanels[1] = custAddPanel;
+        dataPanels[2] = invoicePanel;
+        
 		setPreferredSize(new Dimension(825,640));
 	}
-//	CustomerScreen(DBGuiModel model){
-//		this();
-//		setData(model);
-//	}
 	
+	public static String getCustomerScreenTitle(long custID){
+		return "Customer:" + custID;
+	}
+
+
 	public boolean isEdited(){return editedInfo || editedAddress;}
+	
 	public Vector getEditedData(){
 		Vector results = new Vector();
 		if(editedAddress) results.add(custAddPanel.getData());
@@ -65,45 +70,42 @@ public class CustomerScreen extends Screen{
 		return results;
 	}
 	
-//	public void setData(DBGuiModel model) {
-	public void setData(Customer customer, Vector invList) {
-//		this.model = model;
+	public void setData(Customer customer, Address address, Vector invList) {
 		this.customer = customer;
-//		customer = (Customer)model.getCustomerData().get(0);
+
 		if(customer.getInvoices() == null){
 			customer.setInvoices(invList);
-		} else {
-			int custInvCnt = customer.getInvoices().size();
-			int modInvCnt = invList.size();
-			Invoice custInv = null;
-			Invoice modInv = null;
-			if(customer.getInvoices() != null && customer.getInvoices().size() >=1)
-				custInv = (Invoice)customer.getInvoices().get(0);
-			if(invList != null && invList.size() >=1)
-				modInv = (Invoice) invList.get(0);
-			if (custInv != null && modInv!= null 
-					&& custInv.getCustomerID() == modInv.getCustomerID()
-					&& modInvCnt > custInvCnt)
-				customer.setInvoices(invList);
 		}
-		custPanel.setData(customer);
 		for(Enumeration enum = invList.elements(); enum.hasMoreElements();){
 			Invoice inv = (Invoice) enum.nextElement();
 			inv.setParent(customer);
 		}
+//		Address address=null;
 		try {
-			Address address = sys.customerInfo.getCurrentAddress(customer
-					.getCurrentAddress());
-			custAddPanel.setData(address);
+			if(address == null)
+				address = sys.customerInfo.getCurrentAddress(customer.getCurrentAddress());
+			if(address == null)
+				address = new Address(0);
+			if(customer.getCurrentAddressItem() != address)
+				customer.setCurrentAddressItem(address);
 		} catch (Exception e) {
-			// TODO: handle exception
-			ErrorLogger.getInstance().TODO();
+			ErrorLogger.getInstance().logError("Retrieving and setting customer address.", e);
 		}
-		invoicePanel.setData(invList);
-		detailPanel.setData(customer);
+		if(customer != null){
+			invoicePanel.setData(customer, invList);
+			detailPanel.setData(customer);
+			if(address != null)
+				updateCustomerPanels(customer, address);
+		}
 		//		model.addActionListener(this);
 		this.pack();
 	}
+	
+	void updateCustomerPanels(Customer cust, Address address){
+		custPanel.setData(customer);
+		custAddPanel.setData(address);
+	}
+	
 
     public void setData(DBObject item){
     	ErrorLogger.getInstance().TODO();
@@ -134,14 +136,13 @@ public class CustomerScreen extends Screen{
 	private void saveData(){
 		carpus.database.DBInterface db = Configuration.Config.getDB();
 		Customer cust = (Customer)custPanel.getData();
+		Address address = (Address) custAddPanel.getData(); 
 		java.util.Vector outputLst = new java.util.Vector();
 		
+		boolean newCust = cust.getCustomerID() == 0;
 		if(editedInfo || editedDetail){
-			//  	    if(editedDetail){
-			//  		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "merging detailInfo");
-			
 			Customer cust2 = (Customer)detailPanel.getData();
-			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":terms:"+ cust2.getTerms());
+//			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":terms:"+ cust2.getTerms());
 			
 			cust.setFlag(cust2.isFlag());
 			cust.setDealer(cust2.isDealer()?1:0);
@@ -169,12 +170,10 @@ public class CustomerScreen extends Screen{
 				rmk.ErrorLogger.getInstance().logError("ScreenController:displayInvoiceDetails", excep);
 				//  		carpus.database.Logger.getInstance().logError("CustomerInfo:", excep);
 			}
-			invoicePanel.setData(customer.getInvoices());
+//			invoicePanel.setData(customer.getInvoices());
 		}
 		if(editedAddress){
 			try{
-				carpus.database.DBObject address = custAddPanel.getData();
-				
 				((Address)address).setCustomerID(cust.getCustomerID());
 				outputLst = new java.util.Vector();		
 				outputLst.add(address);		
@@ -189,13 +188,16 @@ public class CustomerScreen extends Screen{
 //					model.setCustomerData(outputLst);
 					updateOccured((DBObject) address, ScreenController.UPDATE_CHANGE, cust );
 				}
-				
-				custAddPanel.setData(((Address)address));
 				editedAddress = false;
 			} catch (java.lang.Exception excep){
 				carpus.database.Logger.getInstance().logError("AddressInfo:",excep);
 			}
 		}
+		updateCustomerPanels(cust,address);
+//		if(newCust)
+		invoicePanel.setData(customer, customer.getInvoices());
+		setTitle(getCustomerScreenTitle(customer.getCustomerID()));
+
 		buttonBar.enableButton(0,editedInfo || editedAddress);
 	}
 	
@@ -268,13 +270,6 @@ public class CustomerScreen extends Screen{
 //			}
 //			defaultCancelAction();
 //			//  	    return;
-//		} else if (command.equals("F1")) { //F1 - Panel1
-//			custPanel.requestFocus();
-//		} else if (command.equals("F2")) { //F2 - Panel2
-//			custAddPanel.requestFocus();
-//			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + "F2????");
-//		} else if (command.equals("F3")) { //F3 - Panel3
-//			invoicePanel.grabFocus();
 //		} else if (command.equals("F11")) { //F11 - Toggle address/detail panel visibilities
 //			custAddPanel.setVisible(!custAddPanel.isVisible());
 //			detailPanel.setVisible(!detailPanel.isVisible());
@@ -332,15 +327,21 @@ public class CustomerScreen extends Screen{
 				// parent item should be invoice
 				// replace it in the current "model"
 				
-				Vector invData = customer.getInvoices();
+				Vector invData = new Vector();
+				if(customer.getInvoices() != null){
+					invData = customer.getInvoices();
+				}else{
+					customer.setInvoices(invData);
+				}
+				
 				for(Enumeration invoices = invData.elements();invoices.hasMoreElements();){
 					Invoice currInv = (Invoice) invoices.nextElement();
 					if(currInv.getInvoice() == ((Invoice)parentItem).getInvoice()){
 						invData.remove(currInv);
-						invData.add(parentItem);
 					}
 					currInv.setParent(customer);
 				}
+				invData.add(parentItem);
 				invoicePanel.setData(invData);
 			} else{
 				ErrorLogger.getInstance().TODO();
@@ -354,10 +355,21 @@ public class CustomerScreen extends Screen{
 			defaultCancelAction();
 			SignalProcessor.getInstance().removeScreen(this);
 		}
-		break;
+		break;	
 		
+		case ScreenController.UPDATE_CHANGE:
+		{
+			updateCustomerPanels((Customer)parentItem, (Address) itemChanged);
+		}
+		break;
+		case ScreenController.UPDATE_SAVE:
+		{		
+			saveData();
+		}
+		break;
 		default:
-			ErrorLogger.getInstance().TODO();
+			System.out.println("Unimplemented:" + changeType);
+			ErrorLogger.getInstance().logUpdate(itemChanged, changeType, parentItem);
 		}
 		
 	}
@@ -410,13 +422,14 @@ public class CustomerScreen extends Screen{
 			saveData();
 		}
 		break;
-		default:
-			ErrorLogger.getInstance().TODO();
+		default:			
+			ErrorLogger.getInstance().logButton(button, id);
 		}
 	}
 
 
 	public Customer getCustomer() {
+		customer.setCurrentAddressItem((Address) custAddPanel.getData());
 		return customer;
 	}
 	

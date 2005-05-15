@@ -4,7 +4,6 @@ import javax.swing.*;
 
 import rmk.ErrorLogger;
 import rmk.ScreenController;
-import rmk.database.dbobjects.DBObject;
 import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
 import rmk.database.dbobjects.Parts;

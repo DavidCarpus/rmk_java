@@ -1,6 +1,5 @@
 package rmk.database.dbobjects;
 import java.sql.*;
-import java.io.*;
 import carpus.database.Fixed;
 import java.util.Vector;
 

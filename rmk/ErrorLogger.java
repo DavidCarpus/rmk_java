@@ -194,11 +194,22 @@ public class ErrorLogger implements carpus.util.LoggerInterface{
     }
     
     public void logButton(int button, int id){
+    	String mesg = "ButtonPress:";
+
     	String caller = getCallerFunction();
     	caller = caller.substring(caller.indexOf("("));
+    	mesg += caller + "";
+
+    	mesg += "" + button + " : ";
+    	if(button > 0 && button < ScreenController.updateTxt.length){
+    		mesg += "" + ScreenController.buttonTxt[button];
+    	}else if(button >=101 && button <= 112){
+    		mesg += " F" + (button-100) + " Key.";
+    	}else{
+    		mesg += " UNKNOWN Button:" + button;
+    	}
     	
-    	String mesg = "Button:" + caller + ":" +  button + " : " + id;
-    	log(mesg);
+    	log(mesg);    	
     }
     
     public void logUpdate(DBObject itemChanged, int changeType, DBObject parentItem){
@@ -218,6 +229,7 @@ public class ErrorLogger implements carpus.util.LoggerInterface{
     	log(mesg);
     }
     
+  
     public void TODO(){
     	String caller = getCallerFunction();
     	String mesg = "***** Unimplemented Functionallity *****:" + caller;

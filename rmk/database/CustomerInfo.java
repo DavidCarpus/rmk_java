@@ -210,11 +210,17 @@ public class CustomerInfo{
 	
 	return customerAddresses;
     }
+    public Address getCustomerAddress(long addressID){
+    	Vector customerAddresses = db.getItems("Address", "AddressID = " + addressID + ";");
+    	if(customerAddresses != null && customerAddresses.size() >0 )
+    		return (Address) customerAddresses.get(0);
+    	return null;
+    }
     //==========================================================
     public Address getCurrentAddress(long customerID) throws Exception{
 	Vector customerAddresses = getCustomerAddresses(customerID);
 
-	if(customerAddresses != null){
+	if(customerAddresses != null && customerAddresses.size()>0){
 	    Customer customer = getCustomerByID(customerID);
 	    for(int i=0; i< customerAddresses.size(); i++){
 		Address address = (Address)customerAddresses.get(i);

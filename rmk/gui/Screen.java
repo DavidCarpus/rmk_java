@@ -20,7 +20,7 @@ abstract class Screen
 	       , IScreen
 //      , WindowListener
 {
-
+	JPanel dataPanels[]=new JPanel[3];
 	
     public static Color DK_GREEN = new Color(0,182,51);
 	protected rmk.DataModel sys = rmk.DataModel.getInstance();
@@ -73,40 +73,46 @@ abstract class Screen
 //  	this.registerKeyboardAction(this, "INVOICEDETAILS", kF6, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 //  	KeyStroke kF7=KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F7,0);
 //  	this.registerKeyboardAction(this, "PAYMENTS", kF7, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-	KeyStroke kF1 = KeyStroke
-	.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0);
-	this.registerKeyboardAction(this, "F1", kF1,
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-	
-	KeyStroke kF2 = KeyStroke
-	.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0);
-	this.registerKeyboardAction(this, "F2", kF2,
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-	
-	KeyStroke kF3 = KeyStroke
-	.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0);
-	this.registerKeyboardAction(this, "F3", kF3,
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-	KeyStroke kF5 = KeyStroke
-	.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0);
-	this.registerKeyboardAction(this, "F5", kF5,
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-	
-	KeyStroke kF6 = KeyStroke
-	.getKeyStroke(java.awt.event.KeyEvent.VK_F6, 0);
-	this.registerKeyboardAction(this, "F6", kF6,
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-	
-	KeyStroke kF7 = KeyStroke
-	.getKeyStroke(java.awt.event.KeyEvent.VK_F7, 0);
-	this.registerKeyboardAction(this, "F7", kF7,
-			JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
+	registerFunctionKeys(this);
+	
 	KeyStroke kESC= KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
 	this.registerKeyboardAction(this, "ESCAPE", kESC, JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 	this.addInternalFrameListener(this);
+    }
+    
+    public void registerFunctionKeys(ActionListener screen){
+    	KeyStroke kF1 = KeyStroke
+		.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0);
+    	registerKeyboardAction(screen, "F1", kF1,
+				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		
+		KeyStroke kF2 = KeyStroke
+		.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0);
+		registerKeyboardAction(screen, "F2", kF2,
+				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		
+		KeyStroke kF3 = KeyStroke
+		.getKeyStroke(java.awt.event.KeyEvent.VK_F3, 0);
+		registerKeyboardAction(screen, "F3", kF3,
+				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+		KeyStroke kF5 = KeyStroke
+		.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0);
+		registerKeyboardAction(screen, "F5", kF5,
+				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		
+		KeyStroke kF6 = KeyStroke
+		.getKeyStroke(java.awt.event.KeyEvent.VK_F6, 0);
+		registerKeyboardAction(screen, "F6", kF6,
+				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		
+		KeyStroke kF7 = KeyStroke
+		.getKeyStroke(java.awt.event.KeyEvent.VK_F7, 0);
+		registerKeyboardAction(screen, "F7", kF7,
+				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);    	
     }
     
 	public boolean processHotKeys(ActionEvent e) {
@@ -119,9 +125,23 @@ abstract class Screen
 		if(command.length() > 3) return false;
 		int index = Integer.parseInt(command.substring(1));
 		if(index > 0){
-			index += ScreenController.BUTTON_F1 - 1;
-			buttonPress(index,0);
+			JPanel panel=null;
+			if(index > 0 && index <= dataPanels.length){
+				panel= dataPanels[index-1];
+				if(panel != null){
+					// TODO: finish the f1-f3 hotkeys on all panels and screens
+					panel.grabFocus();
+					return true;
+				}
+				index += ScreenController.BUTTON_F1 - 1;
+				buttonPress(index,0);
+			}
 		}
+		/*
+		 * "CUSTOMERDETAILS", kF5
+		 * "INVOICEDETAILS", kF6
+		 * "PAYMENTS", kF7
+		 */
 		
 		return true; // processed event
 	}

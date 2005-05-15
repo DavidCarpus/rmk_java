@@ -2,6 +2,7 @@ package rmk;
 
 import java.util.Vector;
 
+import rmk.database.dbobjects.Address;
 import rmk.database.dbobjects.Customer;
 import rmk.database.dbobjects.DBObject;
 import rmk.database.dbobjects.Invoice;
@@ -31,7 +32,7 @@ public class ScreenController {
 	
 	public static final int VALIDATION_FAILED=9;
 
-	public static final String[] updateTxt = {"UPDATE_UNKNOWN", "UPDATE_EDIT", "UPDATE_CHANGE", "UPDATE_ADD", "UPDATE_CANCELED", 
+	public static final String[] updateTxt = {"UPDATE_UNKNOWN", "UPDATE_EDIT", "UPDATE_CHANGE", "UPDATE_REMOVE", "UPDATE_ADD", "UPDATE_CANCELED", 
 			"LIST_ITEM_SELECTED", "UPDATE_SAVE", "ENTER_KEY", "VALIDATION_FAILED" };
 	
 	
@@ -59,14 +60,17 @@ public class ScreenController {
 	public static final int BUTTON_F10=110;
 	public static final int BUTTON_F11=111;
 	public static final int BUTTON_F12=112;
+	public static final String[] buttonTxt = {
+			"BUTTON_SELECTION_UNKNOWN", "BUTTON_SELECTION_DETAILS", "BUTTON_CANCEL", 
+			"BUTTON_ADD", "BUTTON_REMOVE", "BUTTON_SAVE", 
+			"BUTTON_KNIFE_COUNT", "BUTTON_DISPLAY_INVOICE", "BUTTON_DISPLAY_ACK_RPT" , 
+			"BUTTON_SHIP" };	
 	
 	static int cntr = 0;
 
 	private static ScreenController instance = new ScreenController();
 
 	IScreen screen[] = new IScreen[4];
-
-	//      CustomerSelectionScreen custList;
 
 	public static ScreenController getInstance() {
 //		long mem1 = Runtime.getRuntime().freeMemory();
@@ -87,51 +91,13 @@ public class ScreenController {
 		return null;
 	}
 
-	public void displayInvoiceDetails(
-			rmk.database.dbobjects.Invoice selectedInvoice
-//			, DBGuiModel model
-			) {
-//		ErrorLogger.getInstance().logDebug("" + selectedInvoice);
+	public void displayInvoiceDetails(rmk.database.dbobjects.Invoice selectedInvoice) {
 		Desktop.getInstance().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+		ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction() + ":" + selectedInvoice, false);
 		try {
 
 			if (selectedInvoice == null)
 				throw new Exception("No invoice?");
-
-//			Vector invoices = model.getInvoiceData();
-
-//			if (invoices == null) {
-//				ErrorLogger.getInstance().logMessage("New inv Vector - null");
-//				invoices = new Vector();
-//			} else if (invoices.size() == 0) {
-//				ErrorLogger.getInstance().logMessage(
-//						"New inv Vector - size() = 0");
-//				invoices = new Vector();
-//			} else {
-//				boolean found = false;
-//				for (java.util.Enumeration enum = invoices.elements(); enum
-//						.hasMoreElements();) {
-//					rmk.database.dbobjects.Invoice item = (rmk.database.dbobjects.Invoice) enum
-//							.nextElement();
-//					if (item.getInvoice() == selectedInvoice.getInvoice()) {
-//						found = true;
-//						break;
-//					}
-//				}
-//				if (!found) {
-//					ErrorLogger.getInstance().logMessage(
-//							"New inv Vector - non matched inv#");
-//					invoices = new Vector();
-//				}
-//			}
-
-//			if (!invoices.contains(selectedInvoice)) {
-//				invoices.add(selectedInvoice);
-//			} else {
-//				invoices.remove(selectedInvoice);
-//				invoices.add(selectedInvoice);
-//			}
-//			model.setInvoiceData(invoices);
 
 			selectedInvoice.setParent(sys.customerInfo.getCustomerByID(selectedInvoice
 					.getCustomerID()));
@@ -147,13 +113,8 @@ public class ScreenController {
 
 			Desktop.getInstance().add(screen);
 			screen.setData(selectedInvoice);
-//			ErrorLogger.getInstance().logDebug("" + selectedInvoice, true);
-			ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction() + ":" + selectedInvoice, false);
 			select(screen);
 
-			//			screen.setVisible(true);
-			//			screen.toFront();
-			//			screen.grabFocus();
 		} catch (Exception e) {
 			ErrorLogger.getInstance().logError(
 					"ScreenController:displayInvoiceDetails", e);
@@ -166,44 +127,34 @@ public class ScreenController {
 		Desktop.getInstance().setCursor(
 				Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		try {
-			//  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() +
-			// ":"+ "Disp cust:" + customerID);
-
-//			DBGuiModel model = new DBGuiModel();
-			rmk.DataModel sys = rmk.DataModel.getInstance();
 
 			rmk.database.dbobjects.Customer customer;
 			Vector customers = new Vector();
 			customer = sys.customerInfo.getCustomerByID(customerID);
 
-//			ErrorLogger.getInstance().logDebug("" + customer, true);
 			ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction() + ":" + customer, false);
 			
 			customers.add(customer);
-//			model.setCustomerData(customers);
 
 			Vector addressVect = new Vector();
-			rmk.database.dbobjects.Address address = sys.customerInfo
-					.getCurrentAddress(customerID);
+			rmk.database.dbobjects.Address address=null;
+			if(address == null && customer.getCurrentAddress() > 0)
+				address = sys.customerInfo.getCustomerAddress(customer.getCurrentAddress());
+			if(address == null )
+				address = sys.customerInfo.getCurrentAddress(customerID);			
 			if (address == null)
 				address = new rmk.database.dbobjects.Address(0);
-			addressVect.add(address);
-//			model.setAddressData(addressVect);
-
+			
 			Vector invoice = new Vector();
-//			model.setInvoiceData(sys.invoiceInfo.getInitialInvoices(customer));
-
 			CustomerScreen screen = new CustomerScreen();
-			String title = "Customer : " + customerID;
+			
+			String title = CustomerScreen.getCustomerScreenTitle(customerID);
 			screen.setTitle(title);
 			Desktop.getInstance().add(screen);
 			
-			screen.setData(customer,sys.invoiceInfo.getInitialInvoices(customer));
+			screen.setData(customer, address, sys.invoiceInfo.getInitialInvoices(customer));
 			select(screen);
 
-			//	    screen.setVisible(true);
-			//	    screen.toFront();
-			//		screen.grabFocus();
 			Desktop.getInstance().repaint();
 		} catch (Exception e) {
 			ErrorLogger.getInstance().logError(
@@ -220,10 +171,6 @@ public class ScreenController {
 
 			screen.setData((DBObject)null);
 			select(screen);
-			//
-			//	    screen.setVisible(true);
-			//	    screen.toFront();
-			//		screen.grabFocus();
 		} catch (Exception e) {
 			ErrorLogger.getInstance().logError(
 					"ScreenController:displayPartsList", e);
@@ -231,21 +178,14 @@ public class ScreenController {
 	}
 
 	public void displayHistoryList() {
-//		ErrorLogger.getInstance().logDebug("", true);
 		ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction() + ":displayHistoryList()", false);
 		try {
 			InvoiceHistoryScreen screen = new InvoiceHistoryScreen();
 			Desktop.getInstance().add(screen);
-			DBGuiModel model = new DBGuiModel();
 			Vector invoice = new Vector();
-//			model.setInvoiceData(sys.invoiceInfo.getHistory(7));
 
 			screen.setData(sys.invoiceInfo.getHistory(7));
 			select(screen);
-
-			//		screen.setVisible(true);
-			//		screen.toFront();
-			//		screen.grabFocus();
 		} catch (Exception e) {
 			ErrorLogger.getInstance().logError(
 					"ScreenController:displayPartsList", e);
@@ -260,10 +200,6 @@ public class ScreenController {
 
 			screen.setData(customerLst);
 			select(screen);
-			//	    screen.setVisible(true);
-			//	    screen.toFront();
-			//		screen.grabFocus();
-
 		} catch (Exception e) {
 			ErrorLogger.getInstance().logError(
 					"ScreenController:displayCustomerList", e);
@@ -271,7 +207,7 @@ public class ScreenController {
 	}
 
 	public void displayDealerList(Vector dealerLst) {
-		ErrorLogger.getInstance().logDebug("", true);
+		ErrorLogger.getInstance().logDebug("displayDealerList()", false);
 		try {
 			CustomerSelectionScreen screen = new CustomerSelectionScreen();
 			screen.setTitle("Dealers");
@@ -279,10 +215,6 @@ public class ScreenController {
 
 			screen.setData(dealerLst);
 			select(screen);
-			//	    screen.setVisible(true);
-			//	    screen.toFront();
-			//		screen.grabFocus();
-
 		} catch (Exception e) {
 			ErrorLogger.getInstance().logError(
 					"ScreenController:displayDealerList", e);
@@ -312,7 +244,6 @@ public class ScreenController {
 	}
 
 	public IScreen invoiceItem(InvoiceEntries item, long invoiceNum, long itemNum) {
-		//      public void invoiceItem(DBGuiModel data, ActionListener parent){
 		InvoiceItemScreen screen = null;
 		Desktop.getInstance().setCursor(
 				Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -323,16 +254,7 @@ public class ScreenController {
 		
 		try {
 			screen = new InvoiceItemScreen();
-//			Vector invoiceLst = data.getInvoiceData();
 
-//			if (invoiceNum > 0) {
-//				for (Enumeration lst = invoiceLst.elements(); lst
-//						.hasMoreElements();) {
-//					inv = (Invoice) lst.nextElement();
-//					if (invoiceNum == inv.getInvoice())
-//						break;
-//				}
-//			}
 			if (invoiceNum != inv.getInvoice())
 				inv = null;
 
@@ -341,23 +263,7 @@ public class ScreenController {
 				title += inv.getInvoice();
 
 			title += " Item: ";
-//			Vector invoiceItems = data.getKnifeData();
-//			InvoiceEntries item = null;
-//			if (invoiceItems != null) {
-//				if(itemNum > 0){
-//					for (java.util.Enumeration enum = invoiceItems.elements(); enum.hasMoreElements();) {
-//						InvoiceEntries currItem = (InvoiceEntries) enum.nextElement();
-//						if(currItem.getInvoiceEntryID() == itemNum){
-//							item=currItem;
-//							break;
-//						}
-//						
-//					}
-//				}
-//				ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction()  + ":invoiceItem()" + ":" + invoiceItems, false);
-//			} else {
-//				ErrorLogger.getInstance().logDebug("No item (New?)", false);
-//			}
+			
 			if(item != null){
 				title += item.getInvoiceEntryID();
 				ErrorLogger.getInstance().logMessage(
@@ -367,10 +273,6 @@ public class ScreenController {
 			int year = sys.invoiceInfo.getPricingYear(inv.getInvoice());
 			title += " Year-" + year;
 
-//			invoiceLst.remove(inv);
-//			invoiceLst.insertElementAt(inv, 0);
-
-//			Customer customer = (Customer)data.getCustomerData().get(0);
 			Customer customer = inv.getParent();
 			
 			screen.setTitle(title);
@@ -384,11 +286,9 @@ public class ScreenController {
 			inv.setParent(customer);
 			((InvoiceItemScreen)screen).setData(item);
 			select(screen);
-			//  	    screen.addActionListener(parent);
 		} catch (Exception e) {
 			ErrorLogger.getInstance().logError("ScreenController:invoiceItem",
 					e);
-			//  	    e.printStackTrace();
 		} // end of try-catch
 		Desktop.getInstance().setCursor(null);
 		return (IScreen) screen;
@@ -397,13 +297,12 @@ public class ScreenController {
 	public void newCustomer() {
 		ErrorLogger.getInstance().logDebug("", true);
 		try {
-//			DBGuiModel model = new DBGuiModel();
 			CustomerScreen screen = new CustomerScreen();
-//			Vector custVector = new Vector();
-//			custVector.add(new rmk.database.dbobjects.Customer(0));
-//			model.setCustomerData(custVector);
 			Desktop.getInstance().add(screen);
-			screen.setData(new rmk.database.dbobjects.Customer(0), null);
+			Customer cust = new rmk.database.dbobjects.Customer(0);
+			cust.setInvoices(new Vector());
+			Address address = new Address(0);
+			screen.setData(cust, address, cust.getInvoices());
 			select(screen);
 		} catch (Exception e) {
 			ErrorLogger.getInstance().logError("ScreenController:newCustomer",
@@ -414,9 +313,7 @@ public class ScreenController {
 	public void invoicePayments(Invoice invoice, Vector payments) {
 		try {
 			InvoicePaymentsScreen screen = new InvoicePaymentsScreen();
-//			Vector invoices = data.getInvoiceData();
-//			rmk.database.dbobjects.Invoice invoice = (rmk.database.dbobjects.Invoice) invoices
-//					.get(invoices.size() - 1);
+
 			String title = "Invoice Payments : ";
 			if (invoice != null) {
 				ErrorLogger.getInstance().logDebug("" + invoice, true);
@@ -439,15 +336,6 @@ public class ScreenController {
 	public void invoicePayments(Customer customer, Invoice invoice){
 		try {
 			InvoicePaymentsScreen screen = new InvoicePaymentsScreen();
-//			DBGuiModel model = new DBGuiModel();
-			
-//			Vector invoices = new Vector();
-//			invoices.add(invoice);
-//			model.setInvoiceData(invoices);
-
-//			Vector custVector = new Vector();
-//			custVector.add(customer);
-//			model.setCustomerData(custVector);
 	
 			Vector payments = new Vector();
 			invoicePayments(invoice, payments);
@@ -464,12 +352,9 @@ public class ScreenController {
 
 		try {
 			InvoiceSearchScreen screen = new InvoiceSearchScreen();
-			DBGuiModel model = new DBGuiModel();
-			rmk.DataModel sys = rmk.DataModel.getInstance();
 			screen.setTitle("Invoice Query");
 
 			Desktop.getInstance().add(screen);
-			screen.setData(model);
 			select(screen);
 
 		} catch (Exception e) {
@@ -498,17 +383,16 @@ public class ScreenController {
 		return null;
 	}
 
-	public rmk.gui.IScreen getCustomerScreen(
-			rmk.database.dbobjects.Invoice invoice) {
+	public rmk.gui.IScreen getCustomerScreen(long custID) {
 		rmk.gui.IScreen screen;
 		String title = "";
 //		ErrorLogger.getInstance().logDebug("" + invoice, true);
-		ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction()   + ":getCustomerScreen()" + ":" + invoice, false);
+		ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction()   + ":getCustomerScreen()" + ":" + custID, false);
 		
-		title = "Customer : " + invoice.getCustomerID();
+		title = CustomerScreen.getCustomerScreenTitle(custID);
 		return rmk.gui.ApplicationMenu.getInstance().findScreen(title);
 	}
-
+	
 	public rmk.gui.IScreen getPaymentsScreen(
 			rmk.database.dbobjects.Invoice invoice) {
 		ErrorLogger.getInstance().logDebug("" + invoice, true);
@@ -526,9 +410,6 @@ public class ScreenController {
 			screen.setTitle("Preferences");
 			Desktop.getInstance().add(screen);
 			select(screen);
-			//    	    screen.setVisible(true);
-			//    	    screen.toFront();
-			//    		screen.grabFocus();
 		} catch (Exception e) {
 			ErrorLogger.getInstance().logError(
 					"ScreenController:displayDealerList", e);

@@ -63,9 +63,9 @@ public class PartsPanel
       	setPreferredSize(new Dimension(140,220));
     }
     
-    public void setParent(IScreen screen){
+    public void setParentScreen(IScreen screen){
     	parent = screen;
-    	pricePanel.setParent(parent);
+    	pricePanel.setParentScreen(parent);
     }
 //-----------------------------------------------------------------
     public void actionPerformed(ActionEvent e) {

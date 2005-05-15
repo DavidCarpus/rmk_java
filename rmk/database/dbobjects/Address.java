@@ -54,6 +54,13 @@ public class Address extends DBObject{
     private void setDefaults(){
 	setAddressType(1);
 	setCorrectedAddressID(0);
+	setAddress0("");
+	setAddress1("");
+	setAddress2("");
+	setCITY("");
+	setSTATE("");
+	setZIP("");
+	setCOUNTRY("");
 	setTimesUsed(0);
   	setZONE("");
     }

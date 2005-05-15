@@ -5,7 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-import rmk.DataModel;
 import rmk.ErrorLogger;
 import rmk.ScreenController;
 import rmk.database.dbobjects.DBObject;
@@ -16,7 +15,7 @@ import rmk.database.dbobjects.Parts;
 import rmk.database.dbobjects.Customer;
 import java.util.Vector;
 import java.util.Enumeration;
-import rmk.gui.DBGuiModel;
+//import rmk.gui.DBGuiModel;
 import rmk.gui.IScreen;
 
 import javax.swing.event.ListSelectionListener;
@@ -35,7 +34,6 @@ implements ActionListener,  ListSelectionListener
     boolean loading=false;
     
     static InvoiceItemDetailPanel detailPanel = new InvoiceItemDetailPanel();
-//    DBGuiModel model;
     static rmk.DataModel sys = rmk.DataModel.getInstance();
     InvoiceEntries originalKnife=null;
     InvoiceEntries currentKnife=null;
@@ -45,19 +43,9 @@ implements ActionListener,  ListSelectionListener
 //  -----------------------------------------------------------------
     public InvoiceItemPanel(){
         priceTable = sys.pricetable;
-//      priceTable = rmk.database.PartPriceTable.getInstance();
         list.setVisibleRowCount(6);
         list.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
         listData.clear();
-//        if(model != null){
-//            if(model.getInvoiceData() != null)
-//                invoice = (Invoice)model.getInvoiceData().get(0);
-//            if(model.getCustomerData() != null)
-//                customer = (Customer)model.getCustomerData().get(0);
-//        }
-
-        //TODO: Neet to go through parent screen with messages
-//        detailPanel.addActionListener(this);
         
         SingleSelectionModel selectionModel = new KnifeSelectionModel(0);
         selectionModel.addListSelectionListener(this);
@@ -79,12 +67,14 @@ implements ActionListener,  ListSelectionListener
         
         setPreferredSize(new Dimension(530,470));
     }
+    //---------------------------------------------------
+    
     public void moveBackToFeatureEntry(){
     	detailPanel.moveBackToFeatureEntry();
     }
-     public void setParent(IScreen screen){
-    	parent = screen;
-    	detailPanel.setParent(parent);
+     public void setParentScreen(IScreen screen){
+    	parentScreen = screen;
+    	detailPanel.setParentScreen(parentScreen);
     }
      
      public boolean addFeature(InvoiceEntryAdditions feature){
@@ -105,25 +95,22 @@ implements ActionListener,  ListSelectionListener
         if (command.equals("INVOICEITEMDETAILSCHANGE")) { //INVOICE FEATURE CHANGE
             setEdited(true);
             if(!loading)
-            	parent.updateOccured(originalKnife,ScreenController.UPDATE_EDIT, null);
+            	parentScreen.updateOccured(originalKnife,ScreenController.UPDATE_EDIT, null);
             else
-            	parent.updateOccured(originalKnife,ScreenController.UPDATE_UNKNOWN, null);
-//            notifyListeners("INVOICEFEATURECHANGE", this);
+            	parentScreen.updateOccured(originalKnife,ScreenController.UPDATE_UNKNOWN, null);
+            return;
         } else if (command.startsWith("ADDFEATURE")){
         	addFeature((InvoiceEntryAdditions)e.getSource());
         	return;
-    		//TODO: Neet to go through parent screen with messages
-            //            notifyListeners("INVOICEFEATURECHANGE", this);
         } else if (command.equals("INVOICEFEATURECHANGE")) { //INVOICE FEATURE CHANGE
             setEdited(true);
-    		//TODO: Neet to go through parent screen with messages
-            //            notifyListeners(e);
+            return;
         } else if (command.equals("ENTERKEY")) { // ENTER KEY
             ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command);
-            // ignore for now
-        } else{
-            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command);
+            // TODO: ignore for now?
         }
+        
+        ErrorLogger.getInstance().TODO();
     }
 //  -----------------------------------------------------------------
     public void valueChanged(ListSelectionEvent e) {
@@ -132,11 +119,8 @@ implements ActionListener,  ListSelectionListener
         if(e.getValueIsAdjusting()){
             return;
         }
-//        InvoiceEntries currKnife = originalKnife;
 
-//        boolean isNew = (currKnife.isEdited());
-//        
-        if(lastIndex == -1){
+         if(lastIndex == -1){
             lastIndex = newIndex;
         }
         
@@ -155,10 +139,6 @@ implements ActionListener,  ListSelectionListener
             if(existingFeatures != null && existingFeatures.size() > 0 && !loading){
                 if(rmk.gui.Dialogs.yesConfirm("Clear Features")){
                 	currentKnife.setFeatures(new Vector());
-//                    for(Enumeration enum=existingFeatures.elements(); enum.hasMoreElements();){
-//                        InvoiceEntryAdditions feature = (InvoiceEntryAdditions)enum.nextElement();
-//                        feature.setEntryID(currentKnife.getInvoiceEntryID());
-//                    }
                 } else{
                 	int year = sys.invoiceInfo.getPricingYear(invoice);
 //                	int year = DataModel.getCurrentYear();
@@ -183,8 +163,7 @@ implements ActionListener,  ListSelectionListener
                 originalKnife.setPrice(price);
             }
         } else{ // otherwise, new Knife
-            Vector features = new Vector();;
-//            model.setInvoiceItemAttributesData(features);
+            Vector features = new Vector();
             currentKnife.setFeatures(features);
             detailPanel.clearData();
         }
@@ -201,25 +180,17 @@ implements ActionListener,  ListSelectionListener
         	originalKnife = currentKnife;
         }
 
-//        Vector knifeVector = new Vector();
-//        knifeVector.add(currentKnife);
-//        model.setKnifeData(knifeVector);
-//        if(!loading)
-//            detailPanel.setData(model);
-
         if(!loading)
             detailPanel.setData(currentKnife);
         
         if(!loading){
-        	parent.updateOccured(currentKnife,ScreenController.UPDATE_EDIT, null);
+        	parentScreen.updateOccured(currentKnife,ScreenController.UPDATE_EDIT, null);
         	setEdited(true);
         }else
-        	parent.updateOccured(currentKnife,ScreenController.LIST_ITEM_SELECTED, null);
+        	parentScreen.updateOccured(currentKnife,ScreenController.LIST_ITEM_SELECTED, null);
 
         int year = sys.invoiceInfo.getPricingYear(invoice);
         detailPanel.setPricingYear(year);
-        //TODO: Neet to go through parent screen with messages
-        //        notifyListeners(new ActionEvent(this, (int)generatedKnife.getPartID(), "SET_KNIFE_MODEL|" + year));
         
         lastIndex = newIndex;
     }
@@ -229,14 +200,6 @@ implements ActionListener,  ListSelectionListener
     
     //=============================================================
     //=============================================================
-    boolean modelChange(){
-        boolean results = false;
-//        Vector vector = model.getKnifeData();
-//        InvoiceEntries currKnife = (InvoiceEntries)vector.get(0);
-
-        return results;
-    }
-    
     InvoiceEntries getKnife(ListObject item){
         long invoiceNumber=0;
 //        Vector features=null;
@@ -317,62 +280,23 @@ implements ActionListener,  ListSelectionListener
         list.ensureIndexIsVisible(index);
     }
     
-	public void setData(DBObject item){
-		loading = true;
-//		ErrorLogger.getInstance().TODO();
-        InvoiceEntries currKnife=(InvoiceEntries) item;
-        invoice = currKnife.getParent();
-        customer = invoice.getParent();
-        
-        int year = sys.invoiceInfo.getPricingYear(invoice);
-        loadListData(currKnife.getPartID(), year);
-        selectListItem(currKnife.getPartID());
-        originalKnife = currKnife;
-        
-        detailPanel.setData(currKnife);
-		//TODO: Neet to go through parent screen with messages
-        //        notifyListeners(new ActionEvent(this, (int)originalID, "SET_KNIFE_MODEL|" + year));
-        
-        loading = false;
-        setEdited(false);	}
-	
-//  -----------------------------------------------------------------
-    public void setData(DBGuiModel model ){
-//        if(loading) 
-//            return;
-//        loading = true;
-//        
-//        this.model = model;
-//        originalKnife=null;
-//
-//        InvoiceEntries currKnife=null;
-//        invoice = (Invoice)model.getInvoiceData().get(0);
-//        customer = (Customer)model.getCustomerData().get(0);
-//        
-//        if(model.getKnifeData() != null)
-//            currKnife = (InvoiceEntries )model.getKnifeData().get(0);
-//        
-//        int year = sys.invoiceInfo.getPricingYear(invoice);
-//        long originalID = 0;
-//        if(currKnife != null)
-//            originalID = currKnife.getPartID();
-//        
-//        loadListData(originalID, year);
-//        selectListItem(originalID);
-//        
-//        
-//        // ***  load text field values
-//        originalKnife = currKnife;
-//        Vector knifeData = new Vector();
-//        knifeData.add(currKnife);
-//        model.setKnifeData(knifeData);
-//        detailPanel.setData(model);
-//        
-//		//TODO: Neet to go through parent screen with messages
-//        //        notifyListeners(new ActionEvent(this, (int)originalID, "SET_KNIFE_MODEL|" + year));
-//        
-//        loading = false;
-//        setEdited(false);
+    public void setData(DBObject item){
+    	loading = true;
+
+    	InvoiceEntries currKnife=(InvoiceEntries) item;
+    	invoice = currKnife.getParent();
+    	customer = invoice.getParent();
+    	
+    	int year = sys.invoiceInfo.getPricingYear(invoice);
+    	loadListData(currKnife.getPartID(), year);
+    	selectListItem(currKnife.getPartID());
+    	originalKnife = currKnife;
+    	
+    	detailPanel.setData(currKnife);
+    	loading = false;
+    	setEdited(false);
     }
+	
+
 }
 

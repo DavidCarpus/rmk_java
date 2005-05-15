@@ -49,7 +49,7 @@ public class PreferencesScreen extends Screen {
 		getContentPane().add(codePanel);
 
 		textPanel.setFieldEditCheck(txtFields, "PrefChange", textPanel);
-		textPanel.setParent(this);
+		textPanel.setParentScreen(this);
 		codePanel.setParent(this);
 		// load properties file
 		//set field values
@@ -179,7 +179,7 @@ public class PreferencesScreen extends Screen {
 		break;
 		
 		default:
-			ErrorLogger.getInstance().TODO();
+	       	ErrorLogger.getInstance().logButton(button, id);
 		}
 	}
 	

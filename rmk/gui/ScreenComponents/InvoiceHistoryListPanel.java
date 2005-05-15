@@ -16,7 +16,6 @@ import javax.swing.table.TableColumn;
 import rmk.ErrorLogger;
 import rmk.ScreenController;
 import rmk.database.dbobjects.HistoryItems;
-import rmk.gui.DBGuiModel;
 import rmk.gui.IScreen;
 import carpus.gui.DataListPanel;
 import carpus.gui.DataListPanelTableModel;

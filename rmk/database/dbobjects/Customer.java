@@ -20,6 +20,7 @@ public class Customer extends DBObject{
     public final int TERMS_INVOICE = 2;
     
     java.util.Vector invoices;
+    Address currAddress = null;
 
     public Customer(Object[]  data){
 	super(fields);
@@ -182,9 +183,13 @@ public class Customer extends DBObject{
 		return invoices;
 	}
 
-	/**
-	 * @param vector
-	 */
+	public void setCurrentAddressItem(Address newAddress){
+		currAddress = newAddress;
+	}
+	public Address getCurrentAddressItem(){
+		return currAddress;
+	}
+	
 	public void setInvoices(java.util.Vector vector) {
 		invoices = vector;
 	}
@@ -192,13 +197,17 @@ public class Customer extends DBObject{
 	public void addInvoice(Invoice invoice){
 		if(invoices == null) invoices = new Vector();
 		if(invoices.contains(invoice)) return; // THE object is already there
+		boolean found=false;
 		for(Enumeration enum = invoices.elements(); enum.hasMoreElements();){
 			Invoice inv = (Invoice) enum.nextElement();
 			if(inv.getInvoice() == inv.getInvoice()){
 				invoices.remove(inv);
 				invoices.add(invoice);
+				found=true;
 			}
 		}
+		if(!found)
+			invoices.add(invoice);
 
 	}
 }

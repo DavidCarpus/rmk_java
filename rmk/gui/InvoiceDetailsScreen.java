@@ -50,19 +50,19 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		getContentPane().setLayout(
 				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		customerPnl = new rmk.gui.ScreenComponents.CustomerInfoPanel();
-		customerPnl.setParent(this);
+		customerPnl.setParentScreen(this);
 		//		customerPnl.addActionListener(this);
 		getContentPane().add(customerPnl);
 		
 		invoiceDetailPnl = new rmk.gui.ScreenComponents.InvoiceDetailsPanel();
 		invoiceDetailPnl.onPaymentsScreen(false);
-		invoiceDetailPnl.setParent(this);
+		invoiceDetailPnl.setParentScreen(this);
 		//		invoiceDetailPnl.addActionListener(this);
 		getContentPane().add(invoiceDetailPnl);
 		invoiceDetailPnl.setEnabled(false);
 		
 		invoiceEntriesList = new rmk.gui.ScreenComponents.InvoiceEntriesListPanel();
-		invoiceEntriesList.setParent(this);
+		invoiceEntriesList.setParentScreen(this);
 		//		invoiceEntriesList.addActionListener(this);
 		getContentPane().add(invoiceEntriesList);
 		
@@ -85,14 +85,13 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		
     	SignalProcessor.getInstance().addScreen(this);
 
+        dataPanels[0] = customerPnl;
+        dataPanels[1] = invoiceDetailPnl;
+        dataPanels[2] = invoiceEntriesList;
+ 
 		setPreferredSize(new Dimension(915, 640));
 		pack();
 	}
-	
-//	public InvoiceDetailsScreen(DBGuiModel data) {
-//		super("Invoice Details");
-//		setData(data);
-//	}
 
 	//==========================================================
 	public boolean isEdited() {
@@ -100,33 +99,6 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 	}
 	
 	//==========================================================
-//	public void setData(DBGuiModel model) {
-//		this.model = model;
-//		
-//		java.util.Vector data = model.getInvoiceData();
-//		if (data == null) {
-//			carpus.util.Logger.getInstance().logError(
-//					this.getClass().getName() + ":"
-//					+ "void setData(DBGuiModel model)" + ":\n"
-//					+ "Invoice data missing from model.\n",
-//					new Exception("Design Error"));
-//		}
-//		int index = 0;
-//		if (data.size() > 1) { // passed several invoices, last one is relevent
-//			index = data.size() - 1;
-//		}
-//		
-//		Invoice invoice = (Invoice) data.get(index);
-//		invoice.setItems(model.getInvoiceItemsData());
-//
-//		if (invoice.getInvoice() > 0) {
-//			sys.invoiceInfo.logInvoiceAccess(invoice);
-//		}
-//		
-//		setInvoice(invoice);
-//	}
-	
-	
 	public void setData(DBObject item){
 		if(((Invoice) item).getParent() == null)
 			ErrorLogger.getInstance().TODO();
@@ -219,7 +191,11 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 	//==========================================================
 	private void saveData(Invoice inv) {
 		//		model.removeActionListener(this);
-		Customer cust = (Customer) customerPnl.getData();
+		Customer cust;
+		if(currInvoice != null && currInvoice.getParent() != null)
+			cust = currInvoice.getParent();
+		else
+			cust = (Customer) customerPnl.getData();
 
 		if (editedInvoice) {
 			if (inv.getDateShipped() != null
@@ -259,16 +235,17 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 				ErrorLogger.getInstance().logMessage("Error creating invoice for :" + cust);
 			}
 
+			Vector custInvoices = cust.getInvoices();
+			if(custInvoices == null || !custInvoices.contains(currInvoice)){
+				cust.addInvoice(currInvoice);
+//				custInvoices.add(currInvoice);
+			}
+			
+			updateCustomerScreen(cust, currInvoice);
+
 			if (newInv){
 				addEntry(currInvoice);
 			}
-			cust.getInvoices().add(currInvoice);
-			CustomerScreen screen = (CustomerScreen) rmk.ScreenController.getInstance().getCustomerScreen(currInvoice);
-			
-			if (screen != null) {
-				screen.setData(cust, cust.getInvoices());
-			}
-			
 		}
 		if (editedCustomer) {
 //			Vector outputList = new Vector();
@@ -327,6 +304,13 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		setInvoice(inv);
 	}
 	
+	void updateCustomerScreen(Customer cust, Invoice inv){
+		CustomerScreen screen = (CustomerScreen) rmk.ScreenController.getInstance().getCustomerScreen(currInvoice.getCustomerID());
+		
+		if (screen != null) {
+			screen.setData(cust, cust.getCurrentAddressItem(), cust.getInvoices());
+		}		
+	}
 	private void saveEntry(Invoice inv, InvoiceEntries entry) {
 		//		try {
 		//			if (entry.getInvoiceEntryID() == 0)
@@ -508,6 +492,8 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 				//				updatePaymentSummary(inv);
 			}
 		}
+		updateCustomerScreen(currInvoice.getParent(), currInvoice);
+
 		//		model.addActionListener(this);
 	}
 	
@@ -932,17 +918,19 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		break;
 		
 		
-		case ScreenController.BUTTON_F1:
-			customerPnl.requestFocus();
-		break;
-		case ScreenController.BUTTON_F2:
-			invoiceDetailPnl.requestFocus();
-		break;
-		case ScreenController.BUTTON_F3:
-			invoiceEntriesList.requestFocus();
+//		case ScreenController.BUTTON_F1:
+//			customerPnl.requestFocus();
+//		break;
+//		case ScreenController.BUTTON_F2:
+//			invoiceDetailPnl.requestFocus();
+//		break;
+//		case ScreenController.BUTTON_F3:
+//			invoiceEntriesList.requestFocus();
+//		break;
+		
 		case ScreenController.BUTTON_F5: // display customer info
 		{
-			rmk.gui.IScreen screen = rmk.ScreenController.getInstance().getCustomerScreen(currInvoice);
+			rmk.gui.IScreen screen = rmk.ScreenController.getInstance().getCustomerScreen(currInvoice.getCustomerID());
 			
 			if (screen == null) {
 				rmk.ScreenController.getInstance().displayCustomer(
@@ -951,15 +939,26 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 				Customer customer;
 				try {
 					customer = sys.customerInfo.getCustomerByID(currInvoice.getCustomerID());
-//					Vector custInv = sys.customerInfo.get
-					((CustomerScreen)screen).setData(customer);
+					rmk.database.dbobjects.Address address=null;
+					if(address == null && customer.getCurrentAddress() > 0)
+						address = sys.customerInfo.getCustomerAddress(customer.getCurrentAddress());
+					if(address == null )
+						address = sys.customerInfo.getCurrentAddress(customer.getCustomerID());			
+					if (address == null)
+						address = new rmk.database.dbobjects.Address(0);
+					
+					customer.setCurrentAddressItem(address);
+					((CustomerScreen)screen).setData(customer, customer.getCurrentAddressItem(), customer.getInvoices());
 					screen.bringToFront();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					ErrorLogger.getInstance().logError("Fetching customer:"+currInvoice.getCustomerID(), e);
 				}
 			}
 		}
+		break;
+		
+		case ScreenController.BUTTON_F6:
+			; // ignore, already on invoice screen
 		break;
 		
 		case ScreenController.BUTTON_F7: // display customer info
@@ -978,7 +977,7 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		break;
 		
 		default:
-			System.out.println("InvoiceDetailsScreen buttonPress processing unimplemented:" + button);
+	       	ErrorLogger.getInstance().logButton(button, id);
 		}
 	}
 

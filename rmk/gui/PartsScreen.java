@@ -32,17 +32,17 @@ public class PartsScreen extends Screen{
 
 
 	partPnl = new rmk.gui.ScreenComponents.PartsPanel();
-	partPnl.setParent(this);
+	partPnl.setParentScreen(this);
 	partPnl.setEnabled(false);
-	partPnl.setParent(this);
+	partPnl.setParentScreen(this);
   	getContentPane().add(partPnl);
 
 	featuresPnl = new rmk.gui.ScreenComponents.PartsFeaturesPanel();
-	featuresPnl.setParent(this);
+	featuresPnl.setParentScreen(this);
 	featuresPnl.setEnabled(false);
   	getContentPane().add(featuresPnl);
 	featuresPnl.setVisible(false);
-	featuresPnl.setParent(this);
+	featuresPnl.setParentScreen(this);
 
 	partsList = new rmk.gui.ScreenComponents.PartsListPanel();
 	partsList.setParent(this);
@@ -245,7 +245,7 @@ public class PartsScreen extends Screen{
 		break;
 		
 		default:
-			ErrorLogger.getInstance().TODO();
+	       	ErrorLogger.getInstance().logButton(button, id);
 		}
 	}
 	

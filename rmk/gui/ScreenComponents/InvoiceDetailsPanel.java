@@ -133,7 +133,7 @@ implements ActionListener
         c.gridx++;
         knifeCountButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evnt) {
-            	parent.buttonPress(ScreenController.BUTTON_KNIFE_COUNT,0);
+            	parentScreen.buttonPress(ScreenController.BUTTON_KNIFE_COUNT,0);
             }
         }
         );
@@ -144,7 +144,7 @@ implements ActionListener
         JPanel financeButtons = new JPanel();
         paymentButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evnt) {
-            	parent.buttonPress(ScreenController.BUTTON_F7,0);
+            	parentScreen.buttonPress(ScreenController.BUTTON_F7,0);
             }});
         
         discountButton.addActionListener(this);
@@ -355,20 +355,20 @@ implements ActionListener
             invoice.setComment(currentNotes);
             notesButton.setToolTipText(text);
 //            event = new ActionEvent(this, 1, "INVOICECHANGED");
-            parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
+            parentScreen.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
             return;
     	}else if(command.equals("F1")){
-    		parent.updateOccured(null,ScreenController.BUTTON_F1, null);
+    		parentScreen.updateOccured(null,ScreenController.BUTTON_F1, null);
     		return;
     	}else if(command.equals("F2")){
-    		parent.updateOccured(null,ScreenController.BUTTON_F2, null);
+    		parentScreen.updateOccured(null,ScreenController.BUTTON_F2, null);
     		return;
     	}else if(command.equals("F3")){
-    		parent.updateOccured(null,ScreenController.BUTTON_F3, null);
+    		parentScreen.updateOccured(null,ScreenController.BUTTON_F3, null);
     		return;
         } else if(command.equals("SHOP SALE")){
         	if(switchToShopSale())
-        		parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);        
+        		parentScreen.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);        
             return;
             
         } else if(command.equals("TAXRATE")){
@@ -385,7 +385,7 @@ implements ActionListener
             if(taxRate > 1) taxRate /= 100.0;
             if(taxRate != oldRate){
             	invoice.setTaxPercentage(taxRate);
-            	parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);            	
+            	parentScreen.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);            	
             }else
             	ErrorLogger.getInstance().logMessage("TaxRate not changed");
             return;
@@ -403,7 +403,7 @@ implements ActionListener
                 if(discountPercentage != newDisc){
                     discountPercentage = newDisc;
                     invoice.setDiscountPercentage(discountPercentage);
-                    parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
+                    parentScreen.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
 //                    event = new ActionEvent(this, 1, "INVOICECHANGED");
                 }
             } catch (Exception err){
@@ -415,7 +415,7 @@ implements ActionListener
             invoice.setShopSale(false);
             invoice.setShippingInfo("");
             ((JTextArea)txtFields[FIELD_SHIPPINGINFO]).setText("");
-            parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
+            parentScreen.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
 //            optionChanged = true;
             return;
             //---------------------------------
@@ -423,7 +423,7 @@ implements ActionListener
             shipAddressPanel.setVisible(true);
             invoice.setShopSale(false);
             ((JTextArea)txtFields[FIELD_SHIPPINGINFO]).setText(" ");
-            parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
+            parentScreen.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
 //            optionChanged = true;
             return;
             //---------------------------------
@@ -442,7 +442,7 @@ implements ActionListener
             ((LabeledTextField)txtFields[FIELD_DATEESTIMATED]).setValue(
                     dateFormatter.format(date.getTime()));
             invoice.setDateEstimated(date);
-            parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
+            parentScreen.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
             return;
 //            event = new ActionEvent(this, 1, "INVOICECHANGED");
         } else if(command.equals(">")){
@@ -452,7 +452,7 @@ implements ActionListener
                     dateFormatter.format(date.getTime()));
             invoice.setDateEstimated(date);
 //            event = new ActionEvent(this, 1, "INVOICECHANGED");
-            parent.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
+            parentScreen.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
             return;
         }
         

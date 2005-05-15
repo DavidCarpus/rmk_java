@@ -159,7 +159,7 @@ public class CustomerDetailPanel
 	    currentMemo = text;
 	    customer.setMemo(currentMemo);
 //	    event = new ActionEvent(this, 1, "CUSTOMER DETAIL CHANGED");
-	    parent.updateOccured(customer,ScreenController.UPDATE_EDIT, customer);
+	    parentScreen.updateOccured(customer,ScreenController.UPDATE_EDIT, customer);
 	    return;
 	    //----------------------------------------------------------
   	}else if(command.equals("EDIT BLADELIST") || command.equals("ADD BLADELIST")){
@@ -169,7 +169,7 @@ public class CustomerDetailPanel
 	    currentBladeList = text;
 	    customer.setBladeList(currentBladeList);
 //	    event = new ActionEvent(this, 1, "CUSTOMER DETAIL CHANGED");
-	    parent.updateOccured(customer,ScreenController.UPDATE_EDIT, customer);
+	    parentScreen.updateOccured(customer,ScreenController.UPDATE_EDIT, customer);
 	    return;
 	    
 	    //----------------------------------------------------------
@@ -201,20 +201,22 @@ public class CustomerDetailPanel
     public void setData(Customer customer){
 	if(customer == null)
 	    ((LabeledTextField)txtFields[FIELD_TERMS]).setValue("1");
+	else 
+		this.customer = customer;
 //	else
 //	    setData(customer);
     }
 
     //========================================================
     public carpus.database.DBObject getData(){
-	java.util.Vector data = model.getCustomerData();
-	Customer customer=null;
-	if(data != null){
-	    customer = (Customer )model.getCustomerData().get(0);
-	} else{
-	    errLog.logError(this.getClass().getName() + ":" + "DBObject getData()" + ":\n" +
-			    "customer Missing.\n", new Exception("Design Error"));
-	}
+//	java.util.Vector data = model.getCustomerData();
+//	Customer customer=null;
+//	if(data != null){
+//	    customer = (Customer )model.getCustomerData().get(0);
+//	} else{
+//	    errLog.logError(this.getClass().getName() + ":" + "DBObject getData()" + ":\n" +
+//			    "customer Missing.\n", new Exception("Design Error"));
+//	}
 
 	customer.setDealer( (dealer.isSelected()? 1: 0));
 	customer.setFlag( flagged.isSelected());
@@ -267,7 +269,6 @@ public class CustomerDetailPanel
 	    customer.setCreditCardExpiration(null);
 	}
 
-  	model.setCustomerData(data);
 	return customer;
     }
     //========================================================
@@ -351,11 +352,6 @@ public class CustomerDetailPanel
 //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ expiration);
 
 	setEdited(false);
-    }
-
-    //========================================================
-    public static void main(String args[]) throws Exception {
-	rmk.gui.Application.main(args);
     }
 
 }

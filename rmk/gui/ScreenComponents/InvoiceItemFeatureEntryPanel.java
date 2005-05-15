@@ -36,11 +36,11 @@ public class InvoiceItemFeatureEntryPanel
 		    int code = e.getKeyCode();	
 		    if(code == KeyEvent.VK_ENTER){ //Key pressed is the Enter key. 
 		    	if(e.isControlDown()){
-		    		parent.buttonPress(ScreenController.BUTTON_SAVE,0);
+		    		parentScreen.buttonPress(ScreenController.BUTTON_SAVE,0);
 		    	}else{
 		    		InvoiceEntryAdditions newFeature = addEnteredItem();
 		    		if(newFeature != null){
-		    			parent.updateOccured(newFeature, ScreenController.UPDATE_ADD, null);
+		    			parentScreen.updateOccured(newFeature, ScreenController.UPDATE_ADD, null);
 		    			field.grabFocus();
 		    		}
 		    	}

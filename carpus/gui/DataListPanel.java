@@ -9,6 +9,11 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.border.EtchedBorder;
 
+import rmk.ErrorLogger;
+import rmk.ScreenController;
+import rmk.database.dbobjects.Invoice;
+import rmk.gui.IScreen;
+
 import carpus.database.DBObject;
 
 public abstract class DataListPanel extends JPanel implements ActionListener,
@@ -31,6 +36,8 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 
 	protected rmk.DataModel sys = rmk.DataModel.getInstance();
 
+	protected IScreen parentScreen=null;
+	
 	//      LabeledTextField subTotal;
 
 	//==========================================================
@@ -76,21 +83,21 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 		table.setFont(new Font("Serif", Font.BOLD, 14));
 		table.setSelectionBackground(new Color(0, 178, 238));
 
-		KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
-		this.registerKeyboardAction(this, "Cancel", stroke,
-				JComponent.WHEN_IN_FOCUSED_WINDOW);
+//		KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
+//		this.registerKeyboardAction(this, "Cancel", stroke,
+//				JComponent.WHEN_IN_FOCUSED_WINDOW);
 
-		table.getInputMap().put(KeyStroke.getKeyStroke("F2"), "none");
-		Action doNothing = new AbstractAction() {
-
-			public void actionPerformed(ActionEvent e) {
-				notifyListeners(new ActionEvent(this, 1, "F2"));
-				//    		    System.out.println(this.getClass().getName() + ":"+
-				// "doNothing?");
-			} //do nothing
-		};
-		table.getInputMap().put(KeyStroke.getKeyStroke("F2"), "doNothing");
-		table.getActionMap().put("doNothing", doNothing);
+//		table.getInputMap().put(KeyStroke.getKeyStroke("F2"), "none");
+//		Action doNothing = new AbstractAction() {
+//
+//			public void actionPerformed(ActionEvent e) {
+//				notifyListeners(new ActionEvent(this, 1, "F2"));
+//				//    		    System.out.println(this.getClass().getName() + ":"+
+//				// "doNothing?");
+//			} //do nothing
+//		};
+//		table.getInputMap().put(KeyStroke.getKeyStroke("F2"), "doNothing");
+//		table.getActionMap().put("doNothing", doNothing);
 
 		sorter.addMouseListenerToHeaderInTable(table);
 
@@ -157,6 +164,23 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 			}
 		}
 	}
+	
+    protected boolean processHotKeyCommands(String command){
+    	if(command.equals("F1")){
+    		parentScreen.buttonPress(ScreenController.BUTTON_F1, 0);
+    		return true;
+    	}else if(command.equals("F2")){
+    		parentScreen.buttonPress(ScreenController.BUTTON_F2, 0);
+    		return true;
+    	}else if(command.equals("F3")){
+    		parentScreen.buttonPress(ScreenController.BUTTON_F3, 0);
+    		return true;						
+    	}else if(command.equals("CANCEL")){
+    		parentScreen.buttonPress(ScreenController.BUTTON_CANCEL, 0);
+    		return true;	
+    	}
+    	return false;
+    }
 
 	//----------------------------------------------------------
 	public void focusGained(FocusEvent e) {
@@ -261,13 +285,45 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 		keyCheck(DataListPanel list) {
 			lst = list;
 		}
-
+	    public void keyTyped(KeyEvent e){
+	    	if(e.isControlDown()) // ctrl key was held ... Not processes here
+	    		return;
+	    	if(e.getKeyCode() >= KeyEvent.VK_F1 && e.getKeyCode() <= KeyEvent.VK_F12){
+	    		ErrorLogger.getInstance().logDebug("Missing function key registration", true);
+	    	}
+	    }
 		public void keyPressed(KeyEvent e) {
 			int code = e.getKeyCode();
 
-			if (code == KeyEvent.VK_ENTER && e.isControlDown())
-				lst.actionPerformed(new ActionEvent(this, 1, "CTRL_ENTERKEY"));
+			if (code == KeyEvent.VK_ENTER && e.isControlDown()){
+				long item = getSelectedItemID();
+				int id=(int) item;
+//				if(item.getClass().getName().indexOf(".Long")>0)
+//					id = ((Long)item).intValue();
+//				if(item.getClass().getName().indexOf(".Integer")>0)
+//					id = ((Integer)item).intValue();
+//				if(item.getClass().getName().indexOf(".Invoice")>0)
+//					id = ((Invoice)item).();
+//				int id = item;
+				if(parentScreen==null)
+					ErrorLogger.getInstance().TODO();
+				
+				parentScreen.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, id);
+			}
+//				lst.actionPerformed(new ActionEvent(this, 1, "CTRL_ENTERKEY"));
 		}
 	}
 
+	/**
+	 * @return Returns the parentScreen.
+	 */
+	public IScreen getParentScreen() {
+		return parentScreen;
+	}
+	/**
+	 * @param parentScreen The parentScreen to set.
+	 */
+	public void setParentScreen(IScreen parentScreen) {
+		this.parentScreen = parentScreen;
+	}
 }

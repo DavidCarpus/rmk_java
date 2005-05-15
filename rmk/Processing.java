@@ -182,13 +182,13 @@ public class Processing {
         }
         //---------------------------------------
         // Customer Details Screen?
-        screen = rmk.ScreenController.getInstance().getCustomerScreen(invoice);
+        screen = rmk.ScreenController.getInstance().getCustomerScreen(invoice.getCustomerID());
         if (screen != null) {
             //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + "updateScreens_Shipping:"+ "Updating:" +
             // title);
             Customer customer = ((rmk.gui.CustomerScreen) screen).getCustomer();
             if(invoice.getCustomerID() == invoice.getCustomerID()){
-            	((rmk.gui.CustomerScreen) screen).setData(customer, customer.getInvoices());
+            	((rmk.gui.CustomerScreen) screen).setData(customer, customer.getCurrentAddressItem(), customer.getInvoices());
             }
         }
         // Payments Screen?

@@ -33,7 +33,7 @@ public class InvoiceItemScreen extends Screen{
 		
 		((JButton)buttonBar.getButton(0)).setEnabled(false);
 		
-		itemPanel.setParent(this);
+		itemPanel.setParentScreen(this);
 		getContentPane().add(itemPanel);
 		
 		featurePanel.setParent(this);
@@ -335,8 +335,7 @@ public class InvoiceItemScreen extends Screen{
 			saveData();
 		break;
 		default:
-			ErrorLogger.getInstance().TODO();
-		System.out.println("Screen buttonPress processing unimplemented");
+	       	ErrorLogger.getInstance().logButton(button, id);
 		}
 	}
 	

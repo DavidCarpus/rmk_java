@@ -132,10 +132,10 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
     	entryPanel.grabFocus();
     }
     
-	public void setParent(IScreen screen){
-		entryPanel.setParent(screen);
+	public void setParentScreen(IScreen screen){
+		entryPanel.setParentScreen(screen);
 		selectionPanel.setParent(screen);
-		parent=screen;
+		parentScreen=screen;
 	}
 
 	//-----------------------------------------------------------------
@@ -145,7 +145,7 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 
         if (command.equals("QUANTITY_CHANGED")){
         	featureChange();
-        	parent.updateOccured(knife,ScreenController.UPDATE_EDIT, null);
+        	parentScreen.updateOccured(knife,ScreenController.UPDATE_EDIT, null);
         	return;
         }
         		

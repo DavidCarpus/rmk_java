@@ -12,11 +12,11 @@ import java.util.*;
 import javax.swing.table.TableColumn;
 import javax.swing.border.EtchedBorder;
 
+
 import rmk.ErrorLogger;
 import rmk.ScreenController;
 import rmk.database.dbobjects.Customer;
 import rmk.gui.Dialogs;
-import rmk.gui.IScreen;
 
 
 public class CustomerListPanel 
@@ -24,20 +24,15 @@ public class CustomerListPanel
 	implements ActionListener
 {
 	
-    Vector listeners=null;
     Vector customerList;
-    long selectedCustomer;
+//    long selectedCustomer;
     carpus.gui.BasicToolBar buttonBar;
-    IScreen parent = null;
     
     public CustomerListPanel(){
     	dataModel = new CustomerListTableModel(customerList);
     	setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
     	setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
     	addTable(dataModel);
-
-//	KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
-//      	this.registerKeyboardAction(this, "Cancel", stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 	TableColumn column = null;
 	for (int i = 0; i < dataModel.getColumnCount(); i++) {
@@ -57,38 +52,6 @@ public class CustomerListPanel
 	}
 
 	setTableSelectionListeners();
-//	sorter.addMouseListenerToHeaderInTable(table);
-	
-	//following code specifies that only one row at a time can be selected
-//	table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//	ListSelectionModel rowSM = table.getSelectionModel();
-//	rowSM.addListSelectionListener(new ListSelectionListener(){
-//		public void valueChanged(ListSelectionEvent e) {
-//		    if (e.getValueIsAdjusting()) return; //Ignore extra messages.
-//		    ListSelectionModel lsm = (ListSelectionModel)e.getSource();
-//		    if (!lsm.isSelectionEmpty()) {
-//			int row=lsm.getMinSelectionIndex();
-//				selectedCustomer = ((Long)sorter.getValueAt(row,0)).longValue();
-//				buttonBar.enableButton(1, false);
-////				buttonBar.enableButton(2, false);
-//				try {
-//                    Customer cust = rmk.DataModel.getInstance().customerInfo.getCustomerByID(selectedCustomer);
-//                	buttonBar.enableButton(2, cust.isDealer());
-//                } catch (Exception e1) {
-//                    e1.printStackTrace();
-//                }
-//		    }
-//		    buttonBar.enableButton(0, !lsm.isSelectionEmpty());
-//		    buttonBar.enableButton(1, !lsm.isSelectionEmpty());
-//		}
-//	    });
-//	table.addMouseListener(new MouseAdapter(){
-//		public void mouseClicked(MouseEvent e){
-//		    if (e.getClickCount() == 2){
-//			actionPerformed(new ActionEvent(this,1,"CustomerDetails"));
-//		    }
-//		}
-//	    } );
 
       	JScrollPane scrollPane = new JScrollPane(table);
 
@@ -105,12 +68,11 @@ public class CustomerListPanel
 	buttonBar.enableButton(1, false);
 	buttonBar.enableButton(2, false);
   	add(buttonBar);	
-//    	setPreferredSize(new Dimension(325,125));
     }
     
 	//==========================================================
 	protected void doubleClick() {
-		parent.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int) selectedItem);
+		parentScreen.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int) selectedItem);
 //		actionPerformed(new ActionEvent(this, 1, "InvoiceDetails"));
 	}
 	
@@ -121,71 +83,58 @@ public class CustomerListPanel
 		buttonBar.enableButton(2, true);
 		return val;
 	}
-	public void setParent(IScreen screen){
-		parent = screen;
-	}
-	
+
     public long getSelectedItemID(){
-        return selectedCustomer;
+//        return selectedCustomer;
+        return selectedItem;
     }
     public Customer getSelectedCustomer() throws Exception{
-        return rmk.DataModel.getInstance().customerInfo.getCustomerByID(selectedCustomer);        
+//        return sys.customerInfo.getCustomerByID(selectedCustomer);        
+        return sys.customerInfo.getCustomerByID(selectedItem);        
     }
 
     public void actionPerformed(ActionEvent e) {
-	String command = e.getActionCommand().toUpperCase();
+    	String command = e.getActionCommand().toUpperCase();
+		
+    	if(processHotKeyCommands(command) ){
+    		return;
+    	}
 	
 	
-	
-    ErrorLogger.getInstance().logDebugCommand(command);
-
-	ActionEvent event=null;
-
-	if(command.equals("CUSTOMERDETAILS")){
-	    event = new ActionEvent(this,1,command);
-	} else if(command.equals("CANCEL")){
-	    event = new ActionEvent(this,1,command);
-	} else if(command.equals("MERGE")){
-	    event = new ActionEvent(this,1,command);
-	} else if(command.equalsIgnoreCase("QuickDealer")){
-	    try {
-		    Dialogs.generateBlankDealerInvoice(getSelectedItemID());
-	    } catch (Exception err) {
-	    	// TODO: handle exception
-	    }
-	} else {
-	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "?");
-	}
-
-	if(event != null && listeners != null){
-	    for(Enumeration enum=listeners.elements(); enum.hasMoreElements();){
-		((ActionListener)enum.nextElement()).actionPerformed(event);
-	    }
-	}
+    	ErrorLogger.getInstance().logDebugCommand(command);
+    	
+    	ActionEvent event=null;
+    	
+    	if(command.equals("CUSTOMERDETAILS")){
+    		event = new ActionEvent(this,1,command);
+    	} else if(command.equals("CANCEL")){
+    		event = new ActionEvent(this,1,command);
+    	} else if(command.equals("MERGE")){
+    		event = new ActionEvent(this,1,command);
+    	} else if(command.equalsIgnoreCase("QuickDealer")){
+    		try {
+    			Dialogs.generateBlankDealerInvoice(getSelectedItemID());
+    		} catch (Exception err) {
+    			// TODO: handle exception
+    		}
+    	} else {
+    		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "?");
+    	}
     }
-    public void addActionListener(ActionListener listener){
-	if(listeners == null) listeners = new Vector();
-	if(!listeners.contains(listener)) listeners.addElement(listener);
-    }
-    
-//    public boolean setData(Vector customers){
-//    	customerList = customers;
-//    	return true;
+
+//	if(event != null && listeners != null){
+//	    for(Enumeration enum=listeners.elements(); enum.hasMoreElements();){
+//		((ActionListener)enum.nextElement()).actionPerformed(event);
+//	    }
+//	}
 //    }
-    
-//    public void setData(rmk.gui.DBGuiModel model){
-//    	Vector custData = model.getCustomerData();
-//    	setData(custData);
+//    public void addActionListener(ActionListener listener){
+//	if(listeners == null) listeners = new Vector();
+//	if(!listeners.contains(listener)) listeners.addElement(listener);
 //    }
-
-
-    public static void main(String args[])
-	throws Exception
-    {
-	rmk.gui.Application.main(args);
-    }
-
 }
+
+
 //===========================================================
 class CustomerListTableModel extends carpus.gui.DataListPanelTableModel {
     String[] columnNames= new String[]{"Index", "CustomerName", "PhoneNumber", "Dealer", "Flagged"};

@@ -37,12 +37,12 @@ public class InvoicePaymentsScreen extends Screen {
         getContentPane().setLayout(
                 new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         customerPnl = new rmk.gui.ScreenComponents.CustomerInfoPanel();
-        customerPnl.setParent(this);
+        customerPnl.setParentScreen(this);
         getContentPane().add(customerPnl);
 
         invoiceDetailPnl = new rmk.gui.ScreenComponents.InvoiceDetailsPanel();
         invoiceDetailPnl.onPaymentsScreen(true);
-        invoiceDetailPnl.setParent(this);
+        invoiceDetailPnl.setParentScreen(this);
         getContentPane().add(invoiceDetailPnl);
         JPanel msgPanel = new JPanel();
         msgPanel.add(new JLabel("$$$$$$$$ Payments $$$$$$$$"));
@@ -68,7 +68,10 @@ public class InvoicePaymentsScreen extends Screen {
                                                            // Button
 
         //    	buttonBar.addButton(null, "Add","Add","Add");
-
+        dataPanels[0] = customerPnl;
+        dataPanels[1] = invoiceDetailPnl;
+        dataPanels[2] = invoicePaymentsPnl;
+        
         setPreferredSize(new Dimension(900, 640));
         pack();
     }
@@ -323,18 +326,18 @@ public class InvoicePaymentsScreen extends Screen {
         } else if (command.equals("CUSTOMERDETAILS")) {
             Invoice invoice = invoiceDetailPnl.getData();
             rmk.gui.IScreen screen = rmk.ScreenController.getInstance()
-                    .getCustomerScreen(invoice);
+                    .getCustomerScreen(invoice.getCustomerID());
 
             if (screen == null) {
                 rmk.ScreenController.getInstance().displayCustomer(
                         invoice.getCustomerID());
             } else {
-            	((CustomerScreen)screen).setData(invoice.getParent(),paymentList);
+            	((CustomerScreen)screen).setData(invoice.getParent(), invoice.getParent().getCurrentAddressItem(), paymentList);
                 screen.bringToFront();
             }
             // -------------------------
         } else { // Undefined
-            ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
+        	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
         }
     }
 
@@ -356,13 +359,14 @@ public class InvoicePaymentsScreen extends Screen {
     
 	public void buttonPress(int button, int id) {
 		switch(button){
+		//---------------------------------
 		case ScreenController.BUTTON_CANCEL:
 		{
 			defaultCancelAction();
 			SignalProcessor.getInstance().removeScreen(this);
 		}
 		break;
-		
+		//---------------------------------
 		case ScreenController.BUTTON_REMOVE:
 		{
             if(!rmk.gui.Dialogs.yesConfirm("Are you sure you wish to remove this payment?")){
@@ -374,9 +378,10 @@ public class InvoicePaymentsScreen extends Screen {
 //            Invoice invoice = (Invoice) outputList.get(0);
             removeEntry(invoice.getInvoice(), id);
 		}
-		break;
-		
+		break;		
+		//---------------------------------
 		case ScreenController.BUTTON_DISPLAY_INVOICE:
+		case ScreenController.BUTTON_F6:
 		{		
 			long invoiceNumber = invoice.getInvoice();
 			
@@ -388,7 +393,28 @@ public class InvoicePaymentsScreen extends Screen {
 					(int) invoiceNumber);			
 		}
 		break;
+		//---------------------------------
+		case ScreenController.BUTTON_F5:
+		{		
+		rmk.gui.IScreen screen = rmk.ScreenController.getInstance().getCustomerScreen(invoice.getCustomerID());
 		
+		if (screen == null) {
+			rmk.ScreenController.getInstance().displayCustomer(
+					invoice.getCustomerID());
+		} else {
+			Customer customer;
+			try {
+				customer = invoice.getParent();
+//				if(customer == null)
+//					customer = sys.customerInfo.getCustomerByID(invoice.getCustomerID());
+				((CustomerScreen)screen).setData(customer);
+				screen.bringToFront();
+			} catch (Exception e) {
+				ErrorLogger.getInstance().logError("Fetching customer:"+invoice.getCustomerID(), e);
+			}
+		}
+		}
+		//---------------------------------
 		case ScreenController.BUTTON_DISPLAY_ACK_RPT:
 		{		
 			long invoiceNumber = invoice.getInvoice();
@@ -402,15 +428,15 @@ public class InvoicePaymentsScreen extends Screen {
 					(int) invoiceNumber);		
 		}
 		break;
-		
+		// ---------------------------------
 		case ScreenController.BUTTON_ADD:
 		{
 			addEntry(invoice.getInvoice(), invoice.getCustomerID());
 		}
 		break;
-		
+		// ---------------------------------
 		default:
-			ErrorLogger.getInstance().TODO();
+	       	ErrorLogger.getInstance().logButton(button, id);
 		}
 	}
 

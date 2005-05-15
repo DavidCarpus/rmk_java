@@ -11,17 +11,18 @@ import rmk.database.dbobjects.InvoiceEntryAdditions;
 import rmk.gui.IScreen;
 
 import java.util.*;
+
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 import javax.swing.table.TableColumn;
 
 
 public class InvoiceEntriesListPanel 
 extends 
-//  JPanel 
 carpus.gui.DataListPanel
 implements ActionListener, FocusListener{
     Vector invoiceEntriesList;
     boolean expanded = false;
-    IScreen parent = null;
     
 //==========================================================
 //==========================================================
@@ -75,11 +76,15 @@ implements ActionListener, FocusListener{
 	buttonBar.enableButton(0, false);
 	buttonBar.enableButton(1, false);
 	buttonBar.enableButton(2, false);
+	
+	KeyStroke kF2 = KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2, 0);
+	registerKeyboardAction(this, "F2", kF2,
+			JComponent.WHEN_IN_FOCUSED_WINDOW);
+	
   	add(buttonBar);
     }
     //----------------------------------------------------------
     public void focusGained(FocusEvent e) {
-        //  	System.out.println(this.getClass().getName() + ":"+ "focusGained");
         selectLast();
     }
     //----------------------------------------------------------
@@ -93,10 +98,6 @@ implements ActionListener, FocusListener{
 		buttonBar.enableButton(2, true);
 		return val;
     }
-    
-	public void setParent(IScreen screen){
-		parent = screen;
-	}
 
 //==========================================================
 //==========================================================
@@ -104,29 +105,21 @@ implements ActionListener, FocusListener{
     public void actionPerformed(ActionEvent e) {
 	String command = e.getActionCommand().toUpperCase();
 //    ErrorLogger.getInstance().logDebugCommand(command);
-
+	if(processHotKeyCommands(command) ){
+		return;
+	}
+	ErrorLogger.getInstance().logDebugCommand(command);
 	ActionEvent event=null;
 
-	if(command.equals("F1")){
-		parent.buttonPress(ScreenController.BUTTON_F1, 0);
-		return;
-	}else if(command.equals("F2")){
-		parent.buttonPress(ScreenController.BUTTON_F2, 0);
-		return;
-	}else if(command.equals("F3")){
-		parent.buttonPress(ScreenController.BUTTON_F3, 0);
-		return;						
-	}else if(command.equals("CANCEL")){
-		parent.buttonPress(ScreenController.BUTTON_CANCEL, 0);
-		return;						
-	} else if(command.equals("ADDINVOICEENTRY")){
-		parent.buttonPress(ScreenController.BUTTON_ADD, 0);
+
+	if(command.equals("ADDINVOICEENTRY")){
+		parentScreen.buttonPress(ScreenController.BUTTON_ADD, 0);
 		return;
 	} else if(command.equals("EDITINVOICEENTRY") || command.equals("CTRL_ENTERKEY")){
-		parent.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int)selectedItem);
+		parentScreen.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int)selectedItem);
 		return;
 	} else if(command.equals("REMOVEINVOICEENTRY")){
-		parent.buttonPress(ScreenController.BUTTON_REMOVE, (int)selectedItem);
+		parentScreen.buttonPress(ScreenController.BUTTON_REMOVE, (int)selectedItem);
 		return;
 	} else {
 	    System.out.println(this.getClass().getName() + ":Undefined:" + command + "|");
@@ -157,39 +150,11 @@ implements ActionListener, FocusListener{
    	
     }
     
-    //----------------------------------------------------------
-//	public void setData(rmk.gui.DBGuiModel model) {
-//		ErrorLogger.getInstance().TODO();
-//		java.util.Vector data = model.getInvoiceItemsData();
-//		setData(data);
-//		sorter.sortByColumn(1, true);
-//		
-//		data = model.getInvoiceData();
-//		if (data == null)
-//			return;
-//		Invoice invoice = (Invoice) data.get(data.size() - 1);
-//
-//		if (invoice.getInvoice() != 0)
-//			buttonBar.enableButton(1, true);
-//
-//		buttonBar.enableButton(0, false);
-//		buttonBar.enableButton(2, false);
-//	}
-    
 	//----------------------------------------------------------
     public void setMore(boolean more){
 	buttonBar.enableButton(0, more);
     }
 
-//==========================================================
-//==========================================================
-//==========================================================
-//==========================================================
-    public static void main(String args[])
-	throws Exception
-    {
-	rmk.gui.Application.main(args);
-    }
 //==========================================================
 //==========================================================
 //==========================================================

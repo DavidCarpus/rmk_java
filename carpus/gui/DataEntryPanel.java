@@ -11,19 +11,12 @@ import java.awt.event.*;
 
 public abstract class DataEntryPanel extends JPanel{
     boolean edited = false;
-    protected IScreen parent=null;
+    protected IScreen parentScreen=null;
     carpus.database.DBObject data=null;
-//    protected Vector listeners=null;
 	protected carpus.util.Logger errorLog = carpus.util.Logger.getInstance();
-//      protected abstract void setData(carpus.database.DBObject item);
 
-//    public void addActionListener(ActionListener listener){
-//	if(listeners == null) listeners = new Vector();
-//	if(!listeners.contains(listener)) listeners.addElement(listener);
-//    }
-
-	public void setParent(IScreen screen){
-		parent = screen;
+	public void setParentScreen(IScreen screen){
+		parentScreen = screen;
 	}
 	
     public boolean isEdited(){
@@ -32,25 +25,24 @@ public abstract class DataEntryPanel extends JPanel{
     public void setEdited(boolean value){
 	edited = value;
     }
+    
+    boolean processUniversalCommands(String command){
+    	if(command.equals("F1")){
+    		parentScreen.buttonPress(ScreenController.BUTTON_F1, 0);
+    		return true;
+    	}else if(command.equals("F2")){
+    		parentScreen.buttonPress(ScreenController.BUTTON_F2, 0);
+    		return true;
+    	}else if(command.equals("F3")){
+    		parentScreen.buttonPress(ScreenController.BUTTON_F3, 0);
+    		return true;						
+    	}else if(command.equals("CANCEL")){
+    		parentScreen.buttonPress(ScreenController.BUTTON_CANCEL, 0);
+    		return true;	
+    	}
+    	return false;
+    }
 //-----------------------------------------------------------------
-//    public void notifyListeners(String msg){
-//    	if(listeners == null) return;
-//    	notifyListeners(new ActionEvent(this,1,msg));
-//    }
-//    public void notifyListeners(String msg, DataEntryPanel panel){
-//    	if(listeners == null) return;
-//    	notifyListeners(new ActionEvent(panel,1,msg));
-//    }
-//    public void notifyListeners(ActionEvent event){
-//    	if(listeners == null || event == null) return;
-//    	//  	System.out.println(this.getClass().getName() + ":notify:" + event);
-//    	for(Enumeration enum=listeners.elements(); enum.hasMoreElements();){
-//    		((ActionListener)enum.nextElement()).actionPerformed(event);
-//    	}
-//    }
-//-----------------------------------------------------------------
-
-
     public KeyAdapter getFieldEditCheck(String msg, DataEntryPanel panel){	
 //  	System.out.println(this.getClass().getName() + ":"+ "getFieldEditCheck:" + msg);
   	return new FieldEditCheck(msg, panel);
@@ -69,17 +61,7 @@ public abstract class DataEntryPanel extends JPanel{
 	}
     }
 
-//      public void setFieldEditCheck(JTextComponent[] txtFields, 
-//  				  String msg, DataEntryPanel panel){
-//  	KeyAdapter ka = getFieldEditCheck(msg, panel);
-//  	for(int i=0; i<txtFields.length; i++){	    
-//  	    txtFields[i].addKeyListener(ka);
-//  	}
-//      }
-//      public void setFieldEditCheck(JTextComponent txtField, String msg, DataEntryPanel panel){
-//  	KeyAdapter ka = getFieldEditCheck(msg, panel);
-//  	txtField.addKeyListener(ka);
-//      }
+
     public void setFieldEditCheck(JComponent txtField, String msg, DataEntryPanel panel){
 	KeyAdapter ka = getFieldEditCheck(msg, panel);
 	txtField.addKeyListener(ka);
@@ -87,16 +69,16 @@ public abstract class DataEntryPanel extends JPanel{
     public abstract void actionPerformed(ActionEvent e);
 
     public void performEnterAction(){
-    	parent.updateOccured((DBObject) data, ScreenController.ENTER_KEY, (DBObject)data);
+    	parentScreen.updateOccured((DBObject) data, ScreenController.ENTER_KEY, (DBObject)data);
     }
     public void editingOccured(){
-    	parent.updateOccured((DBObject) data, ScreenController.UPDATE_EDIT, (DBObject)data);
+    	parentScreen.updateOccured((DBObject) data, ScreenController.UPDATE_EDIT, (DBObject)data);
     }
     public void cancelUpdate(){
-    	parent.updateOccured((DBObject) data, ScreenController.UPDATE_CANCELED, (DBObject)data);
+    	parentScreen.updateOccured((DBObject) data, ScreenController.UPDATE_CANCELED, (DBObject)data);
     }
     public void saveUpdate(){
-    	parent.updateOccured((DBObject) data, ScreenController.UPDATE_SAVE, (DBObject)data);
+    	parentScreen.updateOccured((DBObject) data, ScreenController.UPDATE_SAVE, (DBObject)data);
     }
 
 

@@ -7,7 +7,6 @@ import rmk.ErrorLogger;
 import rmk.ScreenController;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.Customer;
-import rmk.database.dbobjects.InvoiceEntries;
 import rmk.gui.IScreen;
 
 import java.util.*;
@@ -19,7 +18,7 @@ extends
 carpus.gui.DataListPanel
 implements ActionListener, FocusListener{
 	public static final int INVOICE_COL_WIDTH = 48;
-	IScreen parent = null;
+
     Vector invoiceList;
 
 //    int customerID=0;
@@ -94,12 +93,10 @@ implements ActionListener, FocusListener{
 		add(buttonBar);
 		//    	setPreferredSize(new Dimension(325,125));
 	}
-	public void setParent(IScreen screen){
-		parent = screen;
-	}
+
 	//-------------------------------------------
 	public void doubleClick() {
-		parent.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int) getSelectedItemID());
+		parentScreen.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int) getSelectedItemID());
 //		actionPerformed(new ActionEvent(this, 1, "InvoiceDetails"));
 	}
 	//-------------------------------------------
@@ -119,10 +116,10 @@ implements ActionListener, FocusListener{
 		ActionEvent event = null;
 
 		if (command.equals("INVOICEDETAILS") || command.equals("CTRL_ENTERKEY")) {
-			parent.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int) getSelectedItemID());
+			parentScreen.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int) getSelectedItemID());
 			return;
 		} else if (command.equals("INVOICE")) {
-			parent.buttonPress(ScreenController.BUTTON_DISPLAY_INVOICE,0);
+			parentScreen.buttonPress(ScreenController.BUTTON_DISPLAY_INVOICE,0);
 			return;
 		}else if (command.equals("SHIPPED")) { //PaymentInfo Display
 			if (buttonBar.getButtonLabel(0).equals("Shipped")) {
@@ -134,13 +131,13 @@ implements ActionListener, FocusListener{
 			}
 			return;
 		} else if (command.equals("ADD")) {
-			parent.updateOccured(null,ScreenController.UPDATE_ADD ,null);
+			parentScreen.updateOccured(null,ScreenController.UPDATE_ADD ,null);
 			return;
 		} else if(command.equals("CANCEL")){
-			parent.buttonPress(ScreenController.BUTTON_CANCEL, 0);
+			parentScreen.buttonPress(ScreenController.BUTTON_CANCEL, 0);
 			return;
 		} else if (command.equals("PAYMENTS")){
-			parent.buttonPress(ScreenController.BUTTON_F7, (int) getSelectedItemID());
+			parentScreen.buttonPress(ScreenController.BUTTON_F7, (int) getSelectedItemID());
 			return;
 		} else if (command.equals("RELOAD")) { //PaymentInfo Display
 //			model.setInvoiceData(sys.invoiceInfo.getInitialInvoices(customer));
@@ -150,34 +147,11 @@ implements ActionListener, FocusListener{
 		}
 		
 		ErrorLogger.getInstance().logDebugCommand(command);
-//		if (command.equals("PAYMENTS")) { //PaymentInfo Display
-//			event = e;
-//
-//		} else if (command.equals("RELOAD")) { //PaymentInfo Display
-//			model.setInvoiceData(sys.invoiceInfo.getInitialInvoices(customer));
-//			setData(model.getInvoiceData());
-//			buttonBar.setButtonLabel(0, "Shipped");
-//
-//		} else { // Undefined
-//			ErrorLogger.getInstance().logMessage(
-//				this.getClass().getName() + ":Undefined:" + command + "|");
-//		}
-//
-//		notifyListeners(event);
 	}
 	//------------------------------------------
-//	public void setData(rmk.gui.DBGuiModel model) {
-	public boolean setData(Vector invList) {
-//		this.model = model;
-//
-//		if (model.getCustomerData() != null) {
-//			Customer currentCustomer =
-//				(Customer) model.getCustomerData().get(0);
-//			customer = currentCustomer;
-//		}
-		
-		customer = ((Invoice)invList.get(0)).getParent();
-		
+	public boolean setData(Customer customer, Vector invList) {
+		this.customer=customer;
+
 		// Invoice data processing
 		if(super.setData(invList)){
 			buttonBar.enableButton(0, true);

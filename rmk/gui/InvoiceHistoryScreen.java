@@ -106,10 +106,11 @@ public class InvoiceHistoryScreen extends Screen {
 		case ScreenController.BUTTON_F1: // ignore these for this screen
 		case ScreenController.BUTTON_F2:
 		case ScreenController.BUTTON_F3:
+			ErrorLogger.getInstance().logButton(button, id);
 			break;
 		
 		default:
-			System.out.println("Screen buttonPress processing unimplemented");
+	       	ErrorLogger.getInstance().logButton(button, id);
 		}
 	}
 	

@@ -19,7 +19,8 @@ public class CustomerAddressPanel extends carpus.gui.DataEntryPanel{
     static final int FIELD_COUNTRY=6;
 
     LabeledTextField[] txtFields = new LabeledTextField[7];
-
+    Address address;
+    
     public CustomerAddressPanel(){	
 	GridBagLayout gridbag = new GridBagLayout();
 	GridBagConstraints c = new GridBagConstraints();
@@ -97,60 +98,46 @@ public class CustomerAddressPanel extends carpus.gui.DataEntryPanel{
     public void actionPerformed(ActionEvent e) {}
     //========================================================
     public void processFocusEvent(FocusEvent e){
-		txtFields[FIELD_ADDRESS].requestFocus();
+		txtFields[FIELD_ADDRESS].grabFocus();
     }
+    
 
     //========================================================
     public carpus.database.DBObject getData(){
-	java.util.Vector data;
-	Address address;
-	data = model.getAddressData();
-	if(data == null){
-	    data = new java.util.Vector();
-	    address = new Address(0);
-	    data.add(address);
-	    model.setAddressData(data);
-	} else{
-	    address = (Address )model.getAddressData().get(0);
-	}
-
-	int i=0;
-	String txt="";
-	txt = txtFields[FIELD_ADDRESS].getValue();
-	if(txt != null) txt = txt.toUpperCase();
-	address.setAddress0(txt);
-
-	txt = txtFields[FIELD_ADDRESS2].getValue();
-	if(txt != null) txt = txt.toUpperCase();
-	address.setAddress1(txt);
-
-	txt = txtFields[FIELD_ADDRESS3].getValue();
-	if(txt != null) txt = txt.toUpperCase();
-	address.setAddress2(txt);
-
-	txt = txtFields[FIELD_CITY].getValue();
-	if(txt != null) txt = txt.toUpperCase();
-	address.setCITY(txt);
-
-	txt = txtFields[FIELD_STATE].getValue();
-	if(txt != null) txt = txt.toUpperCase();
-	address.setSTATE(txt);
-
-	txt = txtFields[FIELD_ZIP].getValue();
-	if(txt != null) txt = txt.toUpperCase();
-	address.setZIP(txt);
-
-	txt = txtFields[FIELD_COUNTRY].getValue();
-	if(txt != null) txt = txt.toUpperCase();
-	address.setCOUNTRY(txt);
-	
-	model.setAddressData(data);
-	return address;
-
+    	String txt="";
+    	txt = txtFields[FIELD_ADDRESS].getValue();
+    	if(txt != null) txt = txt.toUpperCase();
+    	address.setAddress0(txt);
+    	
+    	txt = txtFields[FIELD_ADDRESS2].getValue();
+    	if(txt != null) txt = txt.toUpperCase();
+    	address.setAddress1(txt);
+    	
+    	txt = txtFields[FIELD_ADDRESS3].getValue();
+    	if(txt != null) txt = txt.toUpperCase();
+    	address.setAddress2(txt);
+    	
+    	txt = txtFields[FIELD_CITY].getValue();
+    	if(txt != null) txt = txt.toUpperCase();
+    	address.setCITY(txt);
+    	
+    	txt = txtFields[FIELD_STATE].getValue();
+    	if(txt != null) txt = txt.toUpperCase();
+    	address.setSTATE(txt);
+    	
+    	txt = txtFields[FIELD_ZIP].getValue();
+    	if(txt != null) txt = txt.toUpperCase();
+    	address.setZIP(txt);
+    	
+    	txt = txtFields[FIELD_COUNTRY].getValue();
+    	if(txt != null) txt = txt.toUpperCase();
+    	address.setCOUNTRY(txt);
+    	
+    	return address;
     }
     
 	public void setData(Address address) {
-
+		this.address = address;
 //		Address address = (Address) data;
 		if (address == null) {
 			errorLog.logError(
