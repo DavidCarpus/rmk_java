@@ -18,7 +18,7 @@ public class Application extends JFrame implements ActionListener {
     Desktop desktop;
     rmk.DataModel sys;
     BasicToolBar toolbar;
-    public static final String version="2005_05_08";
+    public static final String version="2005_05_17";
 
     //============================================================================
     public Application() throws Exception{
@@ -28,11 +28,10 @@ public class Application extends JFrame implements ActionListener {
 	desktop.setFrame(this);
 	JPanel panel = new JPanel();
 
-	toolbar = new BasicToolBar(null, new String[] {"General Search", "Dealers", "Ship", "Parts", "History", "ToDo", "Preferences"}, 
-				   new String[] {"generalsearch", "dealerlist", "ship", "parts", "history", "ToDo", "Preferences"},
-				   new String[] {"General Search",
-						 "Dealers", "Ship Invoices", "Part Configuration", "Invoice Access History", "ToDo", ""}
-				   );
+	toolbar = new BasicToolBar(null, new String[] {"General Search", "Dealers", "Ship", "Parts", "History", "ToDo", "Preferences", "Log an Error"}, 
+			new String[] {"generalsearch", "dealerlist", "ship", "parts", "history", "ToDo", "Preferences", "ERROR"},
+			new String[] {"General Search",	"Dealers", "Ship Invoices", "Part Configuration", "Invoice Access History", "ToDo", "", "ERROR"}
+	);
 	toolbar.setFloatable(false);
 	toolbar.addActionListener(this);
 	toolbar.getButton(0).setMnemonic(KeyEvent.VK_S);
@@ -100,86 +99,88 @@ public class Application extends JFrame implements ActionListener {
     //============================================================================
     //React to menu selections.
     public void actionPerformed(ActionEvent e) {
-	String command = (""+e.getActionCommand()).toUpperCase();
-	int index=0;
-
-	if (command.equals("QUIT")){ //0
-            quit();
-        } else if (command.equals("NEW")){//1
-	    rmk.ScreenController.getInstance().newCustomer();
-	    return;
-        } else if (command.equals("GENERALSEARCH")){//3
-	    Vector items = rmk.gui.Dialogs.generalSearch();
-	    generalSearch(items);
-        } else if (command.equals("PARTS")){
-	    	rmk.ScreenController.getInstance().displayPartsList();
-		} else if (command.equals("HISTORY")){
-			rmk.ScreenController.getInstance().displayHistoryList();
-		} else if (command.equals("PREFERENCES")){
-			rmk.ScreenController.getInstance().displayPreferencesScreen();
-			
-        } else if (command.startsWith("DEALERLIST")){
-        	rmk.ScreenController.getInstance().displayDealerList(sys.customerInfo.getDealers());
-        } else if (command.equals("SHIP")){
-	    shipInvoices();
-	} else if (command.equals("TODO")){
-		Dialogs.displayToDo();
-	//-------------------------------
-        } else if (command.equals("BLADELIST")){
-	    Dialogs.bladeList(false, null);
-        } else if (command.equals("TAXORDERED")){
-    	    Dialogs.taxOrderedReport();
-        } else if (command.equals("TAXSHIPPED")){
-    	    Dialogs.taxShippedReport();
-        } else if (command.equals("PARTLISTREPORT")){
-    	    Dialogs.partListReport();
-        } else if (command.equals("INVOICE_SEARCH")){
-        	ScreenController.getInstance().invoiceSearch();
-        	
-        } else if (command.equals("SPEC_REQUEST")){
-    	    String location = Configuration.Config.getMergeFileLocation() + "DealerSpec.txt";
-    	    String message = "No data to save to:\n" + location;
-    	    String heading = "Not Saved";
-    	    if(MergeFiles.generateMergeFile(MergeFiles.MERGE_TYPE_DEALER_SPEC, location)){
-    		message = "Data saved to:\n" + location;
-    		heading = "Saved";
-    	    }
-    	    JOptionPane.showMessageDialog(null, message, heading, JOptionPane.INFORMATION_MESSAGE);
-    	//-------------------------------
-        } else if (command.equals("WIERD_INVOICES")){
-    	    String location = Configuration.Config.getMergeFileLocation() + "WierdInvoices.txt";
-    	    String message = "No data to save to:\n" + location;
-    	    String heading = "Not Saved";
-    	    if(MergeFiles.generateMergeFile(MergeFiles.MERGE_TYPE_WIERD_BALANCE_DUE, location)){
-    		message = "Data saved to:\n" + location;
-    		heading = "Saved";
-    	    }
-    	    JOptionPane.showMessageDialog(null, message, heading, JOptionPane.INFORMATION_MESSAGE);
-    	//-------------------------------
-        } else if (command.equals("BALANCE_DUE")){
-	    String location = Configuration.Config.getMergeFileLocation() + "BalanceDue.txt";
-	    String message = "No data to save to:\n" + location;
-	    String heading = "Not Saved";
-
-	    if(MergeFiles.generateMergeFile(MergeFiles.MERGE_TYPE_BALANCE_DUE, location)){
-		message = "Data saved to:\n" + location;
-		heading = "Saved";
-	    }
-	    JOptionPane.showMessageDialog(null, message, heading, JOptionPane.INFORMATION_MESSAGE);
-	//-------------------------------
-        } else if (command.equals("MULTI_INVOICE")){
-    	    rmk.gui.Dialogs.multiInvoice();
-        } else if (command.equals("TEST")){
-//    	    try {
-//                rmk.gui.Dialogs.test();
-//            } catch (Exception err) {
-//                err.printStackTrace();
-//            }
-
-	//-------------------------------
-	}else{
-	    ErrorLogger.getInstance().logMessage("Application:actionPerformed():" + command);
-	}
+    	String command = (""+e.getActionCommand()).toUpperCase();
+    	int index=0;
+    	
+    	if (command.equals("QUIT")){ //0
+    		quit();
+    	} else if (command.equals("NEW")){//1
+    		rmk.ScreenController.getInstance().newCustomer();
+    		return;
+    	} else if (command.equals("GENERALSEARCH")){//3
+    		Vector items = rmk.gui.Dialogs.generalSearch();
+    		generalSearch(items);
+    	} else if (command.equals("PARTS")){
+    		rmk.ScreenController.getInstance().displayPartsList();
+    	} else if (command.equals("HISTORY")){
+    		rmk.ScreenController.getInstance().displayHistoryList();
+    	} else if (command.equals("PREFERENCES")){
+    		rmk.ScreenController.getInstance().displayPreferencesScreen();
+    		
+    	} else if (command.startsWith("DEALERLIST")){
+    		rmk.ScreenController.getInstance().displayDealerList(sys.customerInfo.getDealers());
+    	} else if (command.equals("SHIP")){
+    		shipInvoices();
+    	} else if (command.equals("TODO")){
+    		Dialogs.displayToDo();
+    		//-------------------------------
+    	} else if (command.equals("BLADELIST")){
+    		Dialogs.bladeList(false, null);
+    	} else if (command.equals("TAXORDERED")){
+    		Dialogs.taxOrderedReport();
+    	} else if (command.equals("TAXSHIPPED")){
+    		Dialogs.taxShippedReport();
+    	} else if (command.equals("PARTLISTREPORT")){
+    		Dialogs.partListReport();
+    	} else if (command.equals("INVOICE_SEARCH")){
+    		ScreenController.getInstance().invoiceSearch();
+    		
+    	} else if (command.equals("SPEC_REQUEST")){
+    		String location = Configuration.Config.getMergeFileLocation() + "DealerSpec.txt";
+    		String message = "No data to save to:\n" + location;
+    		String heading = "Not Saved";
+    		if(MergeFiles.generateMergeFile(MergeFiles.MERGE_TYPE_DEALER_SPEC, location)){
+    			message = "Data saved to:\n" + location;
+    			heading = "Saved";
+    		}
+    		JOptionPane.showMessageDialog(null, message, heading, JOptionPane.INFORMATION_MESSAGE);
+    		//-------------------------------
+    	} else if (command.equals("WIERD_INVOICES")){
+    		String location = Configuration.Config.getMergeFileLocation() + "WierdInvoices.txt";
+    		String message = "No data to save to:\n" + location;
+    		String heading = "Not Saved";
+    		if(MergeFiles.generateMergeFile(MergeFiles.MERGE_TYPE_WIERD_BALANCE_DUE, location)){
+    			message = "Data saved to:\n" + location;
+    			heading = "Saved";
+    		}
+    		JOptionPane.showMessageDialog(null, message, heading, JOptionPane.INFORMATION_MESSAGE);
+    		//-------------------------------
+    	} else if (command.equals("BALANCE_DUE")){
+    		String location = Configuration.Config.getMergeFileLocation() + "BalanceDue.txt";
+    		String message = "No data to save to:\n" + location;
+    		String heading = "Not Saved";
+    		
+    		if(MergeFiles.generateMergeFile(MergeFiles.MERGE_TYPE_BALANCE_DUE, location)){
+    			message = "Data saved to:\n" + location;
+    			heading = "Saved";
+    		}
+    		JOptionPane.showMessageDialog(null, message, heading, JOptionPane.INFORMATION_MESSAGE);
+    		//-------------------------------
+    	} else if (command.equals("MULTI_INVOICE")){
+    		rmk.gui.Dialogs.multiInvoice();
+    	} else if (command.equals("TEST")){
+    		//    	    try {
+    		//                rmk.gui.Dialogs.test();
+    		//            } catch (Exception err) {
+    		//                err.printStackTrace();
+    		//            }    		
+    		//-------------------------------
+    	} else if (command.equals("ERROR")){
+    		rmk.gui.Dialogs.getAndLogAnErrorReport();
+    		
+    	}else{
+    		ErrorLogger.getInstance().logMessage("Application:actionPerformed():" + command);
+    	}
     }
     //============================================================================
     //============================================================================

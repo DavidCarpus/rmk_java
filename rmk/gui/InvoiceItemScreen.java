@@ -187,7 +187,7 @@ public class InvoiceItemScreen extends Screen{
 
 		long oldPartID = possibleNewKnife.getPartID();
 		long newPartID = (currKnife != null?currKnife.getPartID():0);
-		if (oldPartID != newPartID) { // save knife
+		if (oldPartID != newPartID || possibleNewKnife.isEdited()) { // save knife
 			Vector invoiceEntries = new Vector();
 			invoiceEntries.add(possibleNewKnife);
 			Configuration.Config.getDB().saveItems( "InvoiceEntries", invoiceEntries);
@@ -316,8 +316,11 @@ public class InvoiceItemScreen extends Screen{
 		
 		break;
 		default:
+		{
 			ErrorLogger.getInstance().TODO();
-		System.out.println("Screen buttonPress processing unimplemented");
+			System.out.println("Screen Update processing unimplemented");
+		}
+		
 		}
 	}
 	

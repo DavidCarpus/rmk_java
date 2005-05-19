@@ -93,9 +93,11 @@ public class CustomerScreen extends Screen{
 		}
 		if(customer != null){
 			invoicePanel.setData(customer, invList);
-			detailPanel.setData(customer);
-			if(address != null)
-				updateCustomerPanels(customer, address);
+
+			updateCustomerPanels(customer, address);
+
+//			if(address != null)
+//				updateCustomerPanels(customer, address);
 		}
 		//		model.addActionListener(this);
 		this.pack();
@@ -104,7 +106,8 @@ public class CustomerScreen extends Screen{
 	void updateCustomerPanels(Customer cust, Address address){
 		custPanel.setData(customer);
 		custAddPanel.setData(address);
-	}
+		detailPanel.setData(customer);
+		}
 	
 
     public void setData(DBObject item){
@@ -159,8 +162,8 @@ public class CustomerScreen extends Screen{
 				outputLst = db.saveItems("Customers", outputLst);
 //				model.setCustomerData(outputLst);
 //				updateOccured((DBObject) cust, ScreenController.UPDATE_CHANGE, cust );
-				custPanel.setData(cust);
-				detailPanel.setData(cust);
+//				custPanel.setData(cust);
+//				detailPanel.setData(cust);
 				editedInfo = false;
 				editedDetail = false;
 				rmk.ErrorLogger.getInstance().logMessage("Saved CustomerInfo" + outputLst);
@@ -319,6 +322,7 @@ public class CustomerScreen extends Screen{
 		{
 			if(itemName.indexOf("Customer")>0){
 				editedDetail = true;
+				customer = (Customer) itemChanged;
 				buttonBar.enableButton(0, true);
 			}else if(itemName.indexOf("Address")>0){
 				editedAddress = true;
@@ -344,6 +348,7 @@ public class CustomerScreen extends Screen{
 				invData.add(parentItem);
 				invoicePanel.setData(invData);
 			} else{
+				ErrorLogger.getInstance().logMessage("ScreenController.UPDATE_EDIT:" + itemName);
 				ErrorLogger.getInstance().TODO();
 //				addNewInvoice();
 			}
@@ -402,10 +407,20 @@ public class CustomerScreen extends Screen{
 			Invoice inv = (Invoice) invoicePanel.getSelectedItem();
 			displayPayments(customer, inv);
 		}
+		break;
 		
 		
+		case ScreenController.BUTTON_F11:
+		{
+			custAddPanel.setVisible(!custAddPanel.isVisible());
+			detailPanel.setVisible(!detailPanel.isVisible());
+			invoicePanel.grabFocus();
+		}
+		break;
+			
+			
 		case ScreenController.BUTTON_DISPLAY_INVOICE:
-		{		
+		{
 			long invoiceNumber = invoicePanel.getSelectedItemID();
 			
 			int format = HtmlReportDialog.LONG_FORMAT;

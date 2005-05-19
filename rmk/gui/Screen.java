@@ -112,6 +112,11 @@ abstract class Screen
 		KeyStroke kF7 = KeyStroke
 		.getKeyStroke(java.awt.event.KeyEvent.VK_F7, 0);
 		registerKeyboardAction(screen, "F7", kF7,
+				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);	
+		
+		KeyStroke kF11 = KeyStroke
+		.getKeyStroke(java.awt.event.KeyEvent.VK_F11, 0);
+		registerKeyboardAction(screen, "F11", kF11,
 				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);    	
     }
     
@@ -137,6 +142,8 @@ abstract class Screen
 				buttonPress(index,0);
 			}
 		}
+		index += ScreenController.BUTTON_F1 - 1;
+		buttonPress(index,0);		
 		/*
 		 * "CUSTOMERDETAILS", kF5
 		 * "INVOICEDETAILS", kF6

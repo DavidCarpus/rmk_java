@@ -46,6 +46,8 @@ public class ScreenController {
 	public static final int BUTTON_DISPLAY_INVOICE=7;
 	public static final int BUTTON_DISPLAY_ACK_RPT=8;
 	public static final int BUTTON_SHIP=9;
+	public static final int BUTTON_CUSTOMER_MERGE=10;
+	public static final int BUTTON_QUICK_DEALER_INVOICE=11;
 	
 	
 	public static final int BUTTON_F1=101;
@@ -164,7 +166,7 @@ public class ScreenController {
 	}
 
 	public void displayPartsList() {
-		ErrorLogger.getInstance().logDebug("", true);
+		ErrorLogger.getInstance().logDebug("", false);
 		try {
 			PartsScreen screen = new PartsScreen();
 			Desktop.getInstance().add(screen);
@@ -193,7 +195,7 @@ public class ScreenController {
 	}
 
 	public void displayCustomerList(Vector customerLst) {
-		ErrorLogger.getInstance().logDebug("", true);
+		ErrorLogger.getInstance().logDebug("", false);
 		try {
 			CustomerSelectionScreen screen = new CustomerSelectionScreen();
 			Desktop.getInstance().add(screen);
@@ -295,7 +297,7 @@ public class ScreenController {
 	}
 
 	public void newCustomer() {
-		ErrorLogger.getInstance().logDebug("", true);
+		ErrorLogger.getInstance().logDebug("", false);
 		try {
 			CustomerScreen screen = new CustomerScreen();
 			Desktop.getInstance().add(screen);
@@ -316,7 +318,7 @@ public class ScreenController {
 
 			String title = "Invoice Payments : ";
 			if (invoice != null) {
-				ErrorLogger.getInstance().logDebug("" + invoice, true);
+				ErrorLogger.getInstance().logDebug("" + invoice, false);
 				title += invoice.getInvoice();
 			} else {
 				ErrorLogger.getInstance().logDebug("No Invoice?", false);
@@ -348,7 +350,7 @@ public class ScreenController {
 	
 	
 	public void invoiceSearch() {
-		ErrorLogger.getInstance().logDebug("", true);
+		ErrorLogger.getInstance().logDebug("", false);
 
 		try {
 			InvoiceSearchScreen screen = new InvoiceSearchScreen();
@@ -365,7 +367,7 @@ public class ScreenController {
 
 	public rmk.gui.IScreen getInvoiceScreen(
 			rmk.database.dbobjects.Invoice invoice) {
-		ErrorLogger.getInstance().logDebug("" + invoice, true);
+		ErrorLogger.getInstance().logDebug("" + invoice, false);
 
 		rmk.gui.IScreen screen;
 		String title = "";
@@ -395,7 +397,7 @@ public class ScreenController {
 	
 	public rmk.gui.IScreen getPaymentsScreen(
 			rmk.database.dbobjects.Invoice invoice) {
-		ErrorLogger.getInstance().logDebug("" + invoice, true);
+		ErrorLogger.getInstance().logDebug("" + invoice, false);
 
 		rmk.gui.IScreen screen;
 		String title = "";
@@ -404,7 +406,7 @@ public class ScreenController {
 	}
 
 	public void displayPreferencesScreen() {
-		ErrorLogger.getInstance().logDebug("", true);
+		ErrorLogger.getInstance().logDebug("", false);
 		try {
 			PreferencesScreen screen = new PreferencesScreen();
 			screen.setTitle("Preferences");

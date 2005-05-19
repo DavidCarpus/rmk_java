@@ -115,6 +115,7 @@ implements ActionListener{
 			buttonBar.enableButton(0, true);
 		}
 		setVisible(true);
+		selectLast();
 	}
 	
 	public void setParent(IScreen screen){

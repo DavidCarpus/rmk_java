@@ -1,6 +1,7 @@
 package rmk.gui.ScreenComponents;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.border.EtchedBorder;
@@ -192,10 +193,18 @@ public class CustomerInfoPanel extends carpus.gui.DataEntryPanel{
 	}
 	//--------------------------------------------------------
 	public double getDiscount(){
-		double newDiscount = Double.parseDouble(txtFields[FIELD_DISCOUNT].getValue());
-		if(newDiscount < 1) 
-			newDiscount *= 100;
-		return newDiscount;
+		try{
+			double newDiscount = Double.parseDouble(txtFields[FIELD_DISCOUNT].getValue());
+			if(newDiscount < 1) 
+				newDiscount *= 100;
+			return newDiscount;
+		} catch (Exception e) {
+			double oldDisc = customer.getDiscount();
+			String errMsg = "Invalid Customer Discount Entered:" + txtFields[FIELD_DISCOUNT].getValue() + "\nReverting to previous Discount:" + oldDisc;
+            JOptionPane.showMessageDialog(this, errMsg, "Invalid Data" , JOptionPane.ERROR_MESSAGE);
+			ErrorLogger.getInstance().logError(errMsg, e);
+			return customer.getDiscount();
+		}
 	}
 	//--------------------------------------------------------
 //	public void setData(rmk.gui.DBGuiModel model){
@@ -211,6 +220,7 @@ public class CustomerInfoPanel extends carpus.gui.DataEntryPanel{
 	//--------------------------------------------------------
 	public void setData(carpus.database.DBObject data){
 		customer = (Customer) data;
+		setPrimaryDataItem(customer);
 		setEdited(false);
 		if(customer == null) return;
 		

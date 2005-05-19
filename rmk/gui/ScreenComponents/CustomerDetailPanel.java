@@ -150,7 +150,7 @@ public class CustomerDetailPanel
 
 	ActionEvent event=null;
 
-  	if(command.equals("EDIT MEMO") || command.equals("ADD MEMO")){
+  	if(command.equals("EDIT MEMO") || command.equals("ADD MEMO") || command.equals("MEMO")){
 	    if(currentMemo == null) currentMemo = "";
 	    String text = rmk.gui.Dialogs.getEditNote(currentMemo, "Notes", rmk.gui.Dialogs.MAX_LEN_USER_NOTES, true);
 	    if(text == null) return; // Canceled, NO change	    
@@ -162,7 +162,7 @@ public class CustomerDetailPanel
 	    parentScreen.updateOccured(customer,ScreenController.UPDATE_EDIT, customer);
 	    return;
 	    //----------------------------------------------------------
-  	}else if(command.equals("EDIT BLADELIST") || command.equals("ADD BLADELIST")){
+  	}else if(command.equals("EDIT BLADELIST") || command.equals("ADD BLADELIST") || command.equals("BLADELIST")){
 	    if(currentBladeList == null) currentBladeList = "";
 	    String text = rmk.gui.Dialogs.getEditNote(currentBladeList, "BladeList", rmk.gui.Dialogs.MAX_LEN_BLADELIST_NOTES, true);
 	    if(text == null) return; // NO change
@@ -199,10 +199,12 @@ public class CustomerDetailPanel
 
 //    public void setData(rmk.gui.DBGuiModel model){
     public void setData(Customer customer){
-	if(customer == null)
-	    ((LabeledTextField)txtFields[FIELD_TERMS]).setValue("1");
-	else 
-		this.customer = customer;
+    	setDataFields((carpus.database.DBObject)customer);
+    	setPrimaryDataItem(customer);
+//	if(customer == null)
+//	    ((LabeledTextField)txtFields[FIELD_TERMS]).setValue("1");
+//	else 
+//		this.customer = customer;
 //	else
 //	    setData(customer);
     }
@@ -272,15 +274,7 @@ public class CustomerDetailPanel
 	return customer;
     }
     //========================================================
-    private void setData(carpus.database.DBObject data){
-	if(model == null){
-	    errLog.logError(
-			    this.getClass().getName() + ":" +
-			    "void setData(DBObject data)" + ":\n" +
-			    "Model Missing.\n",
-			    new Exception("Design Error")
-						      );
-	}
+    private void setDataFields(carpus.database.DBObject data){
 	customer = (Customer) data;
 	if(customer == null){
 	    errLog.logError(this.getClass().getName() + ":" + "void setData(DBObject data)" + ":\n" +

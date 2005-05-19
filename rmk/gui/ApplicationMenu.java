@@ -88,8 +88,8 @@ implements ActionListener
 
         menuItem = new JMenuItem("Query Invoices");
         menuItem.setMnemonic(KeyEvent.VK_R);
-        menuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_V, ActionEvent.ALT_MASK));
+//        menuItem.setAccelerator(KeyStroke.getKeyStroke(
+//                KeyEvent.VK_V, ActionEvent.ALT_MASK));
         menuItem.setActionCommand("INVOICE_SEARCH");
         menuItem.addActionListener(this);
         menu1.add(menuItem); 

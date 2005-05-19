@@ -37,6 +37,7 @@ public class Dialogs {
     public static final int MAX_LEN_BLADELIST_NOTES = 30;
 
     public static final int MAX_LEN_INVOICE_NOTES = 90;
+    static final String ERROR_SEPERATOR="\n========================\n" ;
 
     static Dialogs instance = new Dialogs();
 
@@ -861,6 +862,13 @@ public class Dialogs {
             return null;
         }
     }
+    static void getAndLogAnErrorReport(){    	
+	    String text = getEditNote("", "Error Message", rmk.gui.Dialogs.MAX_LEN_USER_NOTES, true);
+        if(text == null || text.length()==0) return;
+        text = ERROR_SEPERATOR + text + ERROR_SEPERATOR;
+        ErrorLogger.getInstance().logMessage(text);
+    }
+    
     //--------------------------------------------------------------------------------    
     static Vector generalSearch() {
         Vector results = new Vector();

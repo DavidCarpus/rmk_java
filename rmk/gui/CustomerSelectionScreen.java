@@ -102,6 +102,26 @@ public class CustomerSelectionScreen extends Screen{
 			rmk.ScreenController.getInstance().displayCustomer(id);
 		}
 		break;
+		case ScreenController.BUTTON_ADD:
+		{
+			rmk.ScreenController.getInstance().newCustomer();
+		}
+		break;
+		case ScreenController.BUTTON_CUSTOMER_MERGE:
+		{
+			Dialogs.mergeIntoCustomer(id);
+		}
+		break;
+		case ScreenController.BUTTON_QUICK_DEALER_INVOICE:
+		{
+			try {
+				Dialogs.generateBlankDealerInvoice(id);
+			} catch (Exception err) {
+				ErrorLogger.getInstance().logError("Generating blank dealer invoice", err);
+			}
+		}
+		break;
+
 		default:
 	       	ErrorLogger.getInstance().logButton(button, id);
 		break;

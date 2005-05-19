@@ -12,11 +12,9 @@ import java.util.*;
 import javax.swing.table.TableColumn;
 import javax.swing.border.EtchedBorder;
 
-
 import rmk.ErrorLogger;
 import rmk.ScreenController;
 import rmk.database.dbobjects.Customer;
-import rmk.gui.Dialogs;
 
 
 public class CustomerListPanel 
@@ -106,17 +104,20 @@ public class CustomerListPanel
     	ActionEvent event=null;
     	
     	if(command.equals("CUSTOMERDETAILS")){
-    		event = new ActionEvent(this,1,command);
-    	} else if(command.equals("CANCEL")){
-    		event = new ActionEvent(this,1,command);
+    		parentScreen.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int) getSelectedItemID());
+    		return;
     	} else if(command.equals("MERGE")){
-    		event = new ActionEvent(this,1,command);
+    		parentScreen.buttonPress(ScreenController.BUTTON_CUSTOMER_MERGE, (int) getSelectedItemID());
+    		return;
     	} else if(command.equalsIgnoreCase("QuickDealer")){
-    		try {
-    			Dialogs.generateBlankDealerInvoice(getSelectedItemID());
-    		} catch (Exception err) {
-    			// TODO: handle exception
-    		}
+    		parentScreen.buttonPress(ScreenController.BUTTON_QUICK_DEALER_INVOICE, (int) getSelectedItemID());
+    		return;
+    		
+//    		try {
+//    			Dialogs.generateBlankDealerInvoice(getSelectedItemID());
+//    		} catch (Exception err) {
+//    			// TODO: handle exception
+//    		}
     	} else {
     		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "?");
     	}

@@ -185,17 +185,17 @@ public class InvoicePaymentsScreen extends Screen {
                 return; // valid payment was not entered
             }
             
-            Vector existingPayments = sys.financialInfo
-                    .getInvoicePayments(invoiceNum);
+//            Vector existingPayments = sys.financialInfo
+//                    .getInvoicePayments(invoiceNum);
             
-            if (existingPayments == null) // no payments before this one
-                    existingPayments = new Vector();
+            if (paymentList == null) // no payments before this one
+            	paymentList = new Vector();
             if(payment.getVCODE() != null && payment.getVCODE().equals("000"))
                 payment.setVCODE("");
-            if (!existingPayments.contains(payment))
-                    existingPayments.add(payment);
+            if (!paymentList.contains(payment))
+            	paymentList.add(payment);
             // save it and update dependent screens
-            existingPayments = sys.invoiceInfo.savePayments(existingPayments); 
+            paymentList = sys.invoiceInfo.savePayments(paymentList); 
             // update cust CC# info IF it's a CC
             if (rmk.database.FinancialInfo.isValidCCNumber(payment
                     .getCheckNumber())) {
@@ -206,9 +206,12 @@ public class InvoicePaymentsScreen extends Screen {
             }
 
 //            model.setPaymentsData(existingPayments); // update model
-            invoicePaymentsPnl.setData(existingPayments);
+            invoice.setPayments(paymentList);
+            invoicePaymentsPnl.setData(invoice,paymentList);
             invoiceDetailPnl.setData(this.invoice);
+            pack();
             rmk.Processing.updateScreens_Shipping(invoice);
+            
         }
     }
 

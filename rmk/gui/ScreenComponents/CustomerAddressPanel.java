@@ -138,6 +138,7 @@ public class CustomerAddressPanel extends carpus.gui.DataEntryPanel{
     
 	public void setData(Address address) {
 		this.address = address;
+		setPrimaryDataItem(address);
 //		Address address = (Address) data;
 		if (address == null) {
 			errorLog.logError(

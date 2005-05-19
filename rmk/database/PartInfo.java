@@ -138,16 +138,19 @@ public class PartInfo {
 	public int getPartIDFromPartialCode(String partCode) {
 		getParts();
 		partCode = partCode.trim();
-		int match=0;
+		String match="";
+		int matchID=0;
 		for (Enumeration enum = parts.elements(); enum.hasMoreElements();) {
 			Parts part = (Parts) enum.nextElement();
-			if (part.getPartCode().startsWith(partCode) && part.isActive()){
-				if(match != 0) 
+			String realPartCode = part.getPartCode();
+			if (realPartCode.startsWith(partCode) && part.isActive()){
+				if(match.length() > 0) 
 					return 0; // if multiple matches, fail
-				match = (int) part.getPartID();
+				match = realPartCode;
+				matchID=(int) part.getPartID();
 			}
 		}
-		return match;
+		return matchID;
 	}
 	
 	//==========================================================
