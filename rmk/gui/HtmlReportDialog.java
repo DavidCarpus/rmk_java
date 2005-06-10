@@ -167,7 +167,8 @@ public class HtmlReportDialog extends JDialog implements ActionListener{
     //-----------------------------------------------------------------------
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand().toUpperCase().trim();
-        ErrorLogger.getInstance().logDebugCommand(command);
+		ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction() + ":" + command, false);
+//        ErrorLogger.getInstance().logDebugCommand(command);
 
         if (command.equals("CANCEL")) { //cancel
             this.setVisible(false);

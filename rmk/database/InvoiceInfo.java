@@ -389,17 +389,22 @@ public class InvoiceInfo {
 
 	//==========================================================
 	public Vector getPendingInvoices(Customer customer) {
-		Vector results = new Vector();
 		Vector invoices = getCustomerInvoices(customer);
+		return getNonShippedInvoices(invoices);
+	}
 
-		for (int i = 0; i < invoices.size(); i++) {
-			Invoice item = (Invoice) invoices.get(i);
+	public Vector getNonShippedInvoices(Vector allInvoices){
+		Vector results = new Vector();
+//		Vector invoices = getCustomerInvoices(customer);
+
+		for (int i = 0; i < allInvoices.size(); i++) {
+			Invoice item = (Invoice) allInvoices.get(i);
 			if (item.getDateShipped() == null)
 				results.add(item);
 		}
 		return results;
 	}
-
+	
 	public Vector getInvoicesByDate(String dateField, GregorianCalendar start,
 			GregorianCalendar end) {
 		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + dateField + ":"
@@ -489,11 +494,17 @@ public class InvoiceInfo {
 	//      }
 	//==========================================================
 	public Vector getLastShippedInvoices(Customer customer, int cnt) {
-		Vector results = new Vector();
 		Vector invoices = getCustomerInvoices(customer);
-
-		if (invoices != null) {
-			Object[] lst = getShippedInvoices(customer).toArray();
+		
+		Vector shippedInvoices = getShippedInvoices(invoices);
+		return getLastShippedInvoices(shippedInvoices, cnt);
+	}
+	
+	public Vector getLastShippedInvoices(Vector shippedInvoices, int cnt) {
+		Vector results = new Vector();
+		
+		if (shippedInvoices != null) {
+			Object[] lst = shippedInvoices.toArray();
 			java.util.Arrays.sort(lst, new rmk.comparators.InvoiceComparator());
 			if (cnt > lst.length)
 				cnt = lst.length;
@@ -504,18 +515,29 @@ public class InvoiceInfo {
 		}
 		return results;
 	}
-
+	
+	
+	public Vector getShippedInvoices(Vector allInvoices){
+		Vector results = new Vector();
+		
+		if (allInvoices != null) {
+			for (int i = 0; i < allInvoices.size(); i++) {
+				Invoice item = (Invoice) allInvoices.get(i);
+				if (item.getDateShipped() != null)
+					results.add(item);
+			}
+		}
+		return results;
+	}
+	
 	//==========================================================
 	public Vector getInitialInvoices(Customer customer) {
 		Vector results = null;
-		//  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+
-		// "getInitialInvoices");
 
-		//  	if(customerInvoices == null ||
-		// ((Invoice)customerInvoices.get(0)).getCustomerID() != customerID){
-		results = getLastShippedInvoices(customer, 2);
-		results.addAll(getPendingInvoices(customer));
-		//  	}
+		Vector allInvoices = getCustomerInvoices(customer);
+		results = getLastShippedInvoices(allInvoices, 2);
+		results.addAll(getNonShippedInvoices(allInvoices));
+		
 		return results;
 	}
 

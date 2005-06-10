@@ -58,7 +58,11 @@ public class InvoiceItemFeatureEntryPanel
     	
 		InvoiceEntryAdditions newFeature = new InvoiceEntryAdditions(0);
 		
-		Parts part = DataModel.getInstance().partInfo.getPartFromCode(enteredCode);		
+		Parts part = DataModel.getInstance().partInfo.getPartFromCode(enteredCode);
+		if(part.isBladeItem()){
+			
+		}
+			
 		newFeature.setPartID(part.getPartID());
 		if(!enteredCode.toUpperCase().equals(enteredCode)){ // lower case, set price to 0(zero)
 			newFeature.setPrice(0);

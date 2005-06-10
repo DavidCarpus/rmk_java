@@ -8,7 +8,6 @@ import rmk.ScreenController;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
-import rmk.gui.IScreen;
 
 import java.util.*;
 

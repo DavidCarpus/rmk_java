@@ -7,7 +7,6 @@ import rmk.ErrorLogger;
 import rmk.ScreenController;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.Customer;
-import rmk.gui.IScreen;
 
 import java.util.*;
 import javax.swing.table.TableColumn;

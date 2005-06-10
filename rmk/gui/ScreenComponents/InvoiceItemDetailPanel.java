@@ -10,6 +10,7 @@ import rmk.database.dbobjects.DBObject;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
+import rmk.database.dbobjects.Parts;
 
 import java.text.NumberFormat;
 import java.util.Vector;
@@ -160,13 +161,18 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 			String enteredFeature = command.substring("ENTEREDNEWENTRY"
 					.length() + 1);
 
-			long partID = rmk.DataModel.getInstance().partInfo
-					.getPartIDFromCode(enteredFeature);
+			Parts part = rmk.DataModel.getInstance().partInfo.getPartFromCode(enteredFeature);
+			long partID = (part != null? part.getPartID():0);
 			if (partID <= 0) {
 				JOptionPane.showMessageDialog(null, "Invalid Part Code\n"
 						+ enteredFeature, "Invalid Entry",
 						JOptionPane.WARNING_MESSAGE);
-				return;
+				return;		
+			} else if(part.isBladeItem()){
+				JOptionPane.showMessageDialog(null, "Invalid Part Code\nModel #, not feature\n"
+						+ enteredFeature, "Invalid Entry",
+						JOptionPane.WARNING_MESSAGE);
+				return;		
 			} else {
 				InvoiceEntryAdditions feature = new InvoiceEntryAdditions(0);
 				feature.setPartID(partID);
@@ -358,6 +364,7 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 		txtFields[FIELD_DISCOUNT].setValue("" + discountPercentage);
 		comments.setText("");
 		selectionPanel.blankOutFeatures();
+//		selectionPanel.clearFeatures();
 	}
 	public void setPricingYear(int year){
 		entryPanel.setPricingYear(year);

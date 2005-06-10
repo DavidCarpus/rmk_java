@@ -11,7 +11,6 @@ import javax.swing.border.EtchedBorder;
 
 import rmk.ErrorLogger;
 import rmk.ScreenController;
-import rmk.database.dbobjects.Invoice;
 import rmk.gui.IScreen;
 
 import carpus.database.DBObject;

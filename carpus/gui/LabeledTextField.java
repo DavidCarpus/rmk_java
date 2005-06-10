@@ -62,9 +62,5 @@ public class LabeledTextField extends JPanel {
         this.field.addKeyListener(listener);
     }
 
-    //========================================================
-    public static void main(String args[]) throws Exception {
-        rmk.gui.Application.main(args);
-    }
 }
 

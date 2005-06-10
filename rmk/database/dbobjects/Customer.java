@@ -200,7 +200,7 @@ public class Customer extends DBObject{
 		boolean found=false;
 		for(Enumeration enum = invoices.elements(); enum.hasMoreElements();){
 			Invoice inv = (Invoice) enum.nextElement();
-			if(inv.getInvoice() == inv.getInvoice()){
+			if(inv.getInvoice() == invoice.getInvoice()){
 				invoices.remove(inv);
 				invoices.add(invoice);
 				found=true;

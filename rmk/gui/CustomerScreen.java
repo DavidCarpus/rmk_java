@@ -345,6 +345,10 @@ public class CustomerScreen extends Screen{
 					}
 					currInv.setParent(customer);
 				}
+				Vector allInvoices = customer.getInvoices();
+				invData = sys.invoiceInfo.getLastShippedInvoices(allInvoices, 2);
+				invData.addAll(sys.invoiceInfo.getNonShippedInvoices(allInvoices));
+				
 				invData.add(parentItem);
 				invoicePanel.setData(invData);
 			} else{

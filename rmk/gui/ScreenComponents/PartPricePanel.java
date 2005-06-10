@@ -22,7 +22,7 @@ implements ActionListener
 {
 	Vector listeners=null;
 	JComponent[] txtFields = new JComponent[1];
-	JTextField[] pastPrices = new JTextField[rmk.database.PartPriceTable.getMaxYear()-rmk.database.PartPriceTable.getMinYear()+1];
+	JTextField[] pastPrices = new JTextField[rmk.database.PartPriceTable.getMaxPriceYear()-rmk.database.PartPriceTable.getMinYear()+1];
 	JComboBox years = new JComboBox();
 	JButton saveButton = new JButton("Update Price");
 	int startYear;
@@ -44,7 +44,7 @@ implements ActionListener
 		
 		add(years);
 		startYear = rmk.database.PartPriceTable.getMinYear();
-		endYear = rmk.database.PartPriceTable.getMaxYear();
+		endYear = rmk.database.PartPriceTable.getMaxPriceYear();
 		for(int year = endYear; year >= startYear; year--){
 			years.addItem(""+year);
 		}

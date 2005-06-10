@@ -9,6 +9,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.GregorianCalendar;
@@ -213,12 +214,12 @@ public class InvoiceSearchScreen extends Screen {
 	
 
 	
-	class DatePanel extends DataEntryPanel{
-
+	class DatePanel extends DataEntryPanel implements ActionListener{
+		
 		DatePanel(){
 		    final String labels[] = {"Ordered", "Scheduled", "Shipped"};
 		    this.setLayout(new GridLayout(3,4));
-		    
+			
 			for(int i=0; i<= FIELD_SHIPPED_END/2; i++){
 				JPanel panel = new JPanel();
 				panel.setLayout(new GridLayout(1,2));
@@ -226,10 +227,14 @@ public class InvoiceSearchScreen extends Screen {
 				
 				fields[i] = FormattedTextFields.getDateField();
 				fields[i+1] = FormattedTextFields.getDateField();
-				KeyAdapter ka = new FieldEditCheck("DATE_START:" + i, this);
-				fields[i].addKeyListener(ka);
-				KeyAdapter ka2 = new FieldEditCheck("DATE_END:" + i+1, this);
-				fields[i].addKeyListener(ka2);
+
+				fields[i].addActionListener(this);
+				fields[i+1].addActionListener(this);
+				
+//				KeyAdapter ka = new FieldEditCheck("DATE_START:" + i, this);
+//				fields[i].addKeyListener(ka);
+//				KeyAdapter ka2 = new FieldEditCheck("DATE_END:" + i+1, this);
+//				fields[i].addKeyListener(ka2);
 
 				JLabel label=new JLabel("  " + labels[i] + " >= ");
 				label.setFont(new Font("Serif", Font.BOLD, 14));
@@ -250,7 +255,6 @@ public class InvoiceSearchScreen extends Screen {
 			ErrorLogger.getInstance().TODO();
 //		    notifyListeners(e);
 		}
-		
 
 		class FieldEditCheck extends KeyAdapter{
 		    String msg="";

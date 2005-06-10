@@ -408,6 +408,9 @@ public class Dialogs {
             part = correctedPart;
             if (part == null) {
                 return null;
+            } else{
+            	parts.remove(0);
+            	parts.add(0,part);
             }
         }
         

@@ -128,6 +128,12 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		
 		buttonBar.enableButton(2, (invoiceNumber != 0));
 		buttonBar.enableButton(3, (invoiceNumber != 0));
+		
+		if(editedInvoice){
+			buttonBar.enableButton(2, false); // inv
+			buttonBar.enableButton(3, false); // ack
+		}
+		
 		if (invoiceNumber > 0) {
 			sys.invoiceInfo.logInvoiceAccess(invoice);
 		}
@@ -308,7 +314,10 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		CustomerScreen screen = (CustomerScreen) rmk.ScreenController.getInstance().getCustomerScreen(currInvoice.getCustomerID());
 		
 		if (screen != null) {
-			screen.setData(cust, cust.getCurrentAddressItem(), cust.getInvoices());
+			Vector invoices = sys.invoiceInfo.getLastShippedInvoices(cust.getInvoices(), 2);
+			invoices.addAll(sys.invoiceInfo.getNonShippedInvoices(cust.getInvoices()));
+			cust.setInvoices(invoices);
+			screen.setData(cust, cust.getCurrentAddressItem(),invoices);
 		}		
 	}
 	private void saveEntry(Invoice inv, InvoiceEntries entry) {
@@ -948,6 +957,9 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 						address = new rmk.database.dbobjects.Address(0);
 					
 					customer.setCurrentAddressItem(address);
+					if(customer.getInvoices() == null){
+						customer.setInvoices(new Vector());
+					}
 					((CustomerScreen)screen).setData(customer, customer.getCurrentAddressItem(), customer.getInvoices());
 					screen.bringToFront();
 				} catch (Exception e) {

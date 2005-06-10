@@ -75,9 +75,10 @@ public class ToDoDisplay extends JDialog
 				, "/home/carpus/workspace/rmk/rmk/docs/"  
 				};
 
-		java.net.URL helpURL = null;
+		java.net.URL helpURL = null;		
 		for(int i=0; i< locations.length && ! gotIt; i++){
-			location = locations[i] + "RMKToDo.htm";
+			location = locations[i] + "RecentDone.html";
+//			location = locations[i] + "RMKToDo.htm";
 			try
 			{
 				helpURL = new java.net.URL("file", null, -1, location);

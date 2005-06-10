@@ -29,11 +29,12 @@ public class ScreenController {
 	public static final int LIST_ITEM_SELECTED=6;	
 	public static final int UPDATE_SAVE=7;
 	public static final int ENTER_KEY=8;
+	public static final int CLEAR_FEATURES=9;	
 	
-	public static final int VALIDATION_FAILED=9;
+	public static final int VALIDATION_FAILED=10;
 
 	public static final String[] updateTxt = {"UPDATE_UNKNOWN", "UPDATE_EDIT", "UPDATE_CHANGE", "UPDATE_REMOVE", "UPDATE_ADD", "UPDATE_CANCELED", 
-			"LIST_ITEM_SELECTED", "UPDATE_SAVE", "ENTER_KEY", "VALIDATION_FAILED" };
+			"LIST_ITEM_SELECTED", "UPDATE_SAVE", "CLEAR_FEATURES", "ENTER_KEY", "VALIDATION_FAILED" };
 	
 	
 	public static final int BUTTON_SELECTION_UNKNOWN=0;
@@ -48,6 +49,7 @@ public class ScreenController {
 	public static final int BUTTON_SHIP=9;
 	public static final int BUTTON_CUSTOMER_MERGE=10;
 	public static final int BUTTON_QUICK_DEALER_INVOICE=11;
+	public static final int BUTTON_PARTS_ACTIVE_TOGGLE=12;
 	
 	
 	public static final int BUTTON_F1=101;

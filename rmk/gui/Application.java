@@ -28,9 +28,9 @@ public class Application extends JFrame implements ActionListener {
 	desktop.setFrame(this);
 	JPanel panel = new JPanel();
 
-	toolbar = new BasicToolBar(null, new String[] {"General Search", "Dealers", "Ship", "Parts", "History", "ToDo", "Preferences", "Log an Error"}, 
-			new String[] {"generalsearch", "dealerlist", "ship", "parts", "history", "ToDo", "Preferences", "ERROR"},
-			new String[] {"General Search",	"Dealers", "Ship Invoices", "Part Configuration", "Invoice Access History", "ToDo", "", "ERROR"}
+	toolbar = new BasicToolBar(null, new String[] {"General Search", "Dealers", "Ship", "Parts", "History", "RecentlyDone", "Preferences", "Log an Error"}, 
+			new String[] {"generalsearch", "dealerlist", "ship", "parts", "history", "RecentlyDone", "Preferences", "ERROR"},
+			new String[] {"General Search",	"Dealers", "Ship Invoices", "Part Configuration", "Invoice Access History", "RecentlyDone", "", "ERROR"}
 	);
 	toolbar.setFloatable(false);
 	toolbar.addActionListener(this);
@@ -121,7 +121,7 @@ public class Application extends JFrame implements ActionListener {
     		rmk.ScreenController.getInstance().displayDealerList(sys.customerInfo.getDealers());
     	} else if (command.equals("SHIP")){
     		shipInvoices();
-    	} else if (command.equals("TODO")){
+    	} else if (command.equals("RECENTLYDONE")){
     		Dialogs.displayToDo();
     		//-------------------------------
     	} else if (command.equals("BLADELIST")){

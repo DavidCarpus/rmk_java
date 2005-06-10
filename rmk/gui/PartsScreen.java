@@ -244,6 +244,13 @@ public class PartsScreen extends Screen{
 		}
 		break;
 		
+		case ScreenController.BUTTON_PARTS_ACTIVE_TOGGLE:
+		{
+		    setActive(!active);
+		    buttonBar.setButtonLabel(2, active?"InActive":"Active");
+		}
+		break;
+		
 		default:
 	       	ErrorLogger.getInstance().logButton(button, id);
 		}

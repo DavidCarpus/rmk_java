@@ -26,13 +26,22 @@ public class PartPriceTable{
 	return 2002;
     }
     public static int getMaxYear(){
-	GregorianCalendar now = new GregorianCalendar();
-	now.add(GregorianCalendar.MONTH, Configuration.Config.getMonthsBacklogged());
-	if(now.get(Calendar.MONTH) == 11)
-	    return now.get(Calendar.YEAR) +1;
-	else
-	    return now.get(Calendar.YEAR);
-    }
+    	GregorianCalendar now = new GregorianCalendar();
+    	now.add(GregorianCalendar.MONTH, Configuration.Config.getMonthsBacklogged());
+    	if(now.get(Calendar.MONTH) == 11)
+    	    return now.get(Calendar.YEAR) +1;
+    	else
+    	    return now.get(Calendar.YEAR);
+        }
+        
+    public static int getMaxPriceYear(){
+    	GregorianCalendar now = new GregorianCalendar();
+    	if(now.get(Calendar.MONTH) >= 10)
+    	    return now.get(Calendar.YEAR) +1;
+    	else
+    	    return now.get(Calendar.YEAR);
+        }
+        
 
 
     public PartPrices getPartPriceObject(int year, int partID){

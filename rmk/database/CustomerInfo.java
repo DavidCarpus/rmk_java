@@ -41,6 +41,11 @@ public class CustomerInfo{
 		errors.add("Must have Expiration date for CreditCard Number.");
 	}
 
+	String terms = cust.getTerms();
+	if(terms != null) terms = terms.trim();
+	if(terms == null || terms.length() <=0){
+		errors.add("Terms must be entered");
+	}
 	if(errors.size() == 0) return null;
 	return errors;
     }

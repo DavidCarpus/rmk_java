@@ -299,8 +299,22 @@ public class InvoiceItemScreen extends Screen{
 				ErrorLogger.getInstance().TODO();
 			}
 		}
-		
 		break;
+		
+		case ScreenController.CLEAR_FEATURES:
+		{
+//			InvoiceEntryAdditions feature = (InvoiceEntryAdditions)itemChanged;	
+			if(itemPanel.featureChange()){
+				((JButton)buttonBar.getButton(0)).setEnabled(true);
+				itemPanel.setData(itemChanged);
+				itemPanel.moveBackToFeatureEntry();
+			}else{
+				ErrorLogger.getInstance().TODO();
+			}
+		}
+		break;
+		
+		
 		case ScreenController.UPDATE_EDIT:
 		{
 			if(itemName.indexOf("InvoiceEntryAdditions") > 0){

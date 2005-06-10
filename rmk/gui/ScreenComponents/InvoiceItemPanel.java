@@ -139,6 +139,8 @@ implements ActionListener,  ListSelectionListener
             if(existingFeatures != null && existingFeatures.size() > 0 && !loading){
                 if(rmk.gui.Dialogs.yesConfirm("Clear Features")){
                 	currentKnife.setFeatures(new Vector());
+                	currentKnife.setParent(originalKnife.getParent());
+                	parentScreen.updateOccured(currentKnife,ScreenController.CLEAR_FEATURES, currentKnife);
                 } else{
                 	int year = sys.invoiceInfo.getPricingYear(invoice);
 //                	int year = DataModel.getCurrentYear();
@@ -292,6 +294,8 @@ implements ActionListener,  ListSelectionListener
     	selectListItem(currKnife.getPartID());
     	originalKnife = currKnife;
     	
+    	clearData();
+
     	detailPanel.setData(currKnife);
     	loading = false;
     	setEdited(false);

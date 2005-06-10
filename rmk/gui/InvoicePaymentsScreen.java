@@ -361,7 +361,9 @@ public class InvoicePaymentsScreen extends Screen {
     
     
 	public void buttonPress(int button, int id) {
-		switch(button){
+       	ErrorLogger.getInstance().logButton(button, id);
+
+       	switch(button){
 		//---------------------------------
 		case ScreenController.BUTTON_CANCEL:
 		{
@@ -410,7 +412,7 @@ public class InvoicePaymentsScreen extends Screen {
 				customer = invoice.getParent();
 //				if(customer == null)
 //					customer = sys.customerInfo.getCustomerByID(invoice.getCustomerID());
-				((CustomerScreen)screen).setData(customer);
+				((CustomerScreen)screen).setData(customer, customer.getCurrentAddressItem(), customer.getInvoices());
 				screen.bringToFront();
 			} catch (Exception e) {
 				ErrorLogger.getInstance().logError("Fetching customer:"+invoice.getCustomerID(), e);
@@ -438,9 +440,27 @@ public class InvoicePaymentsScreen extends Screen {
 		}
 		break;
 		// ---------------------------------
-		default:
-	       	ErrorLogger.getInstance().logButton(button, id);
+		case ScreenController.BUTTON_SHIP:
+		{
+			Invoice inv = invoiceDetailPnl.getData();
+			if (inv == null) return;
+			GregorianCalendar shipDate = inv.getDateShipped();
+			if (shipDate == null) { // need to ship
+				shipDate = rmk.gui.Dialogs.getDate("Shipping Date",
+						new GregorianCalendar());
+				rmk.Processing.getInstance().shipInvoice(inv, shipDate);
+			} else {
+				rmk.Processing.getInstance().unShipInvoice(inv);
+			}
 		}
+		break;
+		// ---------------------------------
+		default:
+		{
+			ErrorLogger.getInstance().TODO();
+		}
+		break;
+       	}
 	}
 
 	public Invoice getInvoice() {
