@@ -535,7 +535,7 @@ public class InvoiceInfo {
 		Vector results = null;
 
 		Vector allInvoices = getCustomerInvoices(customer);
-		results = getLastShippedInvoices(allInvoices, 2);
+		results = getLastShippedInvoices(getShippedInvoices(allInvoices), 2);
 		results.addAll(getNonShippedInvoices(allInvoices));
 		
 		return results;

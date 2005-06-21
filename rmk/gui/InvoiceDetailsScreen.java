@@ -362,7 +362,7 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 //		model.setInvoiceItemsData(invEntries); // update model
 		inv.setItems(invEntries); // and invoice
 		
-		updateOccured((DBObject) inv, ScreenController.UPDATE_EDIT, null );
+		updateOccured((DBObject) entry, ScreenController.UPDATE_ADD, inv );
 		//		updatePaymentSummary(inv);
 	}
 	
@@ -834,7 +834,11 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		break;
 
 		default:
+		{
+			System.out.println("Unimplemented:" + changeType);
 			ErrorLogger.getInstance().TODO();
+		}
+		
 		}
 	}
 	

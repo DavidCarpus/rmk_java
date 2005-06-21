@@ -378,7 +378,7 @@ public class CustomerScreen extends Screen{
 		break;
 		default:
 			System.out.println("Unimplemented:" + changeType);
-			ErrorLogger.getInstance().logUpdate(itemChanged, changeType, parentItem);
+			ErrorLogger.getInstance().TODO();
 		}
 		
 	}

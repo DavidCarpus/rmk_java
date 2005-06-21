@@ -83,7 +83,7 @@ public class CustomerInfoPanel extends carpus.gui.DataEntryPanel{
 		c.gridx=0;
 		
 		//  	c.gridwidth=2;
-		field = new LabeledTextField("Last Name ", FormattedTextFields.getNameField("",20));
+		field = new LabeledTextField("Last Name ", FormattedTextFields.getNameField("",25));
 		gridbag.setConstraints(field, c);
 		add(field);
 		txtFields[FIELD_LASTNAME] = field;

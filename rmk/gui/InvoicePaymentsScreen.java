@@ -211,7 +211,6 @@ public class InvoicePaymentsScreen extends Screen {
             invoiceDetailPnl.setData(this.invoice);
             pack();
             rmk.Processing.updateScreens_Shipping(invoice);
-            
         }
     }
 
