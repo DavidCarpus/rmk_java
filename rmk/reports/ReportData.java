@@ -748,8 +748,8 @@ public class ReportData {
     public String[] invoiceComment() {
         String comment = invoice.getComment();
 //        int lines = 1;
-        int width = 30;
-        int maxLines = 3;
+        int width = 40;
+        int maxLines = 2;
 //        if (comment != null) lines = comment.length() / width + 1;
         ArrayList comments = new ArrayList();
 
