@@ -53,6 +53,7 @@ public class PartsListPanel extends carpus.gui.DataListPanel  implements ActionL
 	
 	public void doubleClick(){
 		//		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "selected:" + selectedItem);
+		lastSelectedItem = selectedItem;
 		notifyListeners(new ActionEvent(this,(int)selectedItem,"PartsDetails"));
 	}
 	

@@ -63,6 +63,7 @@ implements ActionListener, FocusListener {
 	 */
 	protected void doubleClick() {
 		parent.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, 0);
+		lastSelectedItem = selectedItem;
 //		actionPerformed(new ActionEvent(this, 1, "InvoiceDetails"));
 	}
 

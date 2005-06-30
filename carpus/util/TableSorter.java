@@ -268,7 +268,12 @@ public class TableSorter extends TableMap {
 
     public Object getValueAt(int aRow, int aColumn) {
         checkModel();
-        return model.getValueAt(indexes[aRow], aColumn);
+        int row;
+		if(model.getRowCount() > aRow && aRow < indexes.length)
+        	row = indexes[aRow];
+        else
+        	row = model.getRowCount();
+        return model.getValueAt(row, aColumn);
     }
 
     public void setValueAt(Object aValue, int aRow, int aColumn) {

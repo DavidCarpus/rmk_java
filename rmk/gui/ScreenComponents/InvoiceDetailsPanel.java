@@ -17,6 +17,7 @@ import carpus.util.DateFunctions;
 import rmk.ErrorLogger;
 import rmk.ScreenController;
 import rmk.database.dbobjects.Invoice;
+import rmk.gui.Dialogs;
 
 public class InvoiceDetailsPanel 
 extends carpus.gui.DataEntryPanel
@@ -513,7 +514,16 @@ implements ActionListener
 //      numField = (JFormattedTextField)((LabeledTextField)txtFields[FIELD_SHIPPINGCOST]).getField();
         String txt = ((LabeledTextField)txtFields[FIELD_SHIPPINGCOST]).getValue();
         if(txt == null || txt.length() == 0)	    txt = "0";
-        invoice.setShippingAmount(Double.parseDouble(txt));
+        double shipAmt=0;
+        try{
+        	shipAmt = Double.parseDouble(txt);
+        }catch (Exception e) {
+        	String msg = "Invalid shipping amount:\n" + txt; 
+            JOptionPane.showMessageDialog(null, msg, "Data Entry Error:",
+                    JOptionPane.ERROR_MESSAGE);
+            return null;
+		}
+    	invoice.setShippingAmount(shipAmt);
         
         invoice.setPONumber(((LabeledTextField)txtFields[FIELD_PONUMBER]).getValue());	
         if(currentNotes != null)

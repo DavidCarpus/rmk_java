@@ -61,6 +61,7 @@ implements ActionListener{
 	//-------------------------------------------
 	public void doubleClick(){
 		actionPerformed(new ActionEvent(this,1,"PaymentDetail"));
+		lastSelectedItem = selectedItem;
 	}
 	//-------------------------------------------
 	public long selectedItem(int row){

@@ -11,6 +11,9 @@ import javax.swing.border.EtchedBorder;
 
 import rmk.ErrorLogger;
 import rmk.ScreenController;
+import rmk.database.dbobjects.HistoryItems;
+import rmk.database.dbobjects.Invoice;
+import rmk.database.dbobjects.InvoiceEntries;
 import rmk.gui.IScreen;
 
 import carpus.database.DBObject;
@@ -30,6 +33,8 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 	JScrollPane scrollPane;
 	
 	protected long selectedItem;
+	
+	protected long lastSelectedItem;
 
 	protected carpus.gui.BasicToolBar buttonBar;
 
@@ -52,7 +57,8 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 					return; //Ignore extra messages.
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 				if (!lsm.isSelectionEmpty()) {
-					selectedItem = selectedItem(lsm.getMinSelectionIndex());
+					int index = lsm.getMinSelectionIndex();
+					selectedItem = selectedItem(index);
 				}
 			}
 		});
@@ -127,6 +133,47 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 
 	protected abstract void doubleClick();
 
+	protected void selectLastSelected(){
+		long searchID = lastSelectedItem;
+		ListSelectionModel rowSM = table.getSelectionModel();
+		long minIndex = rowSM.getMinSelectionIndex();
+		long maxIndex = rowSM.getMaxSelectionIndex();
+//		if (minIndex < 0)
+//			return;
+		int row=0;
+		for(row = 0; row < table.getRowCount(); row++){
+			Object valueAt = table.getValueAt((int) row,0);
+			String type = valueAt.getClass().getName().toUpperCase();
+			if(type.endsWith("HISTORYITEMS")){
+				if(((HistoryItems)valueAt).getInvoice() == searchID){
+					break;
+				}
+			}else if(type.endsWith("INVOICEENTRIES")){
+				if(((InvoiceEntries)valueAt).getInvoiceEntryID() == searchID){
+					break;
+				}
+			}else if(type.endsWith("INVOICE")){
+				if(((Invoice)valueAt).getInvoice() == searchID){
+					break;
+				}
+			}else{
+				ErrorLogger.getInstance().logWarning("Unknown list item type:" + type);
+			}
+		}	
+		final int selectedRow=row; 
+//		rowSM.setSelectionInterval(row,row);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				table.requestFocusInWindow();
+//				ListSelectionModel rowSM = table.getSelectionModel();
+//				rowSM.setSelectionInterval(selectedRow,selectedRow);
+				table.changeSelection(selectedRow, selectedRow, false, false);
+				table.setRowSelectionInterval(selectedRow,selectedRow);
+			}
+		});
+		return;
+	}
+	
 	protected abstract long selectedItem(int row);
 
 	public long getSelectedItemID() {
@@ -184,7 +231,11 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 	//----------------------------------------------------------
 	public void focusGained(FocusEvent e) {
 		//  	System.out.println(this.getClass().getName() + ":"+ "focusGained");
-		selectFirst();
+		if(lastSelectedItem > 0){
+			selectLastSelected();
+		} else {
+			selectFirst();
+		}
 	}
 
 	public void focusLost(FocusEvent e) {

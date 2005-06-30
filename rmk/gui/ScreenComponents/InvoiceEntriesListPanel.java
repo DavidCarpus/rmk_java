@@ -83,16 +83,29 @@ implements ActionListener, FocusListener{
   	add(buttonBar);
     }
     //----------------------------------------------------------
-    public void focusGained(FocusEvent e) {
-        selectLast();
-    }
+//    public void focusGained(FocusEvent e) {
+//        selectLast();
+//        selectLastSelected();
+//    }
     //----------------------------------------------------------
     public void doubleClick(){
 		actionPerformed(new ActionEvent(this,1,"EditInvoiceEntry"));
+		lastSelectedItem = selectedItem;
     }
     public long selectedItem(int row){
-		long val = ((Long)sorter.getValueAt(row,1)).longValue();
-		makeVisible(row+1);
+    	long val =0;
+    	int rows = sorter.getRowCount();
+    	int cols = sorter.getColumnCount();
+    	if(rows < row ){
+    		System.out.println(""+ErrorLogger.getInstance().stkTrace(this.getName()));
+    		row = rows -1;
+    	}
+       	if(rows > row && cols > 1){
+    		val = ((Long)sorter.getValueAt(row,1)).longValue();
+    		makeVisible(row+1);
+    	} else{
+    		ErrorLogger.getInstance().logError("Invalid row to select:", new Exception());
+    	}
 		buttonBar.enableButton(0, true);
 		buttonBar.enableButton(2, true);
 		return val;

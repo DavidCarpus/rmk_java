@@ -890,7 +890,10 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		case ScreenController.BUTTON_SAVE:
 		{
 			currInvoice = invoiceDetailPnl.getData();
-			saveData(currInvoice);
+			if(currInvoice != null)
+				saveData(currInvoice);
+			// else
+			//	data entry error
 		}
 		break;
 		
