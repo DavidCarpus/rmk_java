@@ -171,6 +171,11 @@ public class CustomerDetailPanel
 //	    event = new ActionEvent(this, 1, "CUSTOMER DETAIL CHANGED");
 	    parentScreen.updateOccured(customer,ScreenController.UPDATE_EDIT, customer);
 	    return;
+  	}else if(command.equals("FLAG_CHANGED")){
+	    setEdited(true);
+	    parentScreen.updateOccured(customer,ScreenController.UPDATE_EDIT, customer);
+	    return;
+	    //----------------------------------------------------------
 	    
 	    //----------------------------------------------------------
   	}else if(command.equals("EDIT BLADELIST") || command.equals("ADD BLADELIST")){

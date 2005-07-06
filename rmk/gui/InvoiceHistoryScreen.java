@@ -34,7 +34,7 @@ public class InvoiceHistoryScreen extends Screen {
 		getContentPane().setLayout(new BorderLayout());
 
 		invoiceHistoryListPanel = new InvoiceHistoryListPanel();
-		invoiceHistoryListPanel.setParent(this);
+		invoiceHistoryListPanel.setParentScreen(this);
 		getContentPane().add(invoiceHistoryListPanel);
 		buttonBar = new carpus.gui.BasicToolBar(null, 
 							new String[]{"View", "Cancel"},

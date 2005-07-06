@@ -164,11 +164,12 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 //		rowSM.setSelectionInterval(row,row);
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				int rowToSelect = selectedRow;
 				table.requestFocusInWindow();
 //				ListSelectionModel rowSM = table.getSelectionModel();
 //				rowSM.setSelectionInterval(selectedRow,selectedRow);
-				table.changeSelection(selectedRow, selectedRow, false, false);
-				table.setRowSelectionInterval(selectedRow,selectedRow);
+				table.changeSelection(rowToSelect, rowToSelect, false, false);
+//				table.setRowSelectionInterval(rowToSelect,rowToSelect);
 			}
 		});
 		return;

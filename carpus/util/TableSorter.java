@@ -272,7 +272,7 @@ public class TableSorter extends TableMap {
 		if(model.getRowCount() > aRow && aRow < indexes.length)
         	row = indexes[aRow];
         else
-        	row = model.getRowCount();
+        	row = model.getRowCount()-1;
         return model.getValueAt(row, aColumn);
     }
 

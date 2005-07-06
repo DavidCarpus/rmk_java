@@ -16,7 +16,6 @@ import javax.swing.table.TableColumn;
 import rmk.ErrorLogger;
 import rmk.ScreenController;
 import rmk.database.dbobjects.HistoryItems;
-import rmk.gui.IScreen;
 import carpus.gui.DataListPanel;
 import carpus.gui.DataListPanelTableModel;
 
@@ -28,7 +27,7 @@ extends DataListPanel
 implements ActionListener, FocusListener {
 	Vector invoiceList = new Vector();
 //	DBGuiModel model;
-	IScreen parent = null;
+//	IScreen parent = null;
 	
 	public InvoiceHistoryListPanel() {
 		dataModel = new InvoiceHistoryListTableModel(invoiceList);
@@ -62,7 +61,7 @@ implements ActionListener, FocusListener {
 	 * @see carpus.gui.DataListPanel#doubleClick()
 	 */
 	protected void doubleClick() {
-		parent.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, 0);
+		parentScreen.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, 0);
 		lastSelectedItem = selectedItem;
 //		actionPerformed(new ActionEvent(this, 1, "InvoiceDetails"));
 	}
@@ -98,10 +97,10 @@ implements ActionListener, FocusListener {
 		String command = arg0.getActionCommand().toUpperCase();
 
 		if (command.equals("INVOICEDETAILS") || command.equals("CTRL_ENTERKEY")) {
-			parent.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS,0);
+			parentScreen.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS,0);
 			return;
 		}else if(command.equals("CANCEL")){
-			parent.buttonPress(ScreenController.BUTTON_CANCEL, 0);
+			parentScreen.buttonPress(ScreenController.BUTTON_CANCEL, 0);
 			return;
 			
 			
@@ -111,9 +110,9 @@ implements ActionListener, FocusListener {
         ErrorLogger.getInstance().logDebugCommand(command);
 	}
     
-	public void setParent(IScreen screen){
-		parent = screen;
-	}
+//	public void setParent(IScreen screen){
+//		parent = screen;
+//	}
 }
 //======================================================
 //======================================================

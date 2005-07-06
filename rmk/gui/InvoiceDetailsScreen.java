@@ -430,6 +430,7 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 						updateTitle(newTitle);
 						
 						invoiceEntriesList.selectLast();
+						updateCustomerScreen(currInvoice.getParent(), currInvoice);
 					}
 					// reset info screen sizes
 					invoiceDetailPnl.setVisible(true);
@@ -760,8 +761,13 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 					editedInvoice = changedInvoice.isEdited();
 				}
 				Invoice thisScreensInvoice = invoiceDetailPnl.getData();
-				if(changedInvoice.getInvoice() == thisScreensInvoice.getInvoice())
+				if(changedInvoice.getInvoice() == thisScreensInvoice.getInvoice()){
 					setInvoice(changedInvoice);
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run() {
+							invoiceEntriesList.requestFocusInWindow();
+						}
+					});				}
 			} else if(parentName.indexOf(".Customer") > 0 ){
 				editedCustomer = true;
 				buttonBar.getButton(0).setEnabled(true);
@@ -850,18 +856,6 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		switch(button){
 		case ScreenController.BUTTON_CANCEL:
 			if (invoiceNumber == 0) { // remove 0 invoice from model
-//				java.util.Vector invoices = model.getInvoiceData();				
-//				for (java.util.Enumeration enum = invoices.elements(); enum
-//				.hasMoreElements();) {
-//					Invoice inv = (Invoice) enum.nextElement();
-//					if (inv.getInvoice() == 0) {
-//						ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"
-//								+ "removed Invoice:" + inv);
-//						
-//						invoices.remove(inv);
-//						break;
-//					}
-//				}
 				currInvoice.getParent().getInvoices().remove(currInvoice);
 			}
 			defaultCancelAction();

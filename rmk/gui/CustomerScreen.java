@@ -1,6 +1,7 @@
 package rmk.gui;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
@@ -351,6 +352,11 @@ public class CustomerScreen extends Screen{
 				
 				invData.add(parentItem);
 				invoicePanel.setData(invData);
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						invoicePanel.requestFocusInWindow();
+					}
+				});
 			} else{
 				ErrorLogger.getInstance().logMessage("ScreenController.UPDATE_EDIT:" + itemName);
 				ErrorLogger.getInstance().TODO();

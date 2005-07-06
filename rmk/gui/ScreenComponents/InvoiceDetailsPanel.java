@@ -17,7 +17,6 @@ import carpus.util.DateFunctions;
 import rmk.ErrorLogger;
 import rmk.ScreenController;
 import rmk.database.dbobjects.Invoice;
-import rmk.gui.Dialogs;
 
 public class InvoiceDetailsPanel 
 extends carpus.gui.DataEntryPanel
