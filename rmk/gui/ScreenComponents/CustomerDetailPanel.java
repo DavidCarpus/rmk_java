@@ -134,8 +134,12 @@ public class CustomerDetailPanel
 		flagged.setForeground(Color.RED);
 	    else
 		flagged.setForeground(Color.BLACK);
-	    if(! isEdited())
-		actionPerformed(new ActionEvent(this, 1, "FLAG_CHANGED"));
+	    if(! isEdited()){
+//			actionPerformed(new ActionEvent(this, 1, "FLAG_CHANGED"));
+	    	setEdited(true);
+	    	parentScreen.updateOccured(customer,ScreenController.UPDATE_EDIT, customer);
+	    	return;
+	    }
 	} else{
 	    errLog.logError(this.getClass().getName() + ":" + "void itemStateChanged(ItemEvent e)" + ":\n" +
 			    "unhandled source.\n" + 
