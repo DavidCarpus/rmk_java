@@ -9,7 +9,7 @@ import java.util.*;
 public class BladeList extends BaseReport implements ReportInterface {
     boolean useGreyBars=true;
     boolean grey=false;
-
+    
     static final int OTHER_PAGE_ROWS = 49;
     static final String COMMENT_CONT_INDICATOR = "**VvV**";
 	int listFontHeight = 12;
@@ -18,13 +18,16 @@ public class BladeList extends BaseReport implements ReportInterface {
 	int rowsRendered = 0;
 	int format = 0;
 	ReportDataInvoicesList data;
+	static final int PRINTABLE_PAGE_WIDTH = 500;
+	static final int LAST_COLUMN_START = 345;
+	
 	public BladeList() {
 		super();
-		data = new ReportDataInvoicesList();
+		data = new ReportDataInvoicesList(PRINTABLE_PAGE_WIDTH-LAST_COLUMN_START,listFont);
 	}
 	public BladeList(GregorianCalendar shipDate) throws Exception {
 		super();
-		data = new ReportDataInvoicesList();
+		data = new ReportDataInvoicesList(PRINTABLE_PAGE_WIDTH-LAST_COLUMN_START,listFont);
 		data.setEstimatedShipDatesRange(shipDate, shipDate);
 	}
 	public Invoice getInvoice() {
@@ -190,7 +193,7 @@ public class BladeList extends BaseReport implements ReportInterface {
 		int rowLocation = -(fontHeight + 3);
 		String labels[] = {"Invoice", "Qty", "Model", "Features", "Comments"};
 //		int colLocations[] = {6, 40, 60, 130, 325};
-		int colLocations[] = {6, 40, 60, 130, 345};
+		int colLocations[] = {6, 40, 60, 130, LAST_COLUMN_START};
 		g2.setColor(HIGHLIGHT_COLOR);
 		g2.fill3DRect(1, rowLocation-fontHeight+4, (int)region.width-1, fontHeight+1, false) ;
 		g2.setColor(Color.BLACK);

@@ -21,15 +21,16 @@ public class TaxOrdered
     int rowsRendered=0;
     int format=0;
     ReportDataInvoicesList data;
-
+	static final int PRINTABLE_PAGE_WIDTH = 500;
+	static final int LAST_COLUMN_START = 510;
     public TaxOrdered(){
 	super();
-	data = new ReportDataInvoicesList();
+	data = new ReportDataInvoicesList(PRINTABLE_PAGE_WIDTH-LAST_COLUMN_START,listFont);
     }
 
     public TaxOrdered(GregorianCalendar orderedDate) throws Exception{
 	super();
-	data = new ReportDataInvoicesList();
+	data = new ReportDataInvoicesList(PRINTABLE_PAGE_WIDTH-LAST_COLUMN_START,listFont);
 	data.setOrderedDate(orderedDate);
     }
 
@@ -196,7 +197,7 @@ public class TaxOrdered
         int rowLocation = -(fontHeight + 3);
         String labels[] = { "Invoice", "Ordered",  "NonTaxable", "Taxed-Disc+Ship",
                  "Rate", "Taxes", "State", "Shipped", "Payments"};
-        int colLocations[] = { 8, 50, 110, 170, 250, 295, 350, 410, 470, 510};
+        int colLocations[] = { 8, 50, 110, 170, 250, 295, 350, 410, 470, LAST_COLUMN_START};
         for (int col = 0; col < labels.length; col++) {
             String txt = labels[col];
             int x = colLocations[col] + 5;

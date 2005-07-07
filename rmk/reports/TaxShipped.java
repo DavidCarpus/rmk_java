@@ -19,10 +19,12 @@ import java.util.GregorianCalendar;
  * 
  */
 public class TaxShipped extends TaxOrdered implements ReportInterface {
-
+	static final int PRINTABLE_PAGE_WIDTH = 500;
+	static final int LAST_COLUMN_START = 600;
+	
     public TaxShipped(GregorianCalendar orderedDate) throws Exception{
         super();
-        data = new ReportDataInvoicesList();
+        data = new ReportDataInvoicesList(PRINTABLE_PAGE_WIDTH-LAST_COLUMN_START,listFont);
         data.setFormat(ReportDataInvoicesList.FORMAT_TAX_SHIPPED);
         data.setShippedDate(orderedDate);
     }
@@ -86,7 +88,7 @@ public class TaxShipped extends TaxOrdered implements ReportInterface {
         }
 
         rowLocation += fontHeight;
-        colLocations = new int[]{ 8, 50, 110, 155, 220, 260, 310, 355, 410, 600};
+        colLocations = new int[]{ 8, 50, 110, 155, 220, 260, 310, 355, 410, LAST_COLUMN_START};
         for (int i = startIndex; i < totalDataRows && total < height; i++) {
             total += getRowHeight(fontHeight, i, null);
             String dataRow[] = data.getListRow(i);

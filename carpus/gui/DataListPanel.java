@@ -133,7 +133,7 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 
 	protected abstract void doubleClick();
 
-	protected void selectLastSelected(){
+	public void selectLastSelected(){
 		long searchID = lastSelectedItem;
 		ListSelectionModel rowSM = table.getSelectionModel();
 		long minIndex = rowSM.getMinSelectionIndex();
@@ -161,10 +161,12 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 			}
 		}	
 		final int selectedRow=row; 
+		ErrorLogger.getInstance().logMessage("Will select DataListPanel row:" + selectedRow);
 //		rowSM.setSelectionInterval(row,row);
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				int rowToSelect = selectedRow;
+				ErrorLogger.getInstance().logMessage("Selecting DataListPanel row:" + selectedRow);
 				table.requestFocusInWindow();
 //				ListSelectionModel rowSM = table.getSelectionModel();
 //				rowSM.setSelectionInterval(selectedRow,selectedRow);

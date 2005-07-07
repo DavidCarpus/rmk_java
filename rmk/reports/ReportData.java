@@ -554,7 +554,9 @@ public class ReportData {
         if (customer.getFirstName() != null)
                 txt += customer.getFirstName() + " ";
         if (customer.getLastName() != null)
-                txt += customer.getLastName() + " ";
+            txt += customer.getLastName() + " ";
+        if (customer.getSuffix() != null)
+            txt += customer.getSuffix() + " ";
         rows.add(txt.trim().toUpperCase());
 
         if (address != null) {

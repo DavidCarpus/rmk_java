@@ -89,9 +89,12 @@ implements ActionListener, FocusListener{
 //    }
     //----------------------------------------------------------
     public void doubleClick(){
-		actionPerformed(new ActionEvent(this,1,"EditInvoiceEntry"));
 		lastSelectedItem = selectedItem;
+		ErrorLogger.getInstance().logMessage("selectedItem:" + lastSelectedItem);
+		parentScreen.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int)selectedItem);
+//		actionPerformed(new ActionEvent(this,1,"EditInvoiceEntry"));
     }
+    
     public long selectedItem(int row){
     	long val =0;
     	int rows = sorter.getRowCount();
@@ -125,12 +128,15 @@ implements ActionListener, FocusListener{
 
 
 	if(command.equals("ADDINVOICEENTRY")){
+		lastSelectedItem = selectedItem;
+		ErrorLogger.getInstance().logMessage("selectedItem:" + lastSelectedItem);
 		parentScreen.buttonPress(ScreenController.BUTTON_ADD, 0);
 		return;
 	} else if(command.equals("EDITINVOICEENTRY") || command.equals("CTRL_ENTERKEY")){
 		parentScreen.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int)selectedItem);
 		return;
 	} else if(command.equals("REMOVEINVOICEENTRY")){
+		lastSelectedItem=0;
 		parentScreen.buttonPress(ScreenController.BUTTON_REMOVE, (int)selectedItem);
 		return;
 	} else {

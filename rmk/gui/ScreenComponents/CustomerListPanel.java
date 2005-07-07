@@ -72,6 +72,8 @@ public class CustomerListPanel
 	protected void doubleClick() {
 		parentScreen.buttonPress(ScreenController.BUTTON_SELECTION_DETAILS, (int) selectedItem);
 		lastSelectedItem = selectedItem;
+		ErrorLogger.getInstance().logMessage("selectedItem:" + lastSelectedItem);
+
 //		actionPerformed(new ActionEvent(this, 1, "InvoiceDetails"));
 	}
 	

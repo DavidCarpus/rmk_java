@@ -318,6 +318,7 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 			invoices.addAll(sys.invoiceInfo.getNonShippedInvoices(cust.getInvoices()));
 			cust.setInvoices(invoices);
 			screen.setData(cust, cust.getCurrentAddressItem(),invoices);
+			screen.invoicePanel.selectLastSelected();
 		}		
 	}
 	private void saveEntry(Invoice inv, InvoiceEntries entry) {
@@ -808,10 +809,12 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 		}
 		break;
 		case ScreenController.UPDATE_REMOVE:
-			if(itemName.indexOf("InvoiceEntries") > 0 && parentName.indexOf("Invoice") > 0)
+			if(itemName.indexOf("InvoiceEntries") > 0 && parentName.indexOf("Invoice") > 0){
 				setInvoice((Invoice) parentItem);
-			else
+				invoiceEntriesList.selectLast();
+			}else{
 				ErrorLogger.getInstance().TODO();
+			}
 		break;
 		case ScreenController.UPDATE_ADD:
 			if(itemName.indexOf("InvoiceEntries") > 0)				

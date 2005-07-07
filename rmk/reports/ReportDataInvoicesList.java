@@ -5,6 +5,11 @@ import rmk.DataModel;
 import rmk.ErrorLogger;
 import rmk.database.dbobjects.*;
 
+import java.awt.Canvas;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.text.SimpleDateFormat;
 import java.text.NumberFormat;
 
@@ -26,6 +31,14 @@ public class ReportDataInvoicesList {
 	GregorianCalendar startDate = null;
 	GregorianCalendar endDate = null;
 	int format = 0;
+	int lastColumnWidth=0;
+	Font lastColumnFont;
+	
+	public ReportDataInvoicesList(int width, Font font){
+		this.lastColumnWidth = width;
+		lastColumnFont = font;
+	}
+	
 	public Vector getInvoices() {
 		return invoices;
 	}
@@ -603,7 +616,8 @@ public class ReportDataInvoicesList {
 	int addInvoiceItems(Vector results, Invoice inv) {
 		Object items[] = inv.getItems().toArray();
 		int totalQty=0;
-		int COMMENT_CHARS = 30;
+		int COMMENT_CHARS = 35;
+		
 		Arrays.sort(items, new rmk.comparators.BladeListItems());
 		for (int i = 0; i < items.length; i++) {
 			String info[] = blankInfo(cols);
@@ -663,8 +677,18 @@ public class ReportDataInvoicesList {
 				comment = comment.trim();
 				
 //				if(comment == null) 	comment="";
+				// TODO: Fix Comment length to be variable
+//	            if ((segment.format & BOLD) > 0)  x += 2;
+				comment = comment.trim();
 				
-				if (comment.trim().length() > COMMENT_CHARS) 		
+//				Canvas canvas = new Canvas();
+//				Graphics2D g2 = (Graphics2D)(canvas.getGraphics();
+//				g2.setFont(lastColumnFont);
+//	            FontMetrics metrics = g2.getFontMetrics();
+//	            double txtLen = metrics.charsWidth(comment.toCharArray(), 0,
+//	            		comment.length());
+	            
+				if (comment.length() > COMMENT_CHARS) 		
 					longComment = true;
 
 				if(longComment){
@@ -679,7 +703,9 @@ public class ReportDataInvoicesList {
 					info[4] = comment;
 					results.add(info);
 				}
+				
 			}
+			
 			if(info[4].indexOf("<I>") > 0)
 				ErrorLogger.getInstance().logMessage("Debug");
 		}
@@ -746,35 +772,6 @@ public class ReportDataInvoicesList {
 			if (cust.getBladeList() != null)
 				info[4] = "<B><I>" + cust.getBladeList() + "</I></B>";
 			results.add(info);
-		}
-	}
-	//------------------------------------------------------------------------
-	//------------------------------------------------------------------------
-	//------------------------------------------------------------------------
-	public static void main(String args[]) throws Exception {
-		//  	int fontHeight = 10;
-		rmk.DataModel sys = rmk.DataModel.getInstance();
-		ReportDataInvoicesList blData = new ReportDataInvoicesList();
-		GregorianCalendar date = new java.util.GregorianCalendar(
-				2004, 5, 3);
-		//    	java.util.GregorianCalendar date = new
-		// java.util.GregorianCalendar(2004, 0, 8);
-		blData.setFormat(FORMAT_TAX_ORDERED); // FORMAT_TAX_SHIPPED FORMAT_MINIS
-											  // FORMAT_TAX_ORDERED
-		blData.setEstimatedShipDatesRange(date, null);
-//		blData.setOrderedDate(date);
-		ErrorLogger.getInstance().logMessage("Rows:" + blData.getTotalListRows());
-		// getBladeList getBalanceDue getTaxShipped, getTaxOrdered getMinis
-		Vector data = blData.getTaxOrdered();
-		//  	ErrorLogger.getInstance().logMessage(invoices.size());
-		//  	ErrorLogger.getInstance().logMessage(data.size());
-		for (Enumeration enum = data.elements(); enum.hasMoreElements();) {
-			String info[] = (String[]) enum.nextElement();
-			for (int i = 0; i < info.length; i++) {
-				System.out.print(info[i] + "|");
-				//  		System.out.print(info[i] + ".. ");
-			}
-			System.out.print("\n");
 		}
 	}
 }
