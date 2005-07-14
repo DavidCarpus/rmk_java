@@ -19,7 +19,7 @@ import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
 import rmk.database.dbobjects.Customer;
 
-public class InvoiceDetailsScreen extends Screen implements ActionListener {
+public class InvoiceDetailsScreen extends Screen implements ActionListener, FocusListener {
 	//      ActionListener parentFrame;    
 	rmk.gui.ScreenComponents.CustomerInfoPanel customerPnl;
 	
@@ -510,6 +510,11 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 	
 	//==========================================================
 	public void internalFrameActivated(InternalFrameEvent e) {
+		activate();
+	}
+	
+	void activate(){
+//		ErrorLogger.getInstance().logDebug("Activating.", true);
 		ApplicationMenu.getInstance().pushScreenToTopOfStack(this);
 		
 		Invoice invoice = invoiceDetailPnl.getData();
@@ -531,9 +536,8 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 					lastComment = dispStr;
 				}
 			}
-		}
+		}		
 	}
-	
 	//==========================================================
 	public void actionPerformed(ActionEvent e) {
 		if(!processHotKeys(e)){
@@ -999,6 +1003,21 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener {
 
 	public Invoice getInvoice() {
 		return currInvoice;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
+	 */
+	public void focusGained(FocusEvent arg0) {
+		activate();	
+	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
+	 */
+	public void focusLost(FocusEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

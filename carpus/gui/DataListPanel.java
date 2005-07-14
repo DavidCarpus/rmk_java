@@ -141,8 +141,9 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 //		if (minIndex < 0)
 //			return;
 		int row=0;
+		Object valueAt="";
 		for(row = 0; row < table.getRowCount(); row++){
-			Object valueAt = table.getValueAt((int) row,0);
+			valueAt = table.getValueAt((int) row,0);
 			String type = valueAt.getClass().getName().toUpperCase();
 			if(type.endsWith("HISTORYITEMS")){
 				if(((HistoryItems)valueAt).getInvoice() == searchID){
@@ -161,7 +162,8 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 			}
 		}	
 		final int selectedRow=row; 
-		ErrorLogger.getInstance().logMessage("Will select DataListPanel row:" + selectedRow);
+//		ErrorLogger.getInstance().logMessage("Will select DataListPanel row:" + selectedRow);
+		ErrorLogger.getInstance().logDebug("********* Will select DataListPanel row:" + selectedRow + " " + valueAt, false);
 //		rowSM.setSelectionInterval(row,row);
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {

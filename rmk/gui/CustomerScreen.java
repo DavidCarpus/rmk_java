@@ -16,7 +16,7 @@ import rmk.database.dbobjects.Address;
 import rmk.database.dbobjects.DBObject;
 import rmk.database.dbobjects.Invoice;
 
-public class CustomerScreen extends Screen{
+public class CustomerScreen extends Screen implements FocusListener {
 	static int counter;
 //	ActionListener parentFrame;    
 	rmk.gui.ScreenComponents.CustomerInfoPanel custPanel;
@@ -207,10 +207,17 @@ public class CustomerScreen extends Screen{
 	
 	//==========================================================
 	public void internalFrameActivated(javax.swing.event.InternalFrameEvent e) {
+		activate();
+	}
+	
+	void activate(){
+		ErrorLogger.getInstance().logDebug("Activating.", true);
+
 		int id = (int) ((Customer) custPanel.getData()).getCustomerID();
 		if (id == 0)
 			custPanel.grabFocus();
 		else{
+			invoicePanel.selectLastSelected();
 			if(((Customer) custPanel.getData()).isDealer())
 				invoicePanel.grabFocus();
 			else
@@ -456,6 +463,21 @@ public class CustomerScreen extends Screen{
 	public Customer getCustomer() {
 		customer.setCurrentAddressItem((Address) custAddPanel.getData());
 		return customer;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
+	 */
+	public void focusGained(FocusEvent arg0) {
+		activate();	
+	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
+	 */
+	public void focusLost(FocusEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

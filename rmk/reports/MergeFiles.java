@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.text.NumberFormat;
 import javax.swing.*;
 
-import rmk.DataModel;
 import rmk.ErrorLogger;
 import rmk.database.FinancialInfo;
 import rmk.database.dbobjects.Customer;
@@ -110,7 +109,7 @@ public class MergeFiles{
 	int col=0;
 	results[col++] = ""+inv.getInvoice();	
 	Date estDate = inv.getDateEstimated().getTime();
-	ErrorLogger.getInstance().logMessage("MergeFiles:getDealerRow:"+DataModel.db.dateStr(inv.getDateEstimated()));
+//	ErrorLogger.getInstance().logMessage("MergeFiles:getDealerRow:"+DataModel.db.dateStr(inv.getDateEstimated()));
 	results[col++] = dateFormatter.format(estDate);
 
 	try {
@@ -263,6 +262,11 @@ public class MergeFiles{
 						      "Unable to save data.\n" + e,
 						      e
 						      );
+	    if((""+e).indexOf("is being used by another process") > 0){
+	    	String errMsg = "Unable to save File:"+location+"\n File is probably open and must be closed to re-create.";
+	    	JOptionPane.showMessageDialog(null, errMsg, "File Access Error",
+                    JOptionPane.ERROR_MESSAGE);
+	    }
 	    return false;
 	}
     }
