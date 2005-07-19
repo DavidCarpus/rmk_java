@@ -71,6 +71,10 @@ public class CustomerScreen extends Screen implements FocusListener {
 		return results;
 	}
 	
+	public void initialSelection(){
+		invoicePanel.initialSelection();
+	}
+	
 	public void setData(Customer customer, Address address, Vector invList) {
 		this.customer = customer;
 

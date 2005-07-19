@@ -11,6 +11,7 @@ import rmk.gui.*;
 
 import java.awt.*;
 
+
 /**
  * Describe class <code>ScreenController</code> here.
  * 
@@ -150,13 +151,20 @@ public class ScreenController {
 				address = new rmk.database.dbobjects.Address(0);
 			
 			Vector invoice = new Vector();
-			CustomerScreen screen = new CustomerScreen();
+			final CustomerScreen screen = new CustomerScreen();
 			
 			String title = CustomerScreen.getCustomerScreenTitle(customerID);
 			screen.setTitle(title);
 			Desktop.getInstance().add(screen);
 			
 			screen.setData(customer, address, sys.invoiceInfo.getInitialInvoices(customer));
+			screen.initialSelection();
+//			SwingUtilities.invokeLater(new Runnable() {
+//				public void run() {
+//					screen.initialSelection();
+//				}
+//			});			
+			
 			select(screen);
 
 			Desktop.getInstance().repaint();

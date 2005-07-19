@@ -59,6 +59,7 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 				if (!lsm.isSelectionEmpty()) {
 					int index = lsm.getMinSelectionIndex();
 					selectedItem = selectedItem(index);
+					setCellVisible(table, index, index);
 				}
 			}
 		});
@@ -110,6 +111,10 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 		add(scrollPane);
 	}
 
+	public void initialSelection(){
+		lastSelectedItem = 0;
+	}
+	
 	protected void setColumnFormats() {
 		TableColumn column = null;
 		int colCnt = dataModel.getColumnCount();
@@ -158,24 +163,32 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 					break;
 				}
 			}else{
-				ErrorLogger.getInstance().logWarning("Unknown list item type:" + type);
+				ErrorLogger.getInstance().logDebug("Unknown list item type:" + type, true);
+//				ErrorLogger.getInstance().logWarning("Unknown list item type:" + type);
 			}
 		}	
-		final int selectedRow=row; 
-//		ErrorLogger.getInstance().logMessage("Will select DataListPanel row:" + selectedRow);
-		ErrorLogger.getInstance().logDebug("********* Will select DataListPanel row:" + selectedRow + " " + valueAt, false);
-//		rowSM.setSelectionInterval(row,row);
-		SwingUtilities.invokeLater(new Runnable() {
+		if(row == table.getRowCount()){ // not found, select first one
+			ErrorLogger.getInstance().logDebug("********* Will select DataListPanel row:" + 0 + " " + valueAt, false);
+			SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				int rowToSelect = 0;
+				ErrorLogger.getInstance().logMessage("Selecting DataListPanel row:" + 0);
+				table.requestFocusInWindow();
+				table.changeSelection(rowToSelect, rowToSelect, false, false);
+			}
+		});
+		}else{
+			final int selectedRow=row;
+			ErrorLogger.getInstance().logDebug("********* Will select DataListPanel row:" + selectedRow + " " + valueAt, false);
+			SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				int rowToSelect = selectedRow;
 				ErrorLogger.getInstance().logMessage("Selecting DataListPanel row:" + selectedRow);
 				table.requestFocusInWindow();
-//				ListSelectionModel rowSM = table.getSelectionModel();
-//				rowSM.setSelectionInterval(selectedRow,selectedRow);
 				table.changeSelection(rowToSelect, rowToSelect, false, false);
-//				table.setRowSelectionInterval(rowToSelect,rowToSelect);
 			}
 		});
+		}
 		return;
 	}
 	
