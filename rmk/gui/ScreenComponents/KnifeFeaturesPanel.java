@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import rmk.ErrorLogger;
 import rmk.ScreenController;
+import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.Parts;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
 import rmk.gui.IScreen;
@@ -24,24 +25,26 @@ implements ActionListener
     DefaultListModel options[] = new DefaultListModel[sys.partInfo.mainPartTypeCnt()];
     Vector listeners;
     IScreen parent;
+    InvoiceEntries entry=null;
+	JList fields[] = new JList[sys.partInfo.mainPartTypeCnt()];
     
 //-----------------------------------------------------------------
     public KnifeFeaturesPanel(){
 	setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
 
-	JList fields[] = new JList[sys.partInfo.mainPartTypeCnt()];
 	for(int fieldIndex=1; fieldIndex < fields.length; fieldIndex++){
 	    options[fieldIndex] = new DefaultListModel();
 	    fields[fieldIndex] = new JList(options[fieldIndex]);
 	    fields[fieldIndex].setVisibleRowCount(6);
-	    SingleSelectionModel selectionModel = new SingleSelectionModel(fieldIndex) {
-		    public void updateSingleSelection(int oldIndex, int newIndex) {
-			ListObject item = ((ListObject)options[id].get(newIndex));
-			InvoiceEntryAdditions addition = item.getAddition();
-			parent.updateOccured(addition, ScreenController.LIST_ITEM_SELECTED, null);
-		    }
-		};
-	    fields[fieldIndex].setSelectionModel(selectionModel);
+//	    SingleSelectionModel selectionModel = new SingleSelectionModel(fieldIndex) {
+//		    public void updateSingleSelection(int oldIndex, int newIndex) {
+//			ListObject item = ((ListObject)options[id].get(newIndex));			
+//			InvoiceEntryAdditions addition = item.getAddition();
+//			addition.setParent(entry);
+//			parent.updateOccured(addition, ScreenController.LIST_ITEM_SELECTED, null);
+//		    }
+//		};
+//	    fields[fieldIndex].setSelectionModel(selectionModel);
 
 
 	    JPanel listPanel = new JPanel();
@@ -56,7 +59,29 @@ implements ActionListener
 
 	    add(listPanel);
 	}
+	updateSelectionModels(entry);
 	setPreferredSize(new Dimension(80,300));
+    }
+    
+    public void setEntry(InvoiceEntries entry){
+    	this.entry = entry;
+    	updateSelectionModels(entry);
+    }
+    void updateSelectionModels(InvoiceEntries entry){
+    	for(int fieldIndex=1; fieldIndex < fields.length; fieldIndex++){
+    	    fields[fieldIndex].setSelectionModel(
+    	    		new SingleItemSelector(entry, options[fieldIndex], parent)
+    	    		);
+//    	    SingleSelectionModel selectionModel = new SingleSelectionModel(fieldIndex) {
+//    		    public void updateSingleSelection(int oldIndex, int newIndex) {
+//    			ListObject item = ((ListObject)options[id].get(newIndex));			
+//    			InvoiceEntryAdditions addition = item.getAddition();
+//    			addition.setParent(entry);
+//    			parent.updateOccured(addition, ScreenController.LIST_ITEM_SELECTED, null);
+//    		    }
+//    		};
+//    	    fields[fieldIndex].setSelectionModel(selectionModel);
+    	}
     }
 //-----------------------------------------------------------------
     public void actionPerformed(ActionEvent e) {
@@ -130,5 +155,24 @@ implements ActionListener
 		}
 	}
 	rmk.DataModel.getInstance().pricetable.warnIfBadLookup(true);
+    }
+
+    class SingleItemSelector extends SingleSelectionModel{
+    	InvoiceEntries entry;
+    	DefaultListModel optionList;
+    	IScreen parent;
+    	
+    	public SingleItemSelector(InvoiceEntries entry,DefaultListModel optionList, IScreen parent){
+    		this.entry = entry;
+    		this.optionList = optionList;
+    		this.parent = parent;
+    	}
+    	
+    	public void updateSingleSelection(int oldIndex, int newIndex) {
+    		ListObject item = ((ListObject)optionList.get(newIndex));			
+    		InvoiceEntryAdditions addition = item.getAddition();
+    		addition.setParent(entry);
+    		parent.updateOccured(addition, ScreenController.LIST_ITEM_SELECTED, null);	
+    	}
     }
 }

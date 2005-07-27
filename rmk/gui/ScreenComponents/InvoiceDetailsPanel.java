@@ -332,6 +332,7 @@ implements ActionListener
     //========================================================
     public void onPaymentsScreen(boolean val){
         paymentButton.setVisible(!val);
+        discountButton.setVisible(!val);
         shippingPanel.setVisible(!val);
     }
     public void processFocusEvent(FocusEvent e){
@@ -590,7 +591,10 @@ implements ActionListener
     			invoice.getShippingInstructions():"");
     	
     	//    ((JTextField)txtFields[FIELD_SHIPPINGCOST]).setText(""+invoice.getShippingAmount());
-    	((LabeledTextField)txtFields[FIELD_SHIPPINGCOST]).setValue(""+invoice.getShippingAmount());
+    	if(invoice.getShippingAmount()>0)
+    		((LabeledTextField)txtFields[FIELD_SHIPPINGCOST]).setValue(""+invoice.getShippingAmount());
+    	else
+    		((LabeledTextField)txtFields[FIELD_SHIPPINGCOST]).setValue("");
     	
     	((LabeledTextField)txtFields[FIELD_PONUMBER]).setValue(invoice.getPONumber());
     	

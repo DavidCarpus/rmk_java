@@ -182,8 +182,10 @@ implements ActionListener,  ListSelectionListener
         	originalKnife = currentKnife;
         }
 
-        if(!loading)
+        if(!loading){
+        	currentKnife.setParent(invoice);
             detailPanel.setData(currentKnife);
+        }
         
         if(!loading){
         	parentScreen.updateOccured(currentKnife,ScreenController.UPDATE_EDIT, null);

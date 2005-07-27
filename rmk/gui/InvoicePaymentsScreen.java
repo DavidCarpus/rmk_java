@@ -38,6 +38,7 @@ public class InvoicePaymentsScreen extends Screen {
                 new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         customerPnl = new rmk.gui.ScreenComponents.CustomerInfoPanel();
         customerPnl.setParentScreen(this);
+		customerPnl.isOnCustomerPanel(false);
         getContentPane().add(customerPnl);
 
         invoiceDetailPnl = new rmk.gui.ScreenComponents.InvoiceDetailsPanel();
@@ -178,7 +179,8 @@ public class InvoicePaymentsScreen extends Screen {
 
     //------------------------------------------------------------------
     private void addEntry(long invoiceNum, long customerID) {
-        while (true) { // keep getting payments until valid one is not entered
+    	ErrorLogger.getInstance().logDebug("Adding payment(s) to invoice :" + invoiceNum, true);
+    	while (true) { // keep getting payments until valid one is not entered
             Payments payment = rmk.gui.Dialogs.getPayment(invoiceNum, customerID);
             if (payment == null) {
                 invoicePaymentsPnl.requestFocus();

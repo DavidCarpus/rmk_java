@@ -62,6 +62,7 @@ public class InvoiceItemScreen extends Screen{
 			additions = sys.invoiceInfo.getInvoiceEntryAdditions(currentKnife.getInvoiceEntryID());
 			currentKnife.setFeatures(additions);
 		}
+		featurePanel.setEntry(currentKnife);
 	
 		if(additions != null)
 			originalFeatures = (Vector) additions.clone();
@@ -307,6 +308,7 @@ public class InvoiceItemScreen extends Screen{
 			if(itemPanel.featureChange()){
 				((JButton)buttonBar.getButton(0)).setEnabled(true);
 				itemPanel.setData(itemChanged);
+				featurePanel.setEntry((InvoiceEntries) itemChanged);
 				itemPanel.moveBackToFeatureEntry();
 			}else{
 				ErrorLogger.getInstance().TODO();

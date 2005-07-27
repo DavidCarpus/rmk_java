@@ -325,7 +325,10 @@ public class InvoiceInfo {
 	//==========================================================
 	public boolean isDealerInvoice(Invoice invoice) {
 		boolean dealer = false;
-
+		if(invoice == null) {
+			ErrorLogger.getInstance().logError("Invoice == null", new Exception());
+			return false;
+		}
 		Boolean boolDeal = invoice.isDealer();
 		if (boolDeal != null){
 			dealer = boolDeal.booleanValue();
@@ -609,26 +612,33 @@ public class InvoiceInfo {
 		java.util.GregorianCalendar start = new GregorianCalendar();
 		start.add(Calendar.DATE, -days);
 		String criteria = "DateStamp >= " + db.dateStr(start)
-				+ " order by DateStamp ";
+				+ " order by DateStamp DESC";
 		Vector historyItems = db.getItems("HistoryItems", criteria);
 		if (historyItems == null)
 			return new Vector();
 		Enumeration enum = historyItems.elements();
+		HistoryItems dummyHistoryItem=null;
 		while (enum.hasMoreElements()) {
 			HistoryItems item = (HistoryItems) enum.nextElement();
-			try {
-				Invoice inv = invInfo.getInvoice(item.getInvoice());
-				Customer cust = custInfo.getCustomerByID(inv.getCustomerID());
-				String name = cust.getLastName();
-				if (name == null)
-					name = "";
-				if (cust.getFirstName() != null)
-					name += "," + cust.getFirstName();
-				item.setCustomerName(name);
-			} catch (Exception e) {
-				// TODO: handle exception
+			if(historyItems.size() > 1 && item.getInvoice() == 1)
+				dummyHistoryItem = item;
+			else{
+				try {
+					Invoice inv = invInfo.getInvoice(item.getInvoice());
+					Customer cust = custInfo.getCustomerByID(inv.getCustomerID());
+					String name = cust.getLastName();
+					if (name == null)
+						name = "";
+					if (cust.getFirstName() != null)
+						name += "," + cust.getFirstName();
+					item.setCustomerName(name);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
 			}
 		}
+		if(dummyHistoryItem != null)
+		historyItems.remove(dummyHistoryItem);
 		return historyItems;
 	}
 

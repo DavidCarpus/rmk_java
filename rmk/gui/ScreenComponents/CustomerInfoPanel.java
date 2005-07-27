@@ -36,6 +36,10 @@ public class CustomerInfoPanel extends carpus.gui.DataEntryPanel{
 		this();
 		setData(customer);
 	}
+	public void isOnCustomerPanel(boolean val){
+		txtFields[FIELD_DISCOUNT].setVisible(val);
+	}
+	
 	public CustomerInfoPanel(){
 		LabeledTextField field;
 		setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));

@@ -328,8 +328,8 @@ public class ScreenController {
 
 			String title = "Invoice Payments : ";
 			if (invoice != null) {
-				ErrorLogger.getInstance().logDebug("" + invoice, false);
 				title += invoice.getInvoice();
+				ErrorLogger.getInstance().logDebug(title, true);
 			} else {
 				ErrorLogger.getInstance().logDebug("No Invoice?", false);
 			}
@@ -377,7 +377,7 @@ public class ScreenController {
 
 	public rmk.gui.IScreen getInvoiceScreen(
 			rmk.database.dbobjects.Invoice invoice) {
-		ErrorLogger.getInstance().logDebug("" + invoice, false);
+//		ErrorLogger.getInstance().logDebug("getInvoiceScreen:" + invoice, false);
 
 		rmk.gui.IScreen screen;
 		String title = "";
@@ -399,7 +399,7 @@ public class ScreenController {
 		rmk.gui.IScreen screen;
 		String title = "";
 //		ErrorLogger.getInstance().logDebug("" + invoice, true);
-		ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction()   + ":getCustomerScreen()" + ":" + custID, false);
+//		ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction()   + ":getCustomerScreen()" + ":" + custID, false);
 		
 		title = CustomerScreen.getCustomerScreenTitle(custID);
 		return rmk.gui.ApplicationMenu.getInstance().findScreen(title);
@@ -407,7 +407,7 @@ public class ScreenController {
 	
 	public rmk.gui.IScreen getPaymentsScreen(
 			rmk.database.dbobjects.Invoice invoice) {
-		ErrorLogger.getInstance().logDebug("" + invoice, false);
+		ErrorLogger.getInstance().logDebug(ErrorLogger.getCallerFunction() + ":getPaymentsScreen()" + invoice.getInvoice(), false);
 
 		rmk.gui.IScreen screen;
 		String title = "";

@@ -9,6 +9,9 @@ class SingleSelectionModel extends DefaultListSelectionModel {
 //===============================================================
     int id;
 //-----------------------------------------------------------------
+    public SingleSelectionModel() {
+    }
+    
     public SingleSelectionModel(int id) {
 	this.id = id;
 	setSelectionMode(SINGLE_SELECTION);

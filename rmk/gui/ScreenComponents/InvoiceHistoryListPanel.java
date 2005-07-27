@@ -89,7 +89,9 @@ implements ActionListener, FocusListener {
 //
 //		setVisible(true);
 //	}
-
+	public void sortByDate(){
+		sorter.sortByColumn(3, false);
+	}
 	/* (non-Javadoc)
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */

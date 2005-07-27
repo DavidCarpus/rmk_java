@@ -168,7 +168,7 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 			}
 		}	
 		if(row == table.getRowCount()){ // not found, select first one
-			ErrorLogger.getInstance().logDebug("********* Will select DataListPanel row:" + 0 + " " + valueAt, false);
+			ErrorLogger.getInstance().logDebug("********* NOT Found, Will select default DataListPanel row 0 -- searchID:" + searchID + " " + valueAt, true);
 			SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				int rowToSelect = 0;
@@ -179,7 +179,7 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 		});
 		}else{
 			final int selectedRow=row;
-			ErrorLogger.getInstance().logDebug("********* Will select DataListPanel row:" + selectedRow + " " + valueAt, false);
+			ErrorLogger.getInstance().logDebug("********* Will select DataListPanel row:" + selectedRow + " " + valueAt.getClass().getName().toUpperCase() + ":" + valueAt, false);
 			SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				int rowToSelect = selectedRow;

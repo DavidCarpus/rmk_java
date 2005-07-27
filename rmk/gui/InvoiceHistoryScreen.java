@@ -81,6 +81,7 @@ public class InvoiceHistoryScreen extends Screen {
 	 */
 	public void setData(Vector invoiceLst) {
 		invoiceHistoryListPanel.setData(invoiceLst);
+		invoiceHistoryListPanel.sortByDate();
 	}
     public void setData(DBObject item){
     	ErrorLogger.getInstance().TODO();

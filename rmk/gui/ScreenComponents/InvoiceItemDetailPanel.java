@@ -327,6 +327,10 @@ class InvoiceItemDetailPanel extends carpus.gui.DataEntryPanel implements
 			currKnife = new InvoiceEntries(0);
 		
 		invoice = knife.getParent();
+		if(invoice == null) {
+			ErrorLogger.getInstance().logError("Invoice == null", new Exception());
+			return;
+		}
 
 		Vector features = null;
 		if (currKnife.getFeatures() != null) {

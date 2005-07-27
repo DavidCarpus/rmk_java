@@ -433,7 +433,9 @@ public class Dialogs {
         item.setComment(note);
 
         int partID = (int) part.getPartID();
-        double price = getFeaturePrice(year, part, pricetable, initialModel);
+        double price = 0;
+        if(!part.getPartCode().equalsIgnoreCase("KNV"))
+        	price = getFeaturePrice(year, part, pricetable, initialModel);
         if(price < 0)
         	sys.pricetable.warnIfBadLookup(false);
         item.setPrice(price * qty);

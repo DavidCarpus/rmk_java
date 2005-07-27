@@ -51,6 +51,8 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener, Focu
 				new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 		customerPnl = new rmk.gui.ScreenComponents.CustomerInfoPanel();
 		customerPnl.setParentScreen(this);
+		customerPnl.isOnCustomerPanel(false);
+
 		//		customerPnl.addActionListener(this);
 		getContentPane().add(customerPnl);
 		
@@ -314,7 +316,7 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener, Focu
 		CustomerScreen screen = (CustomerScreen) rmk.ScreenController.getInstance().getCustomerScreen(currInvoice.getCustomerID());
 		
 		if (screen != null) {
-			Vector invoices = sys.invoiceInfo.getLastShippedInvoices(cust.getInvoices(), 2);
+			Vector invoices = sys.invoiceInfo.getLastShippedInvoices(sys.invoiceInfo.getShippedInvoices(cust.getInvoices()), 2);
 			invoices.addAll(sys.invoiceInfo.getNonShippedInvoices(cust.getInvoices()));
 			cust.setInvoices(invoices);
 			screen.setData(cust, cust.getCurrentAddressItem(),invoices);
@@ -768,11 +770,12 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener, Focu
 				Invoice thisScreensInvoice = invoiceDetailPnl.getData();
 				if(changedInvoice.getInvoice() == thisScreensInvoice.getInvoice()){
 					setInvoice(changedInvoice);
-					SwingUtilities.invokeLater(new Runnable() {
-						public void run() {
-							invoiceEntriesList.requestFocusInWindow();
-						}
-					});				}
+//					SwingUtilities.invokeLater(new Runnable() {
+//						public void run() {
+//							invoiceEntriesList.requestFocusInWindow();
+//						}
+//					});				
+				}
 			} else if(parentName.indexOf(".Customer") > 0 ){
 				editedCustomer = true;
 				buttonBar.getButton(0).setEnabled(true);
@@ -839,6 +842,15 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener, Focu
 			}
 		}
 		break;
+		
+		case ScreenController.UPDATE_CANCELED:
+		{
+			if (invoiceNumber == 0) { // remove 0 invoice from model
+				currInvoice.getParent().getInvoices().remove(currInvoice);
+			}
+			defaultCancelAction();
+			SignalProcessor.getInstance().removeScreen(this);
+		}
 
 		case ScreenController.UPDATE_SAVE:
 		{

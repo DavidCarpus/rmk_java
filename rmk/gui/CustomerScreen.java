@@ -32,6 +32,7 @@ public class CustomerScreen extends Screen implements FocusListener {
 		getContentPane().setLayout(new BoxLayout(getContentPane(),BoxLayout.Y_AXIS));
 		custPanel = new rmk.gui.ScreenComponents.CustomerInfoPanel();
 		custPanel.setParentScreen(this);
+		custPanel.isOnCustomerPanel(true);
 		getContentPane().add(custPanel);
 		
 		custAddPanel = new rmk.gui.ScreenComponents.CustomerAddressPanel();
@@ -203,7 +204,8 @@ public class CustomerScreen extends Screen implements FocusListener {
 		}
 		updateCustomerPanels(cust,address);
 //		if(newCust)
-		invoicePanel.setData(customer, customer.getInvoices());
+		invoicePanel.setData(customer, sys.invoiceInfo.getInitialInvoices(customer));
+		invoicePanel.grabFocus();
 		setTitle(getCustomerScreenTitle(customer.getCustomerID()));
 
 		buttonBar.enableButton(0,editedInfo || editedAddress);
@@ -418,6 +420,7 @@ public class CustomerScreen extends Screen implements FocusListener {
 				return;
 			}
 			Invoice inv = (Invoice) invoicePanel.getSelectedItem();
+			invoicePanel.updateLastSelected();
 //			if (model == null) model = new DBGuiModel();
 			rmk.ScreenController.getInstance().displayInvoiceDetails(inv);
 		}
