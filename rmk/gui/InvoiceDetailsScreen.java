@@ -320,7 +320,7 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener, Focu
 			invoices.addAll(sys.invoiceInfo.getNonShippedInvoices(cust.getInvoices()));
 			cust.setInvoices(invoices);
 			screen.setData(cust, cust.getCurrentAddressItem(),invoices);
-			screen.invoicePanel.selectLastSelected();
+			screen.invoicePanel.selectInvoice(inv);
 		}		
 	}
 	private void saveEntry(Invoice inv, InvoiceEntries entry) {

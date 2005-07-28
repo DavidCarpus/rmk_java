@@ -147,27 +147,35 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 //			return;
 		int row=0;
 		Object valueAt="";
-		for(row = 0; row < table.getRowCount(); row++){
+		if(table.getRowCount()>0)
+		valueAt = table.getValueAt(0,0);
+		int type = rmk.database.dbobjects.DBObject.typeIDFromClassName(valueAt.getClass().getName().toUpperCase());
+		boolean found=false;
+		
+		for(row = 0; row < table.getRowCount() && !found; row++){
 			valueAt = table.getValueAt((int) row,0);
-			String type = valueAt.getClass().getName().toUpperCase();
-			if(type.endsWith("HISTORYITEMS")){
-				if(((HistoryItems)valueAt).getInvoice() == searchID){
-					break;
-				}
-			}else if(type.endsWith("INVOICEENTRIES")){
-				if(((InvoiceEntries)valueAt).getInvoiceEntryID() == searchID){
-					break;
-				}
-			}else if(type.endsWith("INVOICE")){
-				if(((Invoice)valueAt).getInvoice() == searchID){
-					break;
-				}
-			}else{
+			switch (type) {
+			case rmk.database.dbobjects.DBObject.TYPE_HISTORYITEMS:
+				if(((HistoryItems)valueAt).getInvoice() == searchID)
+					found=true;
+			break;
+			case rmk.database.dbobjects.DBObject.TYPE_INVOICEENTRIES:
+				if(((InvoiceEntries)valueAt).getInvoiceEntryID() == searchID)
+					found=true;
+			break;
+			case rmk.database.dbobjects.DBObject.TYPE_INVOICE:
+				if(((Invoice)valueAt).getInvoice() == searchID)
+					found=true;
+				break;
+			default:
 				ErrorLogger.getInstance().logDebug("Unknown list item type:" + type, true);
-//				ErrorLogger.getInstance().logWarning("Unknown list item type:" + type);
+////		ErrorLogger.getInstance().logWarning("Unknown list item type:" + type);
+				break;
 			}
-		}	
-		if(row == table.getRowCount()){ // not found, select first one
+		}
+		if(row>0) row--; // continues in for loop cause row to increment past item
+		
+		if(!found){ // select first one
 			ErrorLogger.getInstance().logDebug("********* NOT Found, Will select default DataListPanel row 0 -- searchID:" + searchID + " " + valueAt, true);
 			SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -190,6 +198,10 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 		});
 		}
 		return;
+	}
+	
+	public void selectInvoice(Invoice invoice){
+		
 	}
 	
 	protected abstract long selectedItem(int row);

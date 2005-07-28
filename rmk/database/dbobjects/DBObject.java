@@ -2,6 +2,18 @@ package rmk.database.dbobjects;
 
 public abstract class DBObject extends carpus.database.DBObject{
     static final carpus.database.DBInterface db= Configuration.Config.getDB();
+    
+    public static final int TYPE_UNKNOWN=0;
+    public static final int TYPE_ADDRESS=1;
+    public static final int TYPE_CUSTOMER=2;
+    public static  final int TYPE_HISTORYITEMS=3;
+    public static  final int TYPE_INVOICE=4;
+    public static  final int TYPE_INVOICEENTRIES=5;
+    public static  final int TYPE_INVOICEENTRYADDITIONS=6;
+    public static  final int TYPE_PARTPROCES=7;
+    public static  final int TYPE_PARTS=8;
+    public static  final int TYPE_PARTTYPES=9;
+    public static  final int TYPE_PAYMENTS=10;
 
     public DBObject(){};
     
@@ -136,5 +148,12 @@ public abstract class DBObject extends carpus.database.DBObject{
 //			return db.dateStr((java.util.Date) obj);
 			
 		return null;
+	}
+	public static int typeIDFromClassName(String className){
+		if(className.endsWith("HISTORYITEMS")) return TYPE_HISTORYITEMS;
+		else if(className.endsWith("INVOICEENTRIES")) return TYPE_INVOICEENTRIES;
+		else if(className.endsWith("INVOICE")) return TYPE_INVOICE;
+		
+		return TYPE_UNKNOWN;
 	}
 }

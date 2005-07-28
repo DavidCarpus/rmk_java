@@ -148,7 +148,7 @@ public class CustomerScreen extends Screen implements FocusListener {
 		Address address = (Address) custAddPanel.getData(); 
 		java.util.Vector outputLst = new java.util.Vector();
 		
-		boolean newCust = cust.getCustomerID() == 0;
+//		boolean newCust = cust.getCustomerID() == 0;
 		if(editedInfo || editedDetail){
 			Customer cust2 = (Customer)detailPanel.getData();
 //			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":terms:"+ cust2.getTerms());
@@ -203,7 +203,7 @@ public class CustomerScreen extends Screen implements FocusListener {
 			}
 		}
 		updateCustomerPanels(cust,address);
-//		if(newCust)
+
 		invoicePanel.setData(customer, sys.invoiceInfo.getInitialInvoices(customer));
 		invoicePanel.grabFocus();
 		setTitle(getCustomerScreenTitle(customer.getCustomerID()));

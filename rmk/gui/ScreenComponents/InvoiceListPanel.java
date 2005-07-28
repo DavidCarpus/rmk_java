@@ -105,6 +105,10 @@ implements ActionListener, FocusListener{
 	public void updateLastSelected(){
 		lastSelectedItem = selectedItem;
 	}
+	public void selectInvoice(Invoice inv){
+		lastSelectedItem = inv.getInvoice();
+		selectLastSelected();
+	}
 	//-------------------------------------------
 	public long selectedItem(int row) {
 		long val = ((Long) sorter.getValueAt(row, 2)).longValue();
