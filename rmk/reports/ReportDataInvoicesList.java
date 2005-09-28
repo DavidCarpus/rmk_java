@@ -86,6 +86,9 @@ public class ReportDataInvoicesList {
 					listData.add(info);
 					startedDealers = true;
 				}
+				if(cust.isDealer())
+					ErrorLogger.getInstance().logDebug("***********"+cust,false);
+				
 				addCustInfo(listData, (int) invoice.getCustomerID(), lastCustID);
 
 				// VR wanted customer info ALWAYS
@@ -95,6 +98,7 @@ public class ReportDataInvoicesList {
 				//			}
 				lastCustID = (int) invoice.getCustomerID();
 				cnt += addInvoiceInfo(listData, invoice);
+//				ErrorLogger.getInstance().logDebug("inv " + invoice,false);
 				int custQty = addInvoiceItems(listData, invoice);
 				//    	    System.out.print(sys.invoiceInfo.isDealerInvoice(invoice) + " -
 				// ");
@@ -619,9 +623,12 @@ public class ReportDataInvoicesList {
 		int COMMENT_CHARS = 35;
 		
 		Arrays.sort(items, new rmk.comparators.BladeListItems());
+		boolean invoiceNumAdded=false;
 		for (int i = 0; i < items.length; i++) {
 			String info[] = blankInfo(cols);
 			InvoiceEntries entry = (InvoiceEntries) items[i];
+//			ErrorLogger.getInstance().logDebug(" item " + entry,false);
+
 			if (sys.partInfo.partIsBladeItem(entry.getPartID())) {
 				boolean longComment = false;
 //				if (items.length < 2) {
@@ -629,11 +636,12 @@ public class ReportDataInvoicesList {
 //				} else {
 //					info[0] += "" + inv.getInvoice();
 //				}
-				if(i==0)
+				if(!invoiceNumAdded){
 					info[0] += "" + inv.getInvoice();
-				else
+					invoiceNumAdded=true;
+				}else{
 					info[0] += "" ;
-				
+				}
 				info[1] = "" + entry.getQuantity();
 				totalQty += entry.getQuantity();
 				info[2] = sys.partInfo.getPartCodeFromID(entry.getPartID());
@@ -643,27 +651,6 @@ public class ReportDataInvoicesList {
 				String comment = "";
 				String originalComment = entry.getComment();
 				if(originalComment == null) originalComment="";
-				
-				// XFER certain features to comments section 
-//				if(featureList != null && featureList.trim().length() > 0){
-//					// if bold item, transfer to comments also
-//					ArrayList parsedText = BaseReport.parseFormattedText(featureList);
-//					for(int segmentIndex=0; segmentIndex< parsedText.size(); segmentIndex++){
-//						FormattedText segment = (FormattedText) parsedText.get(segmentIndex);
-//						boolean etchSpec = segment.text.trim().startsWith("ET");
-//						if (!etchSpec && (segment.format & BaseReport.BOLD) > 0){
-//							comment += "<B>" + segment.text + "</B> ";
-//							if(originalComment.indexOf(segment.text.trim()) >= 0)
-//								if(!etchSpec)
-//									originalComment = originalComment.replaceAll(segment.text.trim(), "");
-//						}
-//						// if Underline item, transfer to comments also
-//						// remove underline though
-//						//		            !segment.text.trim().startsWith("ET") &&  
-//						if ((segment.format & BaseReport.UNDERLINE) > 0) // etched Item
-//							comment += segment.text;
-//					}
-//				}
 				
 				info[3] = featureList;
 

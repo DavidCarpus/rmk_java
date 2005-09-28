@@ -90,10 +90,10 @@ public class Dialogs {
             String msg = "";
             int cnt = 0;
             if (data != null) {
-                for (java.util.Enumeration enum = data.elements(); enum
+                for (java.util.Enumeration results = data.elements(); results
                         .hasMoreElements();) {
                     if (cnt++ < 30) {
-                        msg += enum.nextElement() + "\n";
+                        msg += results.nextElement() + "\n";
                     } else if (cnt > 30) {
                         msg += ".";
                     }
@@ -832,11 +832,26 @@ public class Dialogs {
             ErrorLogger.getInstance().logError("Retrieving customer:" + id, e);
             return;
         }
+        //TODO: Merge from incorrectCustomer into correctCustomer
+        String msg = "Merge from Customer ";
+        msg += incorrectCustomer.getLastName() + ", " + incorrectCustomer.getFirstName();
+        msg += "\n(ID)";
+        String reply = JOptionPane.showInputDialog(msg, ""+incorrectCustomer.getCustomerID());
+        if(reply != null)
+        	incorrectCustomerID = Integer.parseInt(reply); 
+        else
+        	return;
         try {
             Customer correctCustomer = getMergeCustomer();
             if(correctCustomer != null){
             	// 	merge
             	sys.invoiceInfo.mergeCustomers(correctCustomer, incorrectCustomer);
+            	msg = "!!! Remove old Customer !!!";
+                msg += incorrectCustomer.getLastName() + ", " + incorrectCustomer.getFirstName();
+                msg += "\n(ID)";
+                reply = JOptionPane.showInputDialog(msg, ""+incorrectCustomer.getCustomerID());
+                if(reply != null)
+                	sys.customerInfo.removeCustomer(incorrectCustomer);
             }
         } catch (Exception e) {
             ErrorLogger.getInstance().logError("Retrieving customer:" + id, e);
@@ -848,7 +863,7 @@ public class Dialogs {
         Customer mergeCustomer =null;
         long id=0;
         // get old customer ID/cust
-        String msg = "Old Customer ID to merge into selected customer:";
+        String msg = "ID of Customer to merge into:";
         String reply = JOptionPane.showInputDialog(msg, "");
         if(reply == null || reply.length() == 0)
             return null;

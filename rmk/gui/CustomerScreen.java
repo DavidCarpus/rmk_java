@@ -321,8 +321,8 @@ public class CustomerScreen extends Screen implements FocusListener {
 	}
 	
 	public void updateOccured(DBObject itemChanged, int changeType, DBObject parentItem){
-		String parentName="";
-		if(parentItem != null) parentName = parentItem.getClass().getName();
+//		String parentName="";
+//		if(parentItem != null) parentName = parentItem.getClass().getName();
 		String itemName="";
 		if(itemChanged != null) itemName = itemChanged.getClass().getName();
 

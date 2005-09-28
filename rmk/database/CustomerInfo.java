@@ -236,4 +236,12 @@ public class CustomerInfo{
 	}
 	return null;
     }
+	public void removeCustomer(Customer incorrectCustomer) {
+        try {
+            db.execute("Delete from Customers where customerID  = " + incorrectCustomer.getCustomerID());
+        } catch (Exception e) {
+            rmk.ErrorLogger.getInstance().logError(
+                    "Deleting customer(" + incorrectCustomer.getCustomerID() + ")", e);
+        } // end of try-catch
+	}
 }

@@ -347,7 +347,7 @@ public class ScreenController {
 
 	public void invoicePayments(Customer customer, Invoice invoice){
 		try {
-			InvoicePaymentsScreen screen = new InvoicePaymentsScreen();
+//			InvoicePaymentsScreen screen = new InvoicePaymentsScreen();
 	
 			Vector payments = new Vector();
 			invoicePayments(invoice, payments);

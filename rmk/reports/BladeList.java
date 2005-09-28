@@ -10,7 +10,7 @@ public class BladeList extends BaseReport implements ReportInterface {
     boolean useGreyBars=true;
     boolean grey=false;
     
-    static final int OTHER_PAGE_ROWS = 49;
+    static final int OTHER_PAGE_ROWS = 50;
     static final String COMMENT_CONT_INDICATOR = "**VvV**";
 	int listFontHeight = 12;
 	Font listFont = new Font("serif", Font.PLAIN, listFontHeight - 2);

@@ -608,11 +608,10 @@ public class ReportData {
 
         String info = invoice.getShippingInfo();
         if (info == null || info.trim().length() == 0) {
-            if (invoice.isShopSale())
-                info = "Shop Sale";
-            else
-                info = "SAME";
+        	info = "SAME";
         }
+        if (invoice.isShopSale())
+            info = "Shop Sale";
 
         for (int i = 0; i < 4; i++) {
             results[i] = "";

@@ -16,6 +16,7 @@ import carpus.gui.*;
 import carpus.util.DateFunctions;
 import rmk.ErrorLogger;
 import rmk.ScreenController;
+import rmk.gui.Dialogs;
 import rmk.database.dbobjects.Invoice;
 
 public class InvoiceDetailsPanel 
@@ -55,6 +56,7 @@ implements ActionListener
     JRadioButton ship = new JRadioButton("Shipping Address");
     JRadioButton shopSale = new JRadioButton("Shop Sale");
     JRadioButton sameShippingAddress = new JRadioButton("Same Ship Address");
+    JRadioButton lastSelectedAddressType;
     ButtonGroup group = new ButtonGroup();
     JPanel shipAddressPanel = new JPanel();
     JPanel shippingPanel = new JPanel();
@@ -368,8 +370,10 @@ implements ActionListener
     		parentScreen.updateOccured(null,ScreenController.BUTTON_F3, null);
     		return;
         } else if(command.equals("SHOP SALE")){
-        	if(switchToShopSale())
-        		parentScreen.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);        
+        	if(Dialogs.yesConfirm("Confirm changing to shop sale and removing shipping address...") && switchToShopSale())
+        		parentScreen.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
+        	else
+                lastSelectedAddressType.setSelected(true);
             return;
             
         } else if(command.equals("TAXRATE")){
@@ -412,21 +416,30 @@ implements ActionListener
             return;            
             //---------------------------------
         } else if(command.equals("SAME SHIP ADDRESS")){
-            shipAddressPanel.setVisible(false);
-            invoice.setShopSale(false);
-            invoice.setShippingInfo("");
-            ((JTextArea)txtFields[FIELD_SHIPPINGINFO]).setText("");
-            parentScreen.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
-//            optionChanged = true;
-            return;
+        	if(Dialogs.yesConfirm("Confirm changing address to the standard address...")){
+        		shipAddressPanel.setVisible(false);
+            	invoice.setShopSale(false);
+	            invoice.setShippingInfo("");
+	            ((JTextArea)txtFields[FIELD_SHIPPINGINFO]).setText("");
+	            parentScreen.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
+	//            optionChanged = true;
+	            lastSelectedAddressType = sameShippingAddress;
+	            return;
+        	} else{
+        		lastSelectedAddressType.setSelected(true);
+        	}
             //---------------------------------
         } else if(command.equals("SHIPPING ADDRESS")){
-            shipAddressPanel.setVisible(true);
-            invoice.setShopSale(false);
-            ((JTextArea)txtFields[FIELD_SHIPPINGINFO]).setText(" ");
-            parentScreen.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
-//            optionChanged = true;
-            return;
+        	if(Dialogs.yesConfirm("Confirm changing address to a different shipping address...")){
+	            shipAddressPanel.setVisible(true);
+	            invoice.setShopSale(false);
+	            ((JTextArea)txtFields[FIELD_SHIPPINGINFO]).setText(" ");
+	            parentScreen.updateOccured(invoice,ScreenController.UPDATE_EDIT, invoice);
+	            lastSelectedAddressType = ship;
+	            return;
+        	} else{
+        		lastSelectedAddressType.setSelected(true);
+        	}
             //---------------------------------
             
 //        } else if(command.equals("EST_UP_WEEK")){
@@ -482,7 +495,6 @@ implements ActionListener
         if(storedTaxrate <= 0){
             taxRate = sys.financialInfo.getInvoiceTaxRate(invoice);
         }
-        
         return true;
     }
     //--------------------------------------------------------
@@ -657,12 +669,15 @@ implements ActionListener
 //          ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "shopSale");	    
             shopSale.setSelected(true);
             shipAddressPanel.setVisible(false);
+            lastSelectedAddressType = shopSale;
         } else if(shipAddress.length() > 0){ // there is a shipping address
             ship.setSelected(true);
             shipAddressPanel.setVisible(true);
+            lastSelectedAddressType = ship;
         } else{
             sameShippingAddress.setSelected(true);
             shipAddressPanel.setVisible(false);
+            lastSelectedAddressType = sameShippingAddress;
         }
 //        shipAddressPanel.setVisible(!sameShippingAddress.isSelected());
     }

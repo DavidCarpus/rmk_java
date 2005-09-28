@@ -170,7 +170,7 @@ public class Processing {
         rmk.gui.IScreen screen = rmk.ScreenController.getInstance()
                 .getInvoiceScreen(invoice);
 
-        String title;
+//        String title;
 //        rmk.gui.DBGuiModel model;
         // Invoice Details Screen?
         screen = rmk.ScreenController.getInstance().getInvoiceScreen(invoice);

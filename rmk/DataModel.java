@@ -23,7 +23,7 @@ public class DataModel{
     public static void main(String args[])
 	throws Exception
     {
-	DataModel sys = DataModel.getInstance();
+//	DataModel sys = DataModel.getInstance();
 
 //  	ErrorLogger.getInstance().logMessage(sys.getClass().getName() + ":"+ sys.partInfo.largestPartID());
 //  	ErrorLogger.getInstance().logMessage(sys.getClass().getName() + ":"+ sys.partInfo.getCurrentPartPrices());
