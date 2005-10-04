@@ -478,8 +478,8 @@ public class InvoiceInfo {
 
 		// estimated date is NOT required
 		chkDate = inv.getDateEstimated();
-		if (chkDate != null && chkDate.before(today))
-			errors.add("Invalid Estimated Date, Before today (within 1 week)");
+//		if (chkDate != null && chkDate.before(today))
+//			errors.add("Invalid Estimated Date, Before today (within 1 week)");
 
 		if (chkDate != null) {
 			int dow = chkDate.get(Calendar.DAY_OF_WEEK);
