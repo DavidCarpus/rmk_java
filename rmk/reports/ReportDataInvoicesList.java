@@ -5,11 +5,7 @@ import rmk.DataModel;
 import rmk.ErrorLogger;
 import rmk.database.dbobjects.*;
 
-import java.awt.Canvas;
 import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.text.SimpleDateFormat;
 import java.text.NumberFormat;
 
