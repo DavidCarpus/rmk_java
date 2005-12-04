@@ -104,8 +104,8 @@ public class HtmlReportDialog extends JDialog implements ActionListener{
 //      buttonBar.enableButton(0,false);
         
 //        ErrorLogger.getInstance().TODO();
-        KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
-        buttonBar.registerKeyboardAction(this, "Cancel", stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
+//        KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
+//        buttonBar.registerKeyboardAction(this, "Cancel", stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
         KeyStroke stroke2 = KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0, true);
         buttonBar.registerKeyboardAction(buttonBar, "Next", stroke2, JComponent.WHEN_IN_FOCUSED_WINDOW);
         KeyStroke stroke3 = KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0, true);

@@ -10,11 +10,12 @@ import java.util.*;
 import carpus.gui.BasicToolBar;
 import rmk.ErrorLogger;
 import rmk.ScreenController;
+import rmk.SignalProcessor;
 import rmk.database.dbobjects.Customer;
 import rmk.database.dbobjects.Invoice;
 import rmk.reports.MergeFiles;
 
-public class Application extends JFrame implements ActionListener {
+public class Application extends JFrame implements ActionListener, KeyListener {
     Desktop desktop;
     rmk.DataModel sys;
     BasicToolBar toolbar;
@@ -36,6 +37,10 @@ public class Application extends JFrame implements ActionListener {
 	toolbar.addActionListener(this);
 	toolbar.getButton(0).setMnemonic(KeyEvent.VK_S);
 	toolbar.getButton(4).setMnemonic(KeyEvent.VK_H);
+	
+//	KeyStroke kESC= KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
+//	desktop.registerKeyboardAction(this, "ESCAPE", kESC, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+//	this.registerKeyboardAction(this, "ESCAPE", kESC, JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 	GridBagLayout gridBag = new GridBagLayout();
 	GridBagConstraints c = new GridBagConstraints();
@@ -177,7 +182,9 @@ public class Application extends JFrame implements ActionListener {
     		//-------------------------------
     	} else if (command.equals("ERROR")){
     		rmk.gui.Dialogs.getAndLogAnErrorReport();
-    		
+    	} else if (command.equals("ESCAPE")){
+    		ApplicationMenu.getInstance().notifyLastScreen(ScreenController.BUTTON_CANCEL, 0);
+    		e = null;
     	}else{
     		ErrorLogger.getInstance().logMessage("Application:actionPerformed():" + command);
     	}
@@ -284,5 +291,28 @@ public class Application extends JFrame implements ActionListener {
 	//  	Desktop.getInstance().paintComponent(Desktop.getInstance().getGraphics());
     }
     //============================================================================
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
+	 */
+	public void keyPressed(KeyEvent arg0) {
+		ErrorLogger.getInstance().logMessage("Pressed Key :" + arg0);
+	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
+	 */
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
+	 */
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

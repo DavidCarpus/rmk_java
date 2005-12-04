@@ -9,6 +9,7 @@ import rmk.database.dbobjects.DBObject;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.util.*;
 
 public class CustomerSelectionScreen extends Screen{
@@ -32,7 +33,9 @@ public class CustomerSelectionScreen extends Screen{
 	ButtonBarTranslator translator = new ButtonBarTranslator(this, buttonBar);
 	buttonBar.setLayout( new FlowLayout(FlowLayout.CENTER));
 	buttonBar.enableButton(3,false);
-
+//	KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
+//  	this.registerKeyboardAction(this, "Cancel", stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
+  	
 	getContentPane().add( buttonBar, BorderLayout.SOUTH);
 
 	setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);

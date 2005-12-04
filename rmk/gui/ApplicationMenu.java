@@ -241,6 +241,15 @@ implements ActionListener
 		
 		return lastScreen;
     }
+	public void notifyLastScreen(int buttonPress, int id){
+		int lastScreen = screens.size() - 1;
+		if (!windowMenu.isVisible())
+			return;
+
+		Screen screen = (Screen) screens.get(lastScreen);
+		screen.buttonPress(buttonPress, id);
+	}
+	
     public void pushScreenToTopOfStack(Screen screen){
     	if(screens.size() <=0 ){
     		screens.add(screen);

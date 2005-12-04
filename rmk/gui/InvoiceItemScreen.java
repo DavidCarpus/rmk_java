@@ -331,6 +331,10 @@ public class InvoiceItemScreen extends Screen{
 		}
 		
 		break;
+		case ScreenController.UPDATE_SAVE:{
+			saveData();
+			break;
+		}
 		default:
 		{
 			ErrorLogger.getInstance().TODO();

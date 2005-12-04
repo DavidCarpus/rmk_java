@@ -56,25 +56,6 @@ abstract class Screen
 	buttonBar.getButton(0).setForeground(DK_GREEN);
 	buttonBar.getButton(0).setMnemonic(KeyEvent.VK_V);
 
-	//TODO: *** Need to put hot keys back in somehow
-//  	KeyStroke kF1=KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1,0);
-//  	this.registerKeyboardAction(this, "F1", kF1, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-//  	KeyStroke kF2=KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F2,0);
-//  	this.registerKeyboardAction(this, "F2", kF2, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-//  	KeyStroke kF3=KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F3,0);
-//  	this.registerKeyboardAction(this, "F3", kF3, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-//
-//  	KeyStroke kF11=KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F11,0);
-//  	this.registerKeyboardAction(this, "F11", kF11, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-//
-//  	KeyStroke kF5=KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5,0);
-//  	this.registerKeyboardAction(this, "CUSTOMERDETAILS", kF5, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-//  	KeyStroke kF6=KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F6,0);
-//  	this.registerKeyboardAction(this, "INVOICEDETAILS", kF6, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-//  	KeyStroke kF7=KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F7,0);
-//  	this.registerKeyboardAction(this, "PAYMENTS", kF7, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-
-
 	registerFunctionKeys(this);
 	
 	KeyStroke kESC= KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);

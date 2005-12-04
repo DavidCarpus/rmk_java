@@ -38,9 +38,11 @@ public class CustomerSelectionFrame extends JInternalFrame implements ActionList
 	getContentPane().add(lst , BorderLayout.CENTER);
 
 	getContentPane().add( buttonBar, BorderLayout.SOUTH);
-	KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-	buttonBar.registerKeyboardAction(this, "Cancel", stroke, 
-					 WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+//	KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+//	this.registerKeyboardAction(this, "Cancel", stroke, 
+//			 WHEN_IN_FOCUSED_WINDOW);
+//	buttonBar.registerKeyboardAction(this, "Cancel", stroke, 
+//			 WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 	
 	setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 //          setSize(200,200); //...Then set the window size or call pack...
@@ -59,9 +61,11 @@ public class CustomerSelectionFrame extends JInternalFrame implements ActionList
         customerData = new CustomerSelectionTableModel(customerList);
         sorter = new carpus.util.TableSorter(customerData); 
         JTable table = new JTable(sorter);
-	KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-	table.registerKeyboardAction(this, "Cancel", stroke, 
-					 WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+//	KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+//	table.registerKeyboardAction(this, "Cancel", stroke, 
+//			WHEN_IN_FOCUSED_WINDOW);
+//	table.registerKeyboardAction(this, "Cancel", stroke, 
+//			 WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 //  	results.registerKeyboardAction(this, "Cancel", stroke, WHEN_IN_FOCUSED_WINDOW);
 //  	table.registerKeyboardAction(this, "Cancel", stroke, WHEN_IN_FOCUSED_WINDOW);
 

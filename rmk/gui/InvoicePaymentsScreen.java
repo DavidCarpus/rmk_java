@@ -338,6 +338,7 @@ public class InvoicePaymentsScreen extends Screen {
                         invoice.getCustomerID());
             } else {
             	((CustomerScreen)screen).setData(invoice.getParent(), invoice.getParent().getCurrentAddressItem(), paymentList);
+            	((CustomerScreen)screen).selectInvoiceNumber(invoice.getInvoice());
                 screen.bringToFront();
             }
             // -------------------------
@@ -415,6 +416,7 @@ public class InvoicePaymentsScreen extends Screen {
 //				if(customer == null)
 //					customer = sys.customerInfo.getCustomerByID(invoice.getCustomerID());
 				((CustomerScreen)screen).setData(customer, customer.getCurrentAddressItem(), customer.getInvoices());
+				((CustomerScreen)screen).selectInvoiceNumber(invoice.getInvoice());
 				screen.bringToFront();
 			} catch (Exception e) {
 				ErrorLogger.getInstance().logError("Fetching customer:"+invoice.getCustomerID(), e);

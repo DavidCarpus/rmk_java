@@ -36,6 +36,9 @@ public abstract class DataEntryPanel extends JPanel{
     	}else if(command.equals("F3")){
     		parentScreen.buttonPress(ScreenController.BUTTON_F3, 0);
     		return true;						
+    	}else if(command.equals("F11")){
+    		parentScreen.buttonPress(ScreenController.BUTTON_F11, 0);
+    		return true;	
     	}else if(command.equals("CANCEL")){
     		parentScreen.buttonPress(ScreenController.BUTTON_CANCEL, 0);
     		return true;	
@@ -121,7 +124,7 @@ class FieldEditCheck extends KeyAdapter{
 	
 	if(code == KeyEvent.VK_ESCAPE){
 	    //Key pressed is the Escape key. Hide this Dialog.
-		pnl.cancelUpdate();
+//		pnl.cancelUpdate();
 //	    pnl.notifyListeners("Cancel", pnl);
 	} else if(code == KeyEvent.VK_ENTER){
 	    //Key pressed is the Enter key. 

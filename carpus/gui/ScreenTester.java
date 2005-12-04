@@ -28,8 +28,8 @@ public class ScreenTester extends JDialog implements ActionListener{
 
 	buttonBar.setFloatable(false);
 //  	buttonBar.enableButton(0,false);
-	KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
-      	buttonBar.registerKeyboardAction(this, "Cancel", stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
+//	KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
+//      	buttonBar.registerKeyboardAction(this, "Cancel", stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 	buttonBar.addActionListener(this);
 	buttonBar.setLayout( new FlowLayout(FlowLayout.CENTER));

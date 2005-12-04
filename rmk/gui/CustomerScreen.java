@@ -101,12 +101,17 @@ public class CustomerScreen extends Screen implements FocusListener {
 			invoicePanel.setData(customer, invList);
 
 			updateCustomerPanels(customer, address);
-
+			
 //			if(address != null)
 //				updateCustomerPanels(customer, address);
 		}
 		//		model.addActionListener(this);
 		this.pack();
+	}
+	
+	public void selectInvoiceNumber(long invoiceNum){
+		invoicePanel.selectInvoiceByNumber(invoiceNum);
+		ErrorLogger.getInstance().logDebug("Selected Invoice on Customer screen:"+invoiceNum, true);
 	}
 	
 	void updateCustomerPanels(Customer cust, Address address){
