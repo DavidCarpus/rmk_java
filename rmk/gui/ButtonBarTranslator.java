@@ -44,6 +44,8 @@ public class ButtonBarTranslator implements ActionListener {
 			parent.buttonPress(ScreenController.BUTTON_SHIP, arg0.getID());
 		}else if(command.equalsIgnoreCase("Add")){
 			parent.buttonPress(ScreenController.BUTTON_ADD, arg0.getID());
+		}else if(command.equalsIgnoreCase("Pricing")){
+			parent.buttonPress(ScreenController.BUTTON_PART_PRICING, arg0.getID());
 		}else if(command.equalsIgnoreCase("Inactive") || command.equalsIgnoreCase("Active")){
 			parent.buttonPress(ScreenController.BUTTON_PARTS_ACTIVE_TOGGLE, arg0.getID());			
 		}else{
