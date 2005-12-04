@@ -251,6 +251,12 @@ public class PartsScreen extends Screen{
 		}
 		break;
 		
+		case ScreenController.BUTTON_PART_PRICING:
+		{
+	  		Dialogs.updatePricing();
+		}
+		break;
+		
 		default:
 	       	ErrorLogger.getInstance().logButton(button, id);
 		}
