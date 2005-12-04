@@ -51,6 +51,7 @@ public class ScreenController {
 	public static final int BUTTON_CUSTOMER_MERGE=10;
 	public static final int BUTTON_QUICK_DEALER_INVOICE=11;
 	public static final int BUTTON_PARTS_ACTIVE_TOGGLE=12;
+	public static final int BUTTON_PART_PRICING=13;
 	
 	
 	public static final int BUTTON_F1=101;
@@ -235,7 +236,7 @@ public class ScreenController {
 
 	public InvoiceDetailsScreen newInvoice(Invoice invoice) {
 		InvoiceDetailsScreen screen = null;
-		ErrorLogger.getInstance().logDebug("" + invoice, false);
+		ErrorLogger.getInstance().logDebug("newInvoice:" + invoice, false);
 		try {
 			screen = new InvoiceDetailsScreen();
 			String title = "Invoice : ";
