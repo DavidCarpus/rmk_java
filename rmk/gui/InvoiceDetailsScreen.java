@@ -80,10 +80,10 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener, Focu
 		buttonBar.getButton(4).setMnemonic(KeyEvent.VK_P); // Ship Button
 //		ButtonBarTranslator translator = new ButtonBarTranslator(this, buttonBar);
 		
-		KeyStroke listExpand = KeyStroke.getKeyStroke(
-				java.awt.event.KeyEvent.VK_F11, 0);
-		this.registerKeyboardAction(this, "F11", listExpand,
-				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+//		KeyStroke listExpand = KeyStroke.getKeyStroke(
+//				java.awt.event.KeyEvent.VK_F11, 0);
+//		this.registerKeyboardAction(this, "F11", listExpand,
+//				JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 		
     	SignalProcessor.getInstance().addScreen(this);
 
@@ -139,6 +139,8 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener, Focu
 		if (invoiceNumber > 0) {
 			sys.invoiceInfo.logInvoiceAccess(invoice);
 		}
+		long invoiceNum = sys.invoiceInfo.getLastInvoiceViewed();
+		invoiceEntriesList.setSelectedInvoice(invoiceNum);
 	}
 	
 	//----------------------------------------------------------
@@ -552,154 +554,6 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener, Focu
 		boolean inShippingAddressField=false;
 		ErrorLogger.getInstance().logDebugCommand(command);
 		ErrorLogger.getInstance().TODO();
-
-////			
-//			//-----------------------------
-//		} else if (command.equals("INVOICECHANGED")) { //INVOICE CHANGED
-//			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"
-//					+ "Invoicechanged");
-//			editedInvoice = true;
-//			buttonBar.enableButton(0, true);
-//			return;
-//			//-----------------------------
-//		} else if (command.equals("INFOCHANGED")) { //Customer CHANGED
-//			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"
-//					+ "CustomerChanged");
-//			editedCustomer = true;
-//			buttonBar.enableButton(0, true);
-//			return;
-//			//-----------------------------
-//		} else if (command.equals("ADDINVOICEENTRY")) { // ADD INVOICE ENTRY
-//			ApplicationMenu.getInstance().pushScreenToTopOfStack(this);
-//			addEntry();
-//			//-----------------------------
-//		} else if (command.startsWith("EDITINVOICEENTRY")) {
-//			ApplicationMenu.getInstance().pushScreenToTopOfStack(this);
-//			long id = 0;
-//			//			TODO: get ID from command
-//			//			id = e.getID();
-//			editEntry(id);
-//			return;
-//			//-----------------------------
-//		} else if (command.equals("REMOVEINVOICEENTRY")) {
-//			long id = 0;
-//			//			TODO: get ID from command
-//			//			id = e.getID();
-//			removeEntry(id);
-//			//-----------------------------
-//		} else if (command.equals("INVOICE")) { //Invoice Display
-//			int format = HtmlReportDialog.LONG_FORMAT;
-//			Customer cust = (Customer) customerPnl.getData();
-//			if (cust.isDealer())
-//				format = HtmlReportDialog.SHORT_FORMAT;
-//			
-//			rmk.gui.Dialogs.report(HtmlReportDialog.INVOICE_REPORT, format,
-//					(int) invoiceNumber);
-//			//-----------------------------
-//		} else if (command.equals("ACKNOWLEDGMENT")) { //Acknowledgement Display
-//			int format = HtmlReportDialog.LONG_FORMAT;
-//			Customer cust = (Customer) customerPnl.getData();
-//			if (cust.isDealer())
-//				format = HtmlReportDialog.SHORT_FORMAT;
-//			
-//			rmk.gui.Dialogs.report(HtmlReportDialog.ACKNOWLEDGE_REPORT, format,
-//					(int) invoiceNumber);
-//			//-----------------------------
-//		} else if (command.equals("SAVE")) { //INFO CHANGED
-//			saveData();
-//			notifyListeners("INVOICE_SAVED");
-//			//-----------------------------
-//		} else if (command.equals("CTRL_ENTERKEY")) { // Force Save
-//			if (buttonBar.getButton(0).isEnabled()) {
-//				saveData();
-//				notifyListeners("INVOICE_SAVED");
-//			}
-//			//-----------------------------
-//		} else if (command.equals("PAYMENTS")) { //PaymentInfo Display
-//			gotoPaymentsScreen();
-//			//-----------------------------
-//		} else if (command.equals("INVOICEENTRYADDED")) { //Entry Added, reload list
-//			Vector invList = model.getInvoiceData();
-//			Invoice inv = (Invoice) invList.get(invList.size() - 1);
-//			Vector attList = inv.getItems();
-//			if (attList == null) {
-//				attList = new Vector();
-//				inv.setItems(attList);
-//			}
-//			//			InvoiceEntries entry = (InvoiceEntries) e.getSource();
-//			// TODO: verify this works
-//			InvoiceEntries entry = (InvoiceEntries) from;
-//			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":attList.indexOf:"
-//					+ attList.indexOf(entry));
-//			
-//			attList.addElement(entry);
-//			updateOccured((DBObject) entry, ScreenController.UPDATE_ADD, inv );
-//			//			updatePaymentSummary(inv);
-//			
-////			loadItemList(model);
-//			loadItemList(inv.getItems());
-//			//-----------------------------
-//		} else if (command.equals("INVOICEENTRYCHANGED")
-//				|| command.equals("ITEMSAVE")) { //INFO CHANGED
-//			Vector invList = model.getInvoiceData();
-//			//			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Change - cnt "
-//			//					+ invList.size());
-//			Vector items = model.getInvoiceItemsData();
-//			removeBlankItems(items);
-////			loadItemList(model);
-//			loadItemList(items);
-//			
-//			Invoice detailInv = invoiceDetailPnl.getData();
-//			Invoice inv=null;
-//			for(Enumeration list = invList.elements(); list.hasMoreElements();){
-//				inv = (Invoice) list.nextElement();
-//				if(inv.getInvoice() == detailInv.getInvoice())
-//					break;
-//			}
-//			//			Invoice inv = (Invoice) invList.get(invList.size() - 1);
-//			inv.setItems(items);
-//			
-//			//			InvoiceEntries entry = ((InvoiceItemScreen) e.getSource()).getItem();
-//			// TODO: verify this works
-//			InvoiceEntries entry = (InvoiceEntries) from;
-//			updateOccured((DBObject) entry, ScreenController.UPDATE_EDIT, inv );
-//			//			updatePaymentSummary(inv);
-//			this.grabFocus();
-//			if (invoiceNumber == 0)
-//				invoiceDetailPnl.grabFocus();
-//			else
-//				invoiceEntriesList.grabFocus();
-//			//			invoiceEntriesList.selectedItem(lastItemID);
-//			
-//			//-----------------------------
-//		} else if (command.equals("DBMODELCHANGED-KNIFEDATA")) { //INFO CHANGED
-//			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + command + "|");
-////			loadItemList(model);
-//			Invoice detailInv = invoiceDetailPnl.getData();
-//			loadItemList(detailInv.getItems());
-////			loadItemList(model);
-//
-//			//-----------------------------
-//		} else if (command.equals("LISTEXPAND")) {
-//			expandedList = !expandedList;
-//			//-----------------------------
-//		} else if (command.equals("ENTERKEY")) {
-//			Component currFocus = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
-//			inShippingAddressField = invoiceDetailPnl.isShippingAddressField(currFocus);
-//			//-----------------------------
-//		} else { // Undefined
-//			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":UndefinedAction:"
-//					+ command + "|");
-//		}
-//		invoiceEntriesList.expand(expandedList);
-//		invoiceDetailPnl.setVisible(!expandedList);
-//		
-//		if(inShippingAddressField){
-//			Component currFocus = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
-//			currFocus.requestFocus();
-//			ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Move back to AddressField???");
-//		}
-		
 	}
 	
 	void shipInvoice(){
@@ -838,7 +692,6 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener, Focu
 				ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":Move back to AddressField???");
 			} else{
 				KeyboardFocusManager.getCurrentKeyboardFocusManager().focusNextComponent(currFocus);
-//				ErrorLogger.getInstance().TODO();
 			}
 		}
 		break;
@@ -981,6 +834,7 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener, Focu
 						customer.setInvoices(new Vector());
 					}
 					((CustomerScreen)screen).setData(customer, customer.getCurrentAddressItem(), customer.getInvoices());
+					((CustomerScreen)screen).selectInvoiceNumber(currInvoice.getInvoice());
 					screen.bringToFront();
 				} catch (Exception e) {
 					ErrorLogger.getInstance().logError("Fetching customer:"+currInvoice.getCustomerID(), e);
