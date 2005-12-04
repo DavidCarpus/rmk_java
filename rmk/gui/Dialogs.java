@@ -967,6 +967,7 @@ public class Dialogs {
         partsVector.toArray(partsArray);
         Arrays.sort(partsArray, new rmk.comparators.PartListRpt());
 		
+		pricetable.warnIfBadLookup(false);
         for(int i=0; i< partsArray.length; i++){
         	// for each part
         	Parts part = partsArray[i];
@@ -1000,6 +1001,8 @@ public class Dialogs {
         		newPrices.add(newPartPriceItem);
         	}
         }
+		pricetable.warnIfBadLookup(true);
+
         if(newPrices.size() > 0){
         	Configuration.Config.getDB().saveItems("PartPrices", newPrices);
         }
