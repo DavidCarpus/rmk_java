@@ -189,6 +189,7 @@ public class Processing {
             Customer customer = ((rmk.gui.CustomerScreen) screen).getCustomer();
             if(invoice.getCustomerID() == invoice.getCustomerID()){
             	((rmk.gui.CustomerScreen) screen).setData(customer, customer.getCurrentAddressItem(), customer.getInvoices());
+            	((rmk.gui.CustomerScreen) screen).selectInvoiceNumber(invoice.getInvoice());
             }
         }
         // Payments Screen?

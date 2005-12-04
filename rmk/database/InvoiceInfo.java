@@ -72,6 +72,9 @@ public class InvoiceInfo {
 			lastInvoice = currInv;
 		}
 	}
+	public long getLastInvoiceViewed(){
+		return lastInvoice;
+	}
 
 	public Vector getInvoiceEntries(long invNum) {
 		Vector items = db.getItems("InvoiceEntries", "Invoice=" + invNum);
