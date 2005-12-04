@@ -182,6 +182,12 @@ implements ActionListener, FocusListener{
 		sorter.sortByColumn(1, true);
 		selectLast();
 	}
+	/**
+	 * @param invoiceNum
+	 */
+	public void setSelectedInvoice(long invoiceNum) {
+		lastSelectedItem = invoiceNum;		
+	}
 
 }
 
