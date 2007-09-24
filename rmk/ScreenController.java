@@ -8,6 +8,7 @@ import rmk.database.dbobjects.DBObject;
 import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.InvoiceEntries;
 import rmk.gui.*;
+import rmk.gui.Desktop;
 
 import java.awt.*;
 
