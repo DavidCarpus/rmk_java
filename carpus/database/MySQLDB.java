@@ -46,7 +46,8 @@ public class MySQLDB extends DBAccess implements carpus.database.DBInterface
 	String      url="";
 	if(isConnected()){ return;}
 	
-	System.out.println("Connect:" + username + ":" + passwd);	
+//	System.out.println("Connect:" + username + ":" + passwd);	
+	System.out.println("Connect:" + username);
 	System.out.println("Starting DBAccess:" + className);
 	
 	try{
