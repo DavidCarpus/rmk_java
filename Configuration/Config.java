@@ -79,7 +79,7 @@ public class Config
 		
 		String[] locations = {
 		        "u:/RMKSystem.txt",
-		        "/home/dcarpus/rmk/RMKSystem.txt",
+		        "/home/carpus/RMKSystem.txt",
 		        "./RMKSystem.txt",
 		        "./rmk/RMKSystem.txt",
 		        home + "RMKSystem.txt",
