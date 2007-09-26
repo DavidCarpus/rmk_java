@@ -67,8 +67,11 @@ public abstract class DBObject extends carpus.database.DBObject{
 	dataQry = dataQry.substring(1);
 
 //	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ baseQry + " Select " + dataQry);
-	
-	return baseQry + " Select " + dataQry;
+	if(Configuration.Config.getDBType().equals("MYSQL")){
+		return baseQry + " VALUES (" + dataQry + ")";
+	} else{
+		return baseQry + " Select " + dataQry;
+	}
     }
 	protected String updateSql(String tableName, String keyField, long id)
 		throws Exception {
