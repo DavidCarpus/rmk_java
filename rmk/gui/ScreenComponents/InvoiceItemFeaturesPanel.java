@@ -8,6 +8,7 @@ import rmk.database.dbobjects.InvoiceEntries;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
 import rmk.database.dbobjects.Parts;
 
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.Enumeration;
 import rmk.gui.DBGuiModel;
@@ -116,9 +117,8 @@ public class InvoiceItemFeaturesPanel extends JPanel{
 		if(newFeature.getID().intValue() == 0){  // it's not in database == initial load
 			sortFeatureList();
 		}
-		
-		for(Enumeration enum=currentFeatures.elements(); enum.hasMoreElements();){
-			InvoiceEntryAdditions addition = (InvoiceEntryAdditions)enum.nextElement();
+		for (Iterator iterator = currentFeatures.iterator(); iterator.hasNext();) {
+			InvoiceEntryAdditions addition = (InvoiceEntryAdditions) iterator.next();
 			if(addition.getPartID()  == newFeature.getPartID()){ // already in list...
 				if(addition == newFeature)
 					return true;
@@ -238,8 +238,8 @@ public class InvoiceItemFeaturesPanel extends JPanel{
 	boolean skipDuplicateEntry(InvoiceEntryAdditions newFeature){
 		// make sure it's not already in list
 		boolean duplicateEntry=false;
-		for(Enumeration enum=selectedItems.elements(); enum.hasMoreElements();){
-			InvoiceEntryAdditions feature = ((ListObject)enum.nextElement()).getAddition();
+		for(Enumeration selectionEnum=selectedItems.elements(); selectionEnum.hasMoreElements();){
+			InvoiceEntryAdditions feature = ((ListObject)selectionEnum.nextElement()).getAddition();
 			if(feature.getPartID() == newFeature.getPartID()){ 
 				// already in list...
 				if(newFeature.getID().intValue() == 0){ 

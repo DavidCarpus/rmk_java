@@ -1,5 +1,6 @@
 package rmk.gui.search;
 
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.GregorianCalendar;
 
@@ -140,8 +141,8 @@ public class Processing{
 
     static String entriesInvoiceNumberCriteria(Vector criteriaList){
 	String results="";
-	for(java.util.Enumeration enum = criteriaList.elements(); enum.hasMoreElements();){
-	    String criteria = (String )enum.nextElement();
+	for (Iterator iterator = criteriaList.iterator(); iterator.hasNext();) {
+		String criteria = (String) iterator.next();
 	    int split = criteria.indexOf("-");
 	    String field = criteria.substring(0,split);
 	    String value = criteria.substring(split+1);
@@ -158,8 +159,8 @@ public class Processing{
     }
     static String entriesPartNumberCriteria(Vector criteriaList){
 	String results="";
-	for(java.util.Enumeration enum = criteriaList.elements(); enum.hasMoreElements();){
-	    String criteria = (String )enum.nextElement();
+	for (Iterator iterator = criteriaList.iterator(); iterator.hasNext();) {
+		String criteria = (String) iterator.next();
 	    int split = criteria.indexOf("-");
 	    String field = criteria.substring(0,split);
 	    String value = criteria.substring(split+1);
@@ -188,8 +189,8 @@ public class Processing{
     }
     static String entriesFeaturesCriteria(Vector criteriaList){
 	String results="";
-	for(java.util.Enumeration enum = criteriaList.elements(); enum.hasMoreElements();){
-	    String criteria = (String )enum.nextElement();
+	for (Iterator iterator = criteriaList.iterator(); iterator.hasNext();) {
+		String criteria = (String) iterator.next();
 	    int split = criteria.indexOf("-");
 	    String field = criteria.substring(0,split);
 	    String value = criteria.substring(split+1).toUpperCase();
@@ -217,8 +218,8 @@ public class Processing{
     static String entriesInvoiceDateCriterias(Vector criteriaList){
 	String results="";
 	GregorianCalendar date;
-	for(java.util.Enumeration enum = criteriaList.elements(); enum.hasMoreElements();){
-	    String criteria = (String )enum.nextElement();
+	for (Iterator iterator = criteriaList.iterator(); iterator.hasNext();) {
+		String criteria = (String) iterator.next();
 	    int split = criteria.indexOf("-");
 	    String field = criteria.substring(0,split);
 	    String value = criteria.substring(split+1);
@@ -265,9 +266,9 @@ public class Processing{
 //    	Vector data = getSearchResults("InvoiceEntries",tmp);
 //  	Vector data = rmk.gui.Dialogs.getSearchResults();
 	if(data != null){
-	    for(java.util.Enumeration enum = data.elements(); enum.hasMoreElements();){	    
-		ErrorLogger.getInstance().logMessage(""+enum.nextElement());
-	    }
+		for (Iterator iterator = data.iterator(); iterator.hasNext();) {
+			ErrorLogger.getInstance().logMessage(""+iterator.next());
+		}
 	}
     	System.exit(0);
     }

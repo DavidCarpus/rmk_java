@@ -3,6 +3,7 @@ package rmk.gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.GregorianCalendar;
 
@@ -162,10 +163,8 @@ public class InvoicePaymentsScreen extends Screen {
                 + invoiceNum + "," + paymentID + ")");
         rmk.DataModel sys = rmk.DataModel.getInstance();
         
-
-        for (java.util.Enumeration enum = paymentList.elements(); enum
-                .hasMoreElements();) {
-            Payments payment = (Payments) enum.nextElement();
+        for (Iterator iterator = paymentList.iterator(); iterator.hasNext();) {
+			Payments payment = (Payments) iterator.next();
             if (payment.getPaymentID() == paymentID) {
             	paymentList.remove(payment);
             }

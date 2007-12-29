@@ -8,7 +8,7 @@ import rmk.database.dbobjects.*;
 import java.util.Calendar;
 import java.util.Vector;
 import java.util.GregorianCalendar;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 public class FinancialInfo {
@@ -58,9 +58,8 @@ public class FinancialInfo {
 
         Vector entries = getInvoiceEntries(invoice);
 
-        for (java.util.Enumeration enum = entries.elements(); enum
-                .hasMoreElements();) {
-            InvoiceEntries entry = (InvoiceEntries) enum.nextElement();
+        for (java.util.Iterator iter = entries.iterator(); iter.hasNext();) {
+            InvoiceEntries entry = (InvoiceEntries) iter.next();
             if (recomputeInvoiceEntryRetail(entry, year, true)) changed = true;
         }
         return changed;
@@ -70,9 +69,8 @@ public class FinancialInfo {
     	if(entry.getID().longValue() > 0) throw new Exception("Should not be called with non-new entry");
         Vector additions = entry.getFeatures();
         double price = entry.getPrice();
-        for (java.util.Enumeration enum = additions.elements(); enum
-                .hasMoreElements();) {
-        	InvoiceEntryAdditions feature = (InvoiceEntryAdditions) enum.nextElement();
+        for (java.util.Iterator iter = additions.iterator(); iter.hasNext();) {
+        	InvoiceEntryAdditions feature = (InvoiceEntryAdditions) iter.next();
         	price += feature.getPrice();
         }
         entry.setPrice(price);
@@ -99,10 +97,8 @@ public class FinancialInfo {
             entry.setFeatures(additions);
         }
 
-        for (java.util.Enumeration enum = additions.elements(); enum
-                .hasMoreElements();) {
-            InvoiceEntryAdditions feature = (InvoiceEntryAdditions) enum
-                    .nextElement();
+        for (java.util.Iterator iter = additions.iterator(); iter.hasNext();) {
+            InvoiceEntryAdditions feature = (InvoiceEntryAdditions) iter.next();
             price = partPrices.getPartPrice(priceYear, (int) feature
                     .getPartID());
             if (updateFeaturePrices && price != feature.getPrice() && price > 0) {
@@ -148,9 +144,8 @@ public class FinancialInfo {
         double total = 0;
 
         PartInfo partInfo = new PartInfo(db);
-        for (java.util.Enumeration enum = entries.elements(); enum
-                .hasMoreElements();) {
-            InvoiceEntries entry = (InvoiceEntries) enum.nextElement();
+        for (java.util.Iterator iter = entries.iterator(); iter.hasNext();) {
+            InvoiceEntries entry = (InvoiceEntries) iter.next();
             if (!partInfo.partIsTaxable(entry.getPartID()))
                     total += entry.getPrice();
         }
@@ -162,9 +157,8 @@ public class FinancialInfo {
         double total = 0;
 
         PartInfo partInfo = new PartInfo(db);
-        for (java.util.Enumeration enum = entries.elements(); enum
-                .hasMoreElements();) {
-            InvoiceEntries entry = (InvoiceEntries) enum.nextElement();
+        for (java.util.Iterator iter = entries.iterator(); iter.hasNext();) {
+            InvoiceEntries entry = (InvoiceEntries) iter.next();
             if (!partInfo.partIsTaxable(entry.getPartID())){
                 double price= entry.getPrice();
                 double discount = invoice.getDiscountPercentage();
@@ -188,8 +182,8 @@ public class FinancialInfo {
 
         PartInfo partInfo = new PartInfo(db);
 
-        for (Enumeration enum = items.elements(); enum.hasMoreElements();) {
-            InvoiceEntries item = (InvoiceEntries) enum.nextElement();
+        for (Iterator iter = items.iterator(); iter.hasNext();) {
+            InvoiceEntries item = (InvoiceEntries) iter.next();
             boolean discounted = false;
             
 
@@ -235,8 +229,8 @@ public class FinancialInfo {
             //  	    ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ "got
             // items");
         }
-        for (Enumeration enum = items.elements(); enum.hasMoreElements();) {
-            InvoiceEntries item = (InvoiceEntries) enum.nextElement();
+        for (Iterator iter = items.iterator(); iter.hasNext();) {
+            InvoiceEntries item = (InvoiceEntries) iter.next();
             total += item.getPrice();
         }
         double diff = invoice.getTotalRetail() - total;
@@ -314,8 +308,8 @@ public class FinancialInfo {
         if(payments == null)
         	payments = getInvoicePayments(invoice.getInvoice());
         if (payments != null) {
-            for (Enumeration enum = payments.elements(); enum.hasMoreElements();) {
-                Payments payment = (Payments) enum.nextElement();
+            for (Iterator iter = payments.iterator(); iter.hasNext();) {
+                Payments payment = (Payments) iter.next();
                 totalPayments += payment.getPayment();
             }
         }
@@ -460,13 +454,12 @@ public class FinancialInfo {
                 + customerID
                 + " order by PaymentDate desc");
         Payments payment = null;
-        for (Enumeration payments = dbPayments.elements(); payments
-                .hasMoreElements();) {
+        for (Iterator payments = dbPayments.iterator(); payments.hasNext();) {
             GregorianCalendar cutOffDate = new GregorianCalendar();
             cutOffDate.add(Calendar.MONTH, -Configuration.Config
                     .getCreditCardSearchMonths());
 
-            payment = (Payments) payments.nextElement();
+            payment = (Payments) payments.next();
             String number = "" + payment.getCheckNumber();
             GregorianCalendar paymentDate = payment.getPaymentDate();
             GregorianCalendar expirationDate = payment.getExpirationDate();

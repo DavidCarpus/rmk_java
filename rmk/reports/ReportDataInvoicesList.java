@@ -675,8 +675,9 @@ public class ReportDataInvoicesList {
 					longComment = true;
 
 				if(longComment){
-				    for(Enumeration enum = ReportData.commentRows(comment,COMMENT_CHARS).elements(); enum.hasMoreElements();){
-				        String commentPart = (String)enum.nextElement();
+					for (Iterator iterator = ReportData.commentRows(comment,COMMENT_CHARS).iterator(); iterator
+							.hasNext();) {
+						String commentPart = (String) iterator.next();
 					    info[4] = ""+commentPart;
 					    if(results.indexOf(info) <= 0)
 					    	results.add(info);

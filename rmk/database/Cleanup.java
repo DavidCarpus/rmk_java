@@ -9,7 +9,7 @@
 package rmk.database;
 
 import java.sql.Connection;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 
 import carpus.database.DBInterface;
@@ -45,8 +45,8 @@ public class Cleanup {
 
         }
         ErrorLogger.getInstance().logMessage(this.getClass().getName() + "\nBad CheckNumbers?:");
-        for(Enumeration enum = badNums.elements(); enum.hasMoreElements();){
-            ErrorLogger.getInstance().logMessage(""+enum.nextElement());
+        for(Iterator iter = badNums.iterator(); iter.hasNext();){
+            ErrorLogger.getInstance().logMessage(""+iter.next());
         }
     }
     public Vector fixInvoiceCCPayments(Connection cx, Invoice inv) throws Exception{
@@ -55,8 +55,8 @@ public class Cleanup {
         System.out.print(".");
         PaymentsWorker paymentsDB = new PaymentsWorker();
         Vector payments = paymentsDB.load(cx, "invoice = " + inv.getInvoice());
-        for(Enumeration enum = payments.elements();enum.hasMoreElements(); ){
-            Payments payment = (Payments) enum.nextElement();
+        for(Iterator iter = payments.iterator();iter.hasNext(); ){
+            Payments payment = (Payments) iter.next();
             int paymentType=(int) payment.getPaymentType();
             if(paymentType <=0)
                 paymentType = paymentTypeFromCheckNum(payment.getCheckNumber());

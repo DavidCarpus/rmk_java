@@ -10,6 +10,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
 import rmk.ErrorLogger;
+import rmk.database.dbobjects.Invoice;
 
 public class CustomerSelectionFrame extends JInternalFrame implements ActionListener {
     Vector listeners=null;
@@ -121,8 +122,9 @@ public class CustomerSelectionFrame extends JInternalFrame implements ActionList
 	    if(listeners != null){
 		ActionEvent event = 
 		    new ActionEvent(this,1,"Customer Select " + selectedCustomer);
-		for(Enumeration enum=listeners.elements(); enum.hasMoreElements();){
-		    ((ActionListener)enum.nextElement()).actionPerformed(event);
+		
+		for (java.util.Iterator<ActionListener> iter = listeners.iterator(); iter.hasNext();) {
+		    ((ActionListener)iter.next()).actionPerformed(event);
 		}
 	    }
         } else {

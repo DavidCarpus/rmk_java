@@ -10,6 +10,7 @@ import rmk.database.dbobjects.InvoiceEntryAdditions;
 import rmk.gui.IScreen;
 
 import java.awt.*;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.Enumeration;
 import java.awt.event.*;
@@ -112,10 +113,10 @@ implements ActionListener
     }
 //-----------------------------------------------------------------
     public void notifyListeners(ActionEvent event){
-	if(listeners == null) return;
-	for(Enumeration enum=listeners.elements(); enum.hasMoreElements();){
-	    ((ActionListener)enum.nextElement()).actionPerformed(event);
-	}
+    	if(listeners == null) return;
+    	for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
+    		((ActionListener) iterator.next()).actionPerformed(event);
+    		}
     }
 //-----------------------------------------------------------------
     public void loadFeatureField(int knifeModel, int year, DefaultListModel fieldModel, int type){

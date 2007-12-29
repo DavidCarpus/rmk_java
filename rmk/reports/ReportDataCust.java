@@ -152,8 +152,8 @@ public class ReportDataCust{
 	row++;
 
 	String field="";
-	for(Enumeration enum = features.elements(); enum.hasMoreElements();){
-	    InvoiceEntryAdditions feature = (InvoiceEntryAdditions)enum.nextElement();
+	for (Iterator iterator = features.iterator(); iterator.hasNext();) {
+		InvoiceEntryAdditions feature = (InvoiceEntryAdditions) iterator.next();
 	    col=0;
 	    int partID = (int)feature.getPartID();
 	    results[row][col++] = "";
@@ -218,8 +218,8 @@ public class ReportDataCust{
 
 	if(features == null || features.size() == 0)
 	    results[0][2] = entry.getPartDescription();
-	for(Enumeration enum = features.elements(); enum.hasMoreElements();){
-	    InvoiceEntryAdditions feature = (InvoiceEntryAdditions)enum.nextElement();
+	for (Iterator iterator = features.iterator(); iterator.hasNext();) {
+		InvoiceEntryAdditions feature = (InvoiceEntryAdditions) iterator.next();
 
 	    String part = sys.partInfo.getPartCodeFromID((int)feature.getPartID());
 	    if(feature.getPrice() == 0){

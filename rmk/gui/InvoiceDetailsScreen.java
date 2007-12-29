@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.GregorianCalendar;
 
@@ -188,8 +189,8 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener, Focu
 	void removeBlankItems(Vector items) {
 		if (items == null)
 			return;
-		for (Enumeration enum = items.elements(); enum.hasMoreElements();) {
-			InvoiceEntries entry = (InvoiceEntries) enum.nextElement();
+		for (Iterator iterator = items.iterator(); iterator.hasNext();) {
+			InvoiceEntries entry = (InvoiceEntries) iterator.next();
 			long id = entry.getInvoiceEntryID();
 			long partID = entry.getPartID();
 			if (id <= 0 || partID <= 0)
@@ -340,10 +341,9 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener, Focu
 		Vector features = entry.getFeatures();
 		if (features != null && features.size() > 0) {
 			boolean updates = false;
-			for (java.util.Enumeration enum = features.elements(); enum
-			.hasMoreElements();) {
-				InvoiceEntryAdditions addition = (InvoiceEntryAdditions) enum
-				.nextElement();
+			for (Iterator iterator = features.iterator(); iterator.hasNext();) {
+				InvoiceEntryAdditions addition = (InvoiceEntryAdditions) iterator.next();
+			
 				if (addition.getEntryID() != entry.getInvoiceEntryID()) {
 					// if not already set
 					addition.setEntryID(entry.getInvoiceEntryID());

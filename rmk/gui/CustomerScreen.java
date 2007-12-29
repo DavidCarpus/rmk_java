@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
-import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 
 import rmk.ErrorLogger;
@@ -82,8 +82,8 @@ public class CustomerScreen extends Screen implements FocusListener {
 		if(customer.getInvoices() == null){
 			customer.setInvoices(invList);
 		}
-		for(Enumeration enum = invList.elements(); enum.hasMoreElements();){
-			Invoice inv = (Invoice) enum.nextElement();
+		for(Iterator<Invoice> iter = invList.iterator(); iter.hasNext();){
+			Invoice inv = (Invoice) iter.next();
 			inv.setParent(customer);
 		}
 //		Address address=null;
@@ -129,9 +129,8 @@ public class CustomerScreen extends Screen implements FocusListener {
 	public void updateInvPrice(Invoice invoice){
 		if(customer.getInvoices() != null){
 			Vector invoiceList = customer.getInvoices();
-			for (java.util.Enumeration enum = invoiceList.elements(); enum
-			.hasMoreElements();) {
-				Invoice listInvoice=(Invoice) enum.nextElement();
+			for (java.util.Iterator<Invoice> iter = invoiceList.iterator(); iter.hasNext();) {
+				Invoice listInvoice=(Invoice) iter.next();
 				if(listInvoice.getInvoice() == invoice.getInvoice()){
 					if(listInvoice == invoice){ // same reference
 						invoicePanel.setData(invoiceList);
@@ -357,8 +356,8 @@ public class CustomerScreen extends Screen implements FocusListener {
 					customer.setInvoices(invData);
 				}
 				
-				for(Enumeration invoices = invData.elements();invoices.hasMoreElements();){
-					Invoice currInv = (Invoice) invoices.nextElement();
+				for (java.util.Iterator<Invoice> iter = invData.iterator(); iter.hasNext();) {
+					Invoice currInv=(Invoice) iter.next();
 					if(currInv.getInvoice() == ((Invoice)parentItem).getInvoice()){
 						invData.remove(currInv);
 					}

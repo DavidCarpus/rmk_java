@@ -246,7 +246,10 @@ public class Config
 		} catch (Exception e)
 		{
 		}
-		return "s:\\NewRMK\\merge\\";
+		if(carpus.util.SystemPrefrences.runningOnWindows())
+			return "s:\\NewRMK\\merge\\";
+		else
+			return getHomeDir();
 	}
 
 	public static double getFLTaxRate()
@@ -301,6 +304,14 @@ public class Config
 
 	public static String systemName()
 	{
+		try
+		{
+			String results = p.getProperty("systemName");
+			if (results != null)
+				return results;
+		} catch (Exception e)
+		{
+		}
 		return "rmk";
 	}
 	public static String databaseIP()
@@ -317,6 +328,12 @@ public class Config
 	}
 	public static String databaseName()
 	{
+		try
+		{
+			String results = p.getProperty("databaseName");
+			if (results != null)
+				return results;
+		} catch (Exception e)	{		}
 		return systemName();
 	}
 

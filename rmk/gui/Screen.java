@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 import carpus.gui.*;
+
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.Enumeration;
 
@@ -183,8 +185,8 @@ abstract class Screen
     }
     public void notifyListeners(ActionEvent event){
 	if(listeners == null) return;
-	for(Enumeration enum=listeners.elements(); enum.hasMoreElements();){
-	    ActionListener listener = (ActionListener)enum.nextElement();
+	for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
+		ActionListener listener = (ActionListener) iterator.next();
 	    listener.actionPerformed(event);
 //  	    if(title.equals("Invoice Item"))
 //  		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ listener);

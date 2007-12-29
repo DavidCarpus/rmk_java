@@ -309,12 +309,12 @@ public class ReportData {
 
         String field = "";
         double featuresTotal = 0;
-        for (Enumeration enum = features.elements(); enum.hasMoreElements();) {
-            InvoiceEntryAdditions feature = (InvoiceEntryAdditions) enum
-                    .nextElement();
+        
+        for (Iterator iterator = features.iterator(); iterator.hasNext();) {
+			InvoiceEntryAdditions feature = (InvoiceEntryAdditions) iterator.next();
             addFeatureLong(resultsVector, feature, entryQty, 5);
             featuresTotal += feature.getPrice();
-        }
+		}
         double baseKnife = (entryTotalRetail / entryQty) - featuresTotal;
         baseKnifeRow[3] = "" + currencyFormatter.format(baseKnife);
         baseKnifeRow[4] = "" + currencyFormatter.format(baseKnife * entryQty);
@@ -375,8 +375,8 @@ public class ReportData {
         int rowsAdded =0;
         if (comment != null) {
         	Vector rows = commentRows(comment, maxCommentLength);
-            for (Enumeration enum = rows.elements(); enum.hasMoreElements();) {
-                String commentPart = (String) enum.nextElement();
+        	for (Iterator iterator = rows.iterator(); iterator.hasNext();) {
+				String commentPart = (String) iterator.next();
 				String row[] = new String[cols];
                 if (commentPart != null) {
                     row[0] = "";
@@ -503,11 +503,9 @@ public class ReportData {
                                                           // parttype
                     results[0][2] = "";
         }
-
-        for (Enumeration enum = features.elements(); enum.hasMoreElements();) {
-            InvoiceEntryAdditions feature = (InvoiceEntryAdditions) enum
-                    .nextElement();
-
+        
+        for (Iterator iterator = features.iterator(); iterator.hasNext();) {
+			InvoiceEntryAdditions feature = (InvoiceEntryAdditions) iterator.next();		
             String part = sys.partInfo.getPartCodeFromID((int) feature
                     .getPartID());
             if (feature.getPrice() == 0) {
@@ -528,9 +526,8 @@ public class ReportData {
 
         if (comment != null) {
             row++;
-            for (Enumeration enum = commentRows(comment, maxCommentLength)
-                    .elements(); enum.hasMoreElements();) {
-                String commentPart = (String) enum.nextElement();
+            for (Iterator iterator = commentRows(comment, maxCommentLength).iterator(); iterator.hasNext();) {
+				String commentPart = (String) iterator.next();
                 col = 0;
                 results[row][col++] = "";
                 results[row][col++] = "**NOTE**";

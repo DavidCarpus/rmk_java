@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Vector;
 import java.util.Hashtable;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.GregorianCalendar;
 import java.util.Arrays;
 
@@ -82,9 +83,8 @@ public class InvoiceInfo {
 			return items;
 		PartInfo partInfo = new PartInfo(db);
 
-		for (java.util.Enumeration enum = items.elements(); enum
-				.hasMoreElements();) {
-			InvoiceEntries item = (InvoiceEntries) enum.nextElement();
+		for (java.util.Iterator iter = items.iterator(); iter.hasNext();) {
+			InvoiceEntries item = (InvoiceEntries) iter.next();
 			String desc = partInfo.getPartCodeFromID(item.getPartID());
 			item.setPartType((int) partInfo.getPartTypeFromID((int) item
 					.getPartID()));
@@ -155,9 +155,8 @@ public class InvoiceInfo {
 		Vector invoices = getInvoicesByEstimatedAndTerms(date, 1);
 
 		FinancialInfo finance = new FinancialInfo(db);
-		for (java.util.Enumeration enum = invoices.elements(); enum
-				.hasMoreElements();) {
-			Invoice inv = (Invoice) enum.nextElement();
+		for (java.util.Iterator iter = invoices.iterator(); iter.hasNext();) {
+			Invoice inv = (Invoice) iter.next();
 			double due = finance.getInvoiceDue(inv);
 			if (due > 0) {
 				results.add(inv);
@@ -196,9 +195,8 @@ public class InvoiceInfo {
 	public int getKnifeCount(long invoice) {
 		int results = 0;
 		Vector entries = getInvoiceEntries(invoice);
-		for (java.util.Enumeration enum = entries.elements(); enum
-				.hasMoreElements();) {
-			InvoiceEntries entry = (InvoiceEntries) enum.nextElement();
+		for (java.util.Iterator iter = entries.iterator(); iter.hasNext();) {
+			InvoiceEntries entry = (InvoiceEntries) iter.next();
 			results += entry.getQuantity();
 		}
 		return results;
@@ -221,13 +219,11 @@ public class InvoiceInfo {
 			return null;
 		}
 
-		for (java.util.Enumeration enum = invoices.elements(); enum
-				.hasMoreElements();) {
-			Invoice inv = (Invoice) enum.nextElement();
+		for (java.util.Iterator iter = invoices.iterator(); iter.hasNext();) {
+			Invoice inv = (Invoice) iter.next();
 			Vector items = getInvoiceEntries(inv.getInvoice());
-			for (java.util.Enumeration enum2 = items.elements(); enum2
-					.hasMoreElements();) {
-				InvoiceEntries item = (InvoiceEntries) enum2.nextElement();
+			for (java.util.Iterator iter2 = items.iterator(); iter2.hasNext();) {
+				InvoiceEntries item = (InvoiceEntries) iter2.next();
 				// key Description
 				if (sys.partInfo.partIsBladeItem(item.getPartID())) {
 					String key = ""
@@ -247,9 +243,8 @@ public class InvoiceInfo {
 		//	carpus.util.Formatting formatter = new carpus.util.Formatting();
 		results.add(Formatting.textSizer("For Week", 25) + "  "
 				+ db.dateStr(date));
-		for (java.util.Enumeration enum = resultsHash.keys(); enum
-				.hasMoreElements();) {
-			String key = (String) enum.nextElement();
+		for (java.util.Enumeration<String> iter = resultsHash.keys(); iter.hasMoreElements();) {
+			String key = (String) iter.nextElement();
 			Integer cnt = (Integer) resultsHash.get(key);
 			//  	    results.add( formatter.textSizer(""+cnt, 5) + "- " +
 			// formatter.textSizer(key, 25));
@@ -267,10 +262,8 @@ public class InvoiceInfo {
 				+ entryID);
 		PartInfo partInfo = new PartInfo(db);
 
-		for (java.util.Enumeration enum = items.elements(); enum
-				.hasMoreElements();) {
-			InvoiceEntryAdditions item = (InvoiceEntryAdditions) enum
-					.nextElement();
+		for (java.util.Iterator iter = items.iterator(); iter.hasNext();) {
+			InvoiceEntryAdditions item = (InvoiceEntryAdditions) iter.next();
 			item.setPartType((int) partInfo.getPartTypeFromID((int) item
 					.getPartID()));
 		}
@@ -280,8 +273,8 @@ public class InvoiceInfo {
 		//  	return items;
 
 		Vector results = new Vector();
-		//  	for(java.util.Enumeration enum=items.elements();
-		// enum.hasMoreElements();){
+		//  	for(java.util.Iterator iter=items.iterator();
+		// iter.hasNext();){
 		//  	    InvoiceEntryAdditions item =
 		// (InvoiceEntryAdditions)enum.nextElement();
 		for (int i = 0; i < entries.length; i++) {
@@ -420,12 +413,11 @@ public class InvoiceInfo {
 		Vector results = db.getItems("Invoice", whereClause);
 
 		if(results == null) return null;
-		for (Enumeration enum = results.elements(); enum.hasMoreElements();) {
-			Invoice inv = (Invoice) enum.nextElement();
+		for (Iterator iter = results.iterator(); iter.hasNext();) {
+			Invoice inv = (Invoice) iter.next();
 			Vector entries = getInvoiceEntries(inv.getInvoice());
-			for (Enumeration enum2 = entries.elements(); enum2
-					.hasMoreElements();) {
-				InvoiceEntries entry = (InvoiceEntries) enum2.nextElement();
+			for (Iterator iter2 = entries.iterator(); iter2.hasNext();) {
+				InvoiceEntries entry = (InvoiceEntries) iter2.next();
 				entry.setFeatures(getInvoiceEntryAdditions(entry
 						.getInvoiceEntryID()));
 			}
@@ -550,9 +542,8 @@ public class InvoiceInfo {
 	public void mergeCustomers(Customer correctCustomer,
 			Customer incorrectCustomer) {
 		Vector invoices = getCustomerInvoices(incorrectCustomer);
-		for (Enumeration invList = invoices.elements(); invList
-				.hasMoreElements();) {
-			Invoice inv = (Invoice) invList.nextElement();
+		for (Iterator invList = invoices.iterator(); invList.hasNext();) {
+			Invoice inv = (Invoice) invList.next();
 			inv.setCustomerID(correctCustomer.getCustomerID());
 		}
 		db.saveItems("Invoice", invoices);
@@ -592,11 +583,10 @@ public class InvoiceInfo {
 
 		//  	Vector data = sys.invoiceInfo.getMiniInvoices();
 
-		for (Enumeration enum = data.elements(); enum.hasMoreElements();) {
+		for (Iterator iter = data.iterator(); iter.hasNext();) {
 			//  	    Invoice invoice = (Invoice )enum.nextElement();
 			//  	    ErrorLogger.getInstance().logMessage(invoice + ":" + invoice.getCustomerID());
-			InvoiceEntryAdditions item = (InvoiceEntryAdditions) enum
-					.nextElement();
+			InvoiceEntryAdditions item = (InvoiceEntryAdditions) iter.next();
 			ErrorLogger.getInstance().logMessage(item + ":" + item.getPartType() + " : "
 					+ sys.partInfo.getPartDescFromID(item.getPartID()));
 		}
@@ -619,10 +609,10 @@ public class InvoiceInfo {
 		Vector historyItems = db.getItems("HistoryItems", criteria);
 		if (historyItems == null)
 			return new Vector();
-		Enumeration enum = historyItems.elements();
+		Iterator iter = historyItems.iterator();
 		HistoryItems dummyHistoryItem=null;
-		while (enum.hasMoreElements()) {
-			HistoryItems item = (HistoryItems) enum.nextElement();
+		while (iter.hasNext()) {
+			HistoryItems item = (HistoryItems) iter.next();
 			if(historyItems.size() > 1 && item.getInvoice() == 1)
 				dummyHistoryItem = item;
 			else{

@@ -2,6 +2,7 @@ package rmk.gui;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.Enumeration;
 
@@ -21,12 +22,14 @@ implements ActionListener
     //===================================================
 	public void removeScreenFromWindowMenu(Screen screen) {
 		// remove from screens vector
-		for (Enumeration enum = screens.elements(); enum.hasMoreElements();) {
-			Screen currScreen = (Screen) enum.nextElement();
+		Screen screenToRemove=null;
+		for (Iterator<Screen> iter = screens.iterator(); iter.hasNext();) {
+			Screen currScreen = (Screen) iter.next();
 			if (screen == currScreen) {
-				screens.removeElement(currScreen);
+				screenToRemove = currScreen;
 			}
 		}
+		if(screenToRemove != null)	screens.removeElement(screenToRemove);
 	// remove from menu
 		removeWindowMenuItem(screen.getTitle());
 		removeWindowMenuItem(screen.getTitle());
@@ -199,15 +202,15 @@ implements ActionListener
     	} else{
     		//  	    notifyListeners(e);
     		if(listeners == null) return;
-    		for(Enumeration enum=listeners.elements(); enum.hasMoreElements();){
-    			((ActionListener)enum.nextElement()).actionPerformed(e);
+    		for(Iterator<ActionListener> iter=listeners.iterator(); iter.hasNext();){
+    			((ActionListener)iter.next()).actionPerformed(e);
     		}
     	}
     }
    //===================================================
 	public Screen findScreen(String title) {
-		for (Enumeration enum = screens.elements(); enum.hasMoreElements();) {
-			Screen screen = (Screen) enum.nextElement();
+		for (Iterator<Screen> iter = screens.iterator(); iter.hasNext();) {
+			Screen screen = (Screen) iter.next();
 			if (screen.getTitle().toUpperCase().startsWith(title.toUpperCase())) {
 				return screen;
 			}
@@ -270,8 +273,8 @@ implements ActionListener
     }
     
     public boolean unsavedScreens(){
-		for (Enumeration enum = screens.elements(); enum.hasMoreElements();) {
-			Screen currScreen = (Screen) enum.nextElement();
+		for (Iterator<Screen> iter = screens.iterator(); iter.hasNext();) {
+			Screen currScreen = (Screen) iter.next();
 			if (currScreen.isEdited()) {
 				return true;
 			}

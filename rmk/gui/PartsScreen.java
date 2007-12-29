@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Iterator;
 import java.util.Vector;
 
 import rmk.ErrorLogger;
@@ -74,8 +75,8 @@ public class PartsScreen extends Screen{
     public void setActive(boolean active){
 	this.active = active;
 	Vector lst = new Vector();
-	for(java.util.Enumeration enum = sys.partInfo.getParts(); enum.hasMoreElements();){
-	    Parts part = (Parts)enum.nextElement();
+	for(java.util.Enumeration<Parts> partEnum = sys.partInfo.getParts(); partEnum.hasMoreElements();){
+	    Parts part = (Parts)partEnum.nextElement();
 	    if(part.isActive() && active)
 		lst.add(part);
 	    if(!part.isActive() && !active)

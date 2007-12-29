@@ -71,9 +71,9 @@ public class Processing {
             String invoices = "";
             int cnt = 0;
 
-            for (Enumeration enum = invoicesProcessed.elements(); enum
-                    .hasMoreElements();) {
-                Invoice invoice = (Invoice) enum.nextElement();
+            for (Iterator iter = invoicesProcessed.iterator(); iter
+                    .hasNext();) {
+                Invoice invoice = (Invoice) iter.next();
                 if (invoice.getDateShipped() != null) {
                     invoices += invoice.getInvoice() + "\n";
                     cnt++;
@@ -84,9 +84,9 @@ public class Processing {
 
             cnt = 0;
             invoices="";
-            for (Enumeration enum = invoicesProcessed.elements(); enum
-                    .hasMoreElements();) {
-                Invoice invoice = (Invoice) enum.nextElement();
+            for (Iterator iter = invoicesProcessed.iterator(); iter
+                    .hasNext();) {
+                Invoice invoice = (Invoice) iter.next();
                 if (invoice.getDateShipped() == null) {
                     invoices += invoice.getInvoice() + "\n";
                     cnt++;
@@ -104,8 +104,8 @@ public class Processing {
         if (lst.contains(invoice)){ 
             lst.remove(invoice);
         } else{
-            for (Enumeration enum = lst.elements(); enum.hasMoreElements();) {
-                Invoice inv = (Invoice) enum.nextElement();
+            for (Iterator iter = lst.iterator(); iter.hasNext();) {
+                Invoice inv = (Invoice) iter.next();
                 if (inv.getInvoice() == invoice.getInvoice()) {
                     lst.remove(inv);
                     return;
@@ -116,8 +116,8 @@ public class Processing {
         
     boolean invoiceInList(Vector lst, Invoice invoice) {
         if (lst.contains(invoice)) return true;
-        for (Enumeration enum = lst.elements(); enum.hasMoreElements();) {
-            Invoice inv = (Invoice) enum.nextElement();
+        for (Iterator iter = lst.iterator(); iter.hasNext();) {
+            Invoice inv = (Invoice) iter.next();
             if (inv.getInvoice() == invoice.getInvoice()) return true;
         }
         return false;

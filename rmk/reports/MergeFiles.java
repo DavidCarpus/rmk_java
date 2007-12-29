@@ -46,9 +46,8 @@ public class MergeFiles{
 
 	String[] lastRow=null;
 	Invoice lastInv=null;
-
-	for(java.util.Enumeration enum = data.elements(); enum.hasMoreElements();){
-	    Invoice invoice = (Invoice )enum.nextElement();
+	for (Iterator iterator = data.iterator(); iterator.hasNext();) {
+		Invoice invoice = (Invoice) iterator.next();
 	    boolean dupe = false;
 //  	    ErrorLogger.getInstance().logMessage(invoice.getInvoice());
 	    

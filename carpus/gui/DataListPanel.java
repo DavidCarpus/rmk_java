@@ -230,8 +230,8 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 		if (e == null || listeners == null)
 			return;
 		Vector sentTo = new Vector();
-		for (Enumeration enum = listeners.elements(); enum.hasMoreElements();) {
-			ActionListener listener = ((ActionListener) enum.nextElement());
+		for (Iterator iter = listeners.iterator(); iter.hasNext();) {
+			ActionListener listener = ((ActionListener) iter.next());
 			if (sentTo.indexOf(listener) < 0) {
 				sentTo.add(listener);
 				listener.actionPerformed(e);
@@ -340,8 +340,8 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 	public boolean setData(Vector lst) {
 		data = lst;
 		if (lst != null) {
-			for (Enumeration enum = lst.elements(); enum.hasMoreElements();) {
-				DBObject item = (DBObject) enum.nextElement();
+			for (Iterator iter = lst.iterator(); iter.hasNext();) {
+				DBObject item = (DBObject) iter.next();
 				if (item.getID() == null || item.getID().longValue() == 0)
 					lst.remove(item);
 			}

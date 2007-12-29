@@ -2,8 +2,10 @@ package carpus.gui;
 
 import java.awt.*;
 import javax.swing.*;
+
 import java.util.Vector;
-import java.util.Enumeration;
+//import java.util.Enumeration;
+import java.util.Iterator;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -110,9 +112,8 @@ public class BasicToolBar extends JToolBar implements ActionListener
 
     public void actionPerformed(ActionEvent e) {
         if (listeners != null) {
-            for (Enumeration enum = listeners.elements(); enum
-                    .hasMoreElements();) {
-                ((ActionListener) enum.nextElement()).actionPerformed(e);
+            for (Iterator iter = listeners.iterator(); iter.hasNext();) {
+                ((ActionListener) iter.next()).actionPerformed(e);
             }
         }
     }

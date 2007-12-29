@@ -1,9 +1,11 @@
 package rmk.database;
 
 import rmk.database.dbobjects.*;
+
+import java.util.Enumeration;
 import java.util.Vector;
 import java.util.Hashtable;
-import java.util.Enumeration;
+import java.util.Iterator;
 
 public class PartInfo {
 	static Hashtable parts = null;
@@ -31,8 +33,8 @@ public class PartInfo {
 	public long largestPartID() {
 		long results = 0;
 		getParts();
-		for (Enumeration enum = parts.elements(); enum.hasMoreElements();) {
-			Parts part = (Parts) enum.nextElement();
+		for (java.util.Enumeration<Parts> iter = parts.elements(); iter.hasMoreElements();) {
+			Parts part = (Parts) iter.nextElement();
 			results = Math.max(part.getPartID(), results);
 		}
 		return results;
@@ -40,8 +42,8 @@ public class PartInfo {
 	//==========================================================
 	public int getPartTypeFromID(int partID) {
 		getParts();
-		for (Enumeration enum = parts.elements(); enum.hasMoreElements();) {
-			Parts part = (Parts) enum.nextElement();
+		for (java.util.Enumeration<Parts> iter = parts.elements(); iter.hasMoreElements();) {
+			Parts part = (Parts) iter.nextElement();
 			if (part.getPartID() == partID)
 				return part.getPartType();
 		}
@@ -128,8 +130,8 @@ public class PartInfo {
 	//==========================================================
 	public int getPartIDFromCode(String partCode) {
 		getParts();
-		for (Enumeration enum = parts.elements(); enum.hasMoreElements();) {
-			Parts part = (Parts) enum.nextElement();
+		for (java.util.Enumeration<Parts> iter = parts.elements(); iter.hasMoreElements();) {
+			Parts part = (Parts) iter.nextElement();
 			if (partCode.equals(part.getPartCode()))
 				return (int) part.getPartID();
 		}
@@ -140,8 +142,8 @@ public class PartInfo {
 		partCode = partCode.trim();
 		String match="";
 		int matchID=0;
-		for (Enumeration enum = parts.elements(); enum.hasMoreElements();) {
-			Parts part = (Parts) enum.nextElement();
+		for (java.util.Enumeration<Parts> iter = parts.elements(); iter.hasMoreElements();) {
+			Parts part = (Parts) iter.nextElement();
 			String realPartCode = part.getPartCode();
 			if (realPartCode.startsWith(partCode) && part.isActive()){
 				if(match.length() > 0) 
@@ -165,8 +167,8 @@ public class PartInfo {
 	public Vector getParts(int partType) {
 		getParts();
 		Vector lst = new Vector();
-		for (Enumeration enum = parts.elements(); enum.hasMoreElements();) {
-			Parts part = (Parts) enum.nextElement();
+		for (java.util.Enumeration<Parts> iter = parts.elements(); iter.hasMoreElements();) {
+			Parts part = (Parts) iter.nextElement();
 			if (part.getPartType() == partType)
 				lst.add(part);
 		}
@@ -184,16 +186,16 @@ public class PartInfo {
 		}
 		return lst;
 	}
-	public java.util.Enumeration getPartTypesEnum() {
+	public java.util.Enumeration<PartTypes> getPartTypesEnum() {
 		if (partTypes == null) {
 			partTypes = new Hashtable();
 			Vector lst =
 				db.getItems("PartTypes", "PartTypeID >0 order by PartTypeID");
 			if (lst != null) {
-				for (Enumeration enum = lst.elements();
-					enum.hasMoreElements();
+				for (Iterator iter = lst.iterator();
+					iter.hasNext();
 					) {
-					PartTypes type = (PartTypes) enum.nextElement();
+					PartTypes type = (PartTypes) iter.next();
 					//  		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ type);
 
 					partTypes.put(type.getID(), type);
@@ -225,8 +227,8 @@ public class PartInfo {
 		//  	return "Unknown";
 	}
 	public int getPartTypeID(String desc) {
-		for (Enumeration enum = getPartTypesEnum(); enum.hasMoreElements();) {
-			PartTypes type = (PartTypes) enum.nextElement();
+		for (Enumeration<PartTypes> partTypes = getPartTypesEnum(); partTypes.hasMoreElements();) {
+			PartTypes type = (PartTypes) partTypes.nextElement();
 			String typeDesc = type.getDescription();
 			if(typeDesc == null)
 				typeDesc = "";	
@@ -242,12 +244,12 @@ public class PartInfo {
 		return 0;
 	}
 	//==========================================================
-	public java.util.Enumeration getParts() {
+	public java.util.Enumeration<Parts> getParts() {
 		if (parts == null) {
 			parts = new Hashtable();
 			Vector lst = db.getItems("Parts", "partid >0 order by partid");
-			for (Enumeration enum = lst.elements(); enum.hasMoreElements();) {
-				Parts part = (Parts) enum.nextElement();
+			for (Iterator iter = lst.iterator(); iter.hasNext();) {
+				Parts part = (Parts) iter.next();
 				parts.put(part.getID(), part);
 			}
 		}
@@ -262,10 +264,10 @@ public class PartInfo {
 
 	//==========================================================
 	public Vector getKnifeOptions() {
-		getParts();
+		
 		Vector lst = new Vector();
-		for (Enumeration enum = parts.elements(); enum.hasMoreElements();) {
-			Parts part = (Parts) enum.nextElement();
+		for (Enumeration<Parts> parts = getParts(); parts.hasMoreElements();) {
+			Parts part = (Parts) parts.nextElement();
 			if (part.getPartType() != MODEL_PART_TYPE
 				&& part.getPartType() != 99) // Model,Misc
 				lst.add(part);
@@ -274,10 +276,9 @@ public class PartInfo {
 	}
 	//==========================================================
 	public Vector getKnives() {
-		getParts();
 		Vector lst = new Vector();
-		for (Enumeration enum = parts.elements(); enum.hasMoreElements();) {
-			Parts part = (Parts) enum.nextElement();
+		for (Enumeration<Parts> parts = getParts(); parts.hasMoreElements();) {
+			Parts part = (Parts) parts.nextElement();
 			if (part.getPartType() == MODEL_PART_TYPE)
 				lst.add(part);
 		}
@@ -320,10 +321,10 @@ public class PartInfo {
 	//--------------------------------------------------------------------------------
 	public Vector getPartsFromPartCodeVector(Vector partCodes) {
 		Vector parts = new Vector();
-		for (java.util.Enumeration enum = partCodes.elements(); enum.hasMoreElements();
+		for (java.util.Iterator iter = partCodes.iterator(); iter.hasNext();
 			) {
-//			Parts part = getPartFromPartialCode((String) enum.nextElement());
-			Parts part = getPartFromCode((String) enum.nextElement());
+//			Parts part = getPartFromPartialCode((String) iter.next());
+			Parts part = getPartFromCode((String) iter.next());
 			parts.add(part);
 		}
 		return parts;

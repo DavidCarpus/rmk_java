@@ -1,14 +1,19 @@
 #RMK Settings
 #Sun May 08 14:24:52 EDT 2005
-mergeFileLocation=s\:/NewRMK/merge/
-databaseType=ACCESS
+#mergeFileLocation=s\:/NewRMK/merge/
+databaseName=newrmk
+#databaseType=ACCESS
+#dbuser=gtr
+#dbpasswd=skeet
+databaseType=MYSQL
+databaseIP=localhost
+dbuser=shop
+dbpasswd=skeet100
 faxNumber=(407)855-9054
-dbpasswd=skeet
 dataFileLocation=s\:/NewRMK/rmk/txt/
 monthsBacklogged=52
 lookandfeel=com.sun.java.swing.plaf.windows.WindowsLookAndFeel
 backgroundImageLocation=s\:/NewRMK/dcarpus/rmk/
-dbuser=gtr
 dbFileLocation=s\:/NewRMK/dcarpus/
 ShippingCode8=BLANK
 ShippingCode7=OTHER

@@ -68,8 +68,8 @@ public class InvoiceEntries extends DBObject{
     public void setInvoiceEntryID(long value){
 	values[0] = new Long(value);
 	if(items != null){
-	    for(java.util.Enumeration enum = items.elements(); enum.hasMoreElements();){
-		InvoiceEntryAdditions addition = (InvoiceEntryAdditions)enum.nextElement();
+	    for(java.util.Iterator<InvoiceEntryAdditions> iter = items.iterator(); iter.hasNext();){
+		InvoiceEntryAdditions addition = (InvoiceEntryAdditions)iter.next();
 		if(addition.getEntryID() != value)
 		    addition.setEntryID(value);
 	    }

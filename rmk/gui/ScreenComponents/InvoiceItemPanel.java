@@ -13,6 +13,8 @@ import rmk.database.dbobjects.Invoice;
 import rmk.database.dbobjects.InvoiceEntryAdditions;
 import rmk.database.dbobjects.Parts;
 import rmk.database.dbobjects.Customer;
+
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.Enumeration;
 //import rmk.gui.DBGuiModel;
@@ -147,8 +149,9 @@ implements ActionListener,  ListSelectionListener
                     price = priceTable.getPartPrice(year, (int)currentKnife.getPartID());
 
                     currentKnife.setFeatures(new Vector());
-                    for(Enumeration enum=existingFeatures.elements(); enum.hasMoreElements();){
-                        InvoiceEntryAdditions feature = (InvoiceEntryAdditions)enum.nextElement();
+                    for (Iterator iterator = existingFeatures.iterator(); iterator
+							.hasNext();) {
+						InvoiceEntryAdditions feature = (InvoiceEntryAdditions) iterator.next();
                         InvoiceEntryAdditions featureCopy = new InvoiceEntryAdditions(feature);
                         
                         currentKnife.addFeature(featureCopy);
@@ -173,8 +176,9 @@ implements ActionListener,  ListSelectionListener
         	currentKnife.setID(originalKnife.getID());
         	Vector features = currentKnife.getFeatures();
         	if(features!=null){
-        		for(Enumeration enum=features.elements(); enum.hasMoreElements();){
-        			InvoiceEntryAdditions feature = (InvoiceEntryAdditions)enum.nextElement();
+        		for (Iterator iterator = features.iterator(); iterator
+						.hasNext();) {
+					InvoiceEntryAdditions feature = (InvoiceEntryAdditions) iterator.next();
         			feature.setEntryID(originalKnife.getInvoiceEntryID());
         		}
         	}
@@ -272,8 +276,8 @@ implements ActionListener,  ListSelectionListener
     public void selectListItem(long partID) {
         int index = 1;
         
-        for (Enumeration enum = listData.elements(); enum.hasMoreElements();) {
-            ListObject item = (ListObject) enum.nextElement();
+        for (Enumeration listEnum = listData.elements(); listEnum.hasMoreElements();) {
+            ListObject item = (ListObject) listEnum.nextElement();
             if (item.getID() == partID) {
                 index = listData.indexOf(item);
                 break;

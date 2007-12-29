@@ -94,8 +94,8 @@ public class Invoice extends DBObject{
     	items = lst;
     	if(items == null) return;
     	
-    	for(java.util.Enumeration enum = items.elements(); enum.hasMoreElements();){
-    		InvoiceEntries entry = (InvoiceEntries)enum.nextElement();
+    	for(java.util.Iterator iter = items.iterator(); iter.hasNext();){
+    		InvoiceEntries entry = (InvoiceEntries)iter.next();
     		entry.setParent(this);
     	}
     }

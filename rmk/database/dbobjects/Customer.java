@@ -1,6 +1,7 @@
 package rmk.database.dbobjects;
 import java.sql.*;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 
 import carpus.database.Fixed;
@@ -198,8 +199,8 @@ public class Customer extends DBObject{
 		if(invoices == null) invoices = new Vector();
 		if(invoices.contains(invoice)) return; // THE object is already there
 		boolean found=false;
-		for(Enumeration enum = invoices.elements(); enum.hasMoreElements();){
-			Invoice inv = (Invoice) enum.nextElement();
+		for(Iterator<Invoice> iter = invoices.iterator(); iter.hasNext();){
+			Invoice inv = (Invoice) iter.next();
 			if(inv.getInvoice() == invoice.getInvoice()){
 				invoices.remove(inv);
 				invoices.add(invoice);

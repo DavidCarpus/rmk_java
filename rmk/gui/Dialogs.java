@@ -10,6 +10,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.GregorianCalendar;
 
@@ -185,9 +186,8 @@ public class Dialogs {
         } // end of try-catch
 
         int cnt = 0;
-        for (java.util.Enumeration enum = data.elements(); enum
-                .hasMoreElements();) {
-            Invoice invoice = (Invoice) enum.nextElement();
+        for (Iterator iterator = data.iterator(); iterator.hasNext();) {
+            Invoice invoice = (Invoice) iterator.next();
             rpt.setInvoice(invoice);
             try {
                 Customer cust = sys.customerInfo.getCustomerByID(invoice
@@ -343,10 +343,11 @@ public class Dialogs {
     public boolean dataErrors(Vector errors) { // returns true if errors
         if (errors != null) {
             String errMsg = "";
-            for (java.util.Enumeration enum = errors.elements(); enum
-                    .hasMoreElements();) {
-                errMsg += enum.nextElement() + "\n";
-            }
+            
+            for (Iterator iterator = errors.iterator(); iterator.hasNext();) {
+            	errMsg += iterator.next() + "\n";
+            	}
+            
             JOptionPane.showMessageDialog(null, errMsg, "Data Entry Errors:",
                     JOptionPane.WARNING_MESSAGE);
             return true;
