@@ -10,11 +10,10 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
 import rmk.ErrorLogger;
-import rmk.database.dbobjects.Invoice;
 
 public class CustomerSelectionFrame extends JInternalFrame implements ActionListener {
     Vector listeners=null;
-    ArrayList customerList;
+    ArrayList<rmk.database.dbobjects.Customer> customerList;
     carpus.gui.BasicToolBar buttonBar;
     long selectedCustomer;
     CustomerSelectionTableModel customerData;
@@ -133,21 +132,21 @@ public class CustomerSelectionFrame extends JInternalFrame implements ActionList
 	
     }
 
-    public void setCustomers(ArrayList lst){
-//  	ErrorLogger.getInstance().logMessage("CustomerSelectionFrame:setCustomers()" + lst.size());
-	this.toFront();
-	
-	customerList = lst;
-	customerData.setValues(lst);
-	sorter.tableChanged(new javax.swing.event.TableModelEvent(sorter));
-	sorter.sortByColumn(1, true);
-	setVisible(true);
-	pack();
-    }
-    public void addActionListener(ActionListener listener){
-	if(listeners == null) listeners = new Vector();
-	if(!listeners.contains(listener)) listeners.addElement(listener);
-    }
+//    public void setCustomers(ArrayList lst){
+////  	ErrorLogger.getInstance().logMessage("CustomerSelectionFrame:setCustomers()" + lst.size());
+//	this.toFront();
+//	
+//	customerList = lst;
+//	customerData.setValues(lst);
+//	sorter.tableChanged(new javax.swing.event.TableModelEvent(sorter));
+//	sorter.sortByColumn(1, true);
+//	setVisible(true);
+//	pack();
+//    }
+//    public void addActionListener(ActionListener listener){
+//	if(listeners == null) listeners = new Vector();
+//	if(!listeners.contains(listener)) listeners.addElement(listener);
+//    }
     public static void main(String args[])
 	throws Exception
     {
@@ -158,7 +157,7 @@ class CustomerSelectionTableModel extends AbstractTableModel {
     String[] columnNames;
     Object[][] data= new Object[0][3];
 
-    CustomerSelectionTableModel(ArrayList lst){
+    CustomerSelectionTableModel(ArrayList<rmk.database.dbobjects.Customer> lst){
 	columnNames= new String[]{"ID", "Customer", "Phone", "Dealer"};
 
 	if(lst != null){
@@ -166,7 +165,7 @@ class CustomerSelectionTableModel extends AbstractTableModel {
 	}
     }
 
-    public void setValues(ArrayList lst){
+    public void setValues(ArrayList<rmk.database.dbobjects.Customer> lst){
 	if(lst == null){
 	    data = new Object[columnNames.length][1];
 	    return;

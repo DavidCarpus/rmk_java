@@ -38,7 +38,7 @@ public class MySQLDB extends DBAccess implements carpus.database.DBInterface
 	systemName = Config.systemName();
 //	connect("rmk", "gtr", "Unknown");
 	connect(Config.dbUserName(), 
-			Config.dbPassword(), "Unknown");
+			Config.dbPassword(), "MySQL");
 
 	}
 	public void connect(String username, String passwd, String className){

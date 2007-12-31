@@ -19,7 +19,7 @@ public class Application extends JFrame implements ActionListener, KeyListener {
     Desktop desktop;
     rmk.DataModel sys;
     BasicToolBar toolbar;
-    public static final String version="2005_07_07";
+    public static final String version="2007_12_29";
 
     //============================================================================
     public Application() throws Exception{

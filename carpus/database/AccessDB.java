@@ -22,7 +22,6 @@ public class AccessDB extends DBAccess implements DBInterface {
 		connect(username, passwd, className);
 	}
 	public void connect(String username, String passwd, String className) {
-		boolean passed = true;
 		String url = "";
 		if (isConnected()) {
 			return;
