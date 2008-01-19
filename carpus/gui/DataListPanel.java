@@ -176,7 +176,8 @@ public abstract class DataListPanel extends JPanel implements ActionListener,
 		if(row>0) row--; // continues in for loop cause row to increment past item
 		
 		if(!found){ // select first one
-			ErrorLogger.getInstance().logDebug("********* NOT Found, Will select default DataListPanel row 0 -- searchID:" + searchID + " " + valueAt, true);
+			if(searchID >0)
+				ErrorLogger.getInstance().logDebug("********* NOT Found, Will select default DataListPanel row 0 -- searchID:" + searchID + " " + valueAt, true);
 			SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				int rowToSelect = 0;
