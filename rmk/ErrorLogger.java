@@ -93,9 +93,20 @@ public class ErrorLogger implements carpus.util.LoggerInterface{
 	    String item = ""+trace[i];
 	    if(!(item.startsWith("java.") || item.startsWith("javax.")  || item.startsWith("sun.")))
   		if(!(item.startsWith("rmk.DBModel."))){
-		    if(!(delClass != null && item.toUpperCase().indexOf(delClass.trim().toUpperCase()) > 0))
+		    if(!(delClass != null && item.toUpperCase().indexOf(delClass.trim().toUpperCase()) > 0)){
+		    	String tmp = trace[i].toString();
+		    	
+		    	String regExp = "[(]";
+		    	String[] split = tmp.split(regExp);
+		    	String path=split[0].substring(0, split[0].lastIndexOf(".")) + ".java" +
+		    					split[1].substring(split[1].lastIndexOf(":"));
+		    	path = path.substring(0, path.lastIndexOf(")"));
+		    	String function= split[0].substring(split[0].lastIndexOf(".")+1) + "()";
+		    	tmp = "(" + path + ") " + function;
 			//  		if(!(item.startsWith("carpus.database.Logger")))
-			results += "\n " + trace[i];
+		    	
+		    	results += "\n " + tmp;
+		    }
 		}
 	}
 //  	System.out.println(results);

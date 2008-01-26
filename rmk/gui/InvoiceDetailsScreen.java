@@ -115,6 +115,7 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener, Focu
 		
 		customerPnl.setData(invoice.getParent());
 		invoiceDetailPnl.setData(invoice);
+//		invoiceEntriesList.setL
 		
 		String newTitle = "Invoice:" + invoice.getID();
 		newTitle += " (" + invoiceEntriesList.getTotalKnives() + ") Knives";
@@ -140,8 +141,9 @@ public class InvoiceDetailsScreen extends Screen implements ActionListener, Focu
 		if (invoiceNumber > 0) {
 			sys.invoiceInfo.logInvoiceAccess(invoice);
 		}
-		long invoiceNum = sys.invoiceInfo.getLastInvoiceViewed();
-		invoiceEntriesList.setSelectedInvoice(invoiceNum);
+//		long invoiceNum = sys.invoiceInfo.getLastInvoiceViewed();
+		invoiceEntriesList.setSelectedInvoiceEntry(0);
+//		invoiceEntriesList.setSelectedInvoice(invoiceNum);
 	}
 	
 	//----------------------------------------------------------

@@ -185,10 +185,12 @@ implements ActionListener, FocusListener{
 	/**
 	 * @param invoiceNum
 	 */
-	public void setSelectedInvoice(long invoiceNum) {
-		lastSelectedItem = invoiceNum;		
+//	public void setSelectedInvoice(long invoiceNum) {
+//		lastSelectedItem = invoiceNum;		
+//	}
+	public void setSelectedInvoiceEntry(long invoiceEntryID){
+		lastSelectedItem = invoiceEntryID;
 	}
-
 }
 
 
