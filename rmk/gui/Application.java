@@ -205,65 +205,6 @@ public class Application extends JFrame implements ActionListener, KeyListener {
     }
 
     //============================================================================
-    private void test(){
-	//    	newCustomer();
-	//  	rmk.ScreenController.getInstance().newCustomer();
-
-	//  	    java.util.Vector lst = sys.getInvoiceItem(94148);
-	//  	    DBGuiModel model = new rmk.gui.DBGuiModel(rmk.gui.DBGuiModel.KNIFE_DATA, lst);
-	//  	    rmk.ScreenController.getInstance().invoiceItem(model);
-
-
-//        	rmk.ScreenController.getInstance().displayCustomer(230); // 18422, 1, 5, 7, 80000, 23705
-	//1005 - sullivan's
-//	rmk.ScreenController.getInstance().displayHistoryList();
-    	
-//    	DBGuiModel model = new DBGuiModel();
-//    	Invoice inv = sys.invoiceInfo.getInvoice(48250);
-//    	Customer cust = null;
-//		try {			cust = sys.customerInfo.getCustomerByID(inv.getCustomerID());
-//		} catch (Exception e) {			e.printStackTrace();		}
-//		
-//		Vector custLst=new Vector();
-//    	custLst.add(cust);
-//    	model.setCustomerData(custLst);
-//    	rmk.ScreenController.getInstance().displayInvoiceDetails(inv,new DBGuiModel());
-
-
-    	rmk.ScreenController.getInstance().invoiceSearch();
-    	
-
-//	DBGuiModel model = new DBGuiModel();
-//	Invoice inv = sys.invoiceInfo.getInvoice(44417);
-//	rmk.ScreenController.getInstance().displayInvoiceDetails(inv, model);
-	// 44469, 41859, 42498, 60000, 60001, 44575, 44800
-	// 42682, 50004, 42563, 42684, 44827, 53163, 53382
-
-//  	rmk.ScreenController.getInstance().displayPartsList();
-
-//        	    DBGuiModel model = new DBGuiModel();
-//  	    Invoice inv = sys.invoiceInfo.getInvoice(35906);
-//  	    Vector invoice = new Vector();
-//  	    invoice.add(inv);
-//        	    model.setInvoiceData(invoice);
-//  	    Vector custData = new Vector();
-//  	    try {
-//  		custData.add(sys.customerInfo.getCustomerByID(inv.getCustomerID()));
-//  		model.setCustomerData(custData);
-//  	    } catch (Exception e){
-//  	    } // end of try-catch
-//  //  	    getInvoiceItemsData
-//        	    model.setKnifeData(sys.invoiceInfo.getInvoiceItem(300025)); // 111979, 112952, 112994
-//        	    rmk.ScreenController.getInstance().invoiceItem(model);
-
-	//    	    model.setKnifeData(null);
-	//    	    rmk.ScreenController.getInstance().invoiceItem(model);
-
-	//  	Vector lst = sys.getCustomersFromPhone("(407)");
-	//      	Vector lst = sys.getCustomersByLastName("sports");
-	//      	displayCustomers(sys, lst);
-    }
-    //============================================================================
 
     //============================================================================
     public static void main(String args[]) throws Exception {
@@ -283,8 +224,7 @@ public class Application extends JFrame implements ActionListener, KeyListener {
 
 	try {Thread.sleep(2000);}
 	catch (Exception e) {}
-//	if(Configuration.Config.IDE)
-//	    app.test();	
+
 	ErrorLogger.getInstance().logMessage("App Version " + version + " Started:" + new Date() );
 
 	Desktop.getInstance().repaint();
