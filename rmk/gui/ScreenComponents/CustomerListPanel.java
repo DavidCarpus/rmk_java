@@ -51,9 +51,9 @@ public class CustomerListPanel
 
 	setTableSelectionListeners();
 
-      	JScrollPane scrollPane = new JScrollPane(table);
-
-  	add(scrollPane);
+//    JScrollPane scrollPane = new JScrollPane(table);
+//
+//  	add(scrollPane);
 
 	buttonBar = new carpus.gui.BasicToolBar(null, new String[] {"Details","Merge", "QuickDealer"}, 
 				   new String[] {"CustomerDetails","Merge", "QuickDealer"},
