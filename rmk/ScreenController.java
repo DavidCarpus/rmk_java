@@ -225,9 +225,9 @@ public class ScreenController {
 		try {
 			CustomerSelectionScreen screen = new CustomerSelectionScreen();
 			screen.setTitle("Dealers");
+			screen.setData(dealerLst);
 			Desktop.getInstance().add(screen);
 
-			screen.setData(dealerLst);
 			select(screen);
 		} catch (Exception e) {
 			ErrorLogger.getInstance().logError(
