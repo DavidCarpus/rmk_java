@@ -166,8 +166,8 @@ implements ActionListener{
 				//  	    data[i][colIndex++] = new Long((int)item.getInvoice());
 				data[i][colIndex++] = new Double(item.getPayment());
 				
-				if (item.getCheckNumber() != null) {
-					String number = item.getCheckNumber();
+				if (item.getNumber() != null) {
+					String number = item.getNumber();
 					if (FinancialInfo.isValidCCNumber(number))
 						number = FinancialInfo.addCardNumberDashes(number);
 					data[i][colIndex++] = "" + number;

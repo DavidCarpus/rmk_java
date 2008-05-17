@@ -116,7 +116,7 @@ public class InvoiceInfo {
 	}
 
 	//------------------------------------------------------------------------
-	public Vector getDealerSpecInvoices(java.util.GregorianCalendar date) {
+	public Vector<Invoice> getDealerSpecInvoices(java.util.GregorianCalendar date) {
 		java.util.GregorianCalendar start = (GregorianCalendar) date.clone();
 		java.util.GregorianCalendar end = (GregorianCalendar) date.clone();
 		start.set(Calendar.DAY_OF_MONTH, 1);
@@ -143,7 +143,7 @@ public class InvoiceInfo {
 				+ " and totalRetail = 0 order by " + dateField + ", Invoice";
 		ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":" + criteria);
 
-		Vector results = new Vector();
+		Vector<Invoice> results = new Vector<Invoice>();
 		results = db.getItems("Invoice", criteria);
 
 		return results;

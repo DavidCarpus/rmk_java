@@ -59,14 +59,14 @@ public class Cleanup {
             Payments payment = (Payments) iter.next();
             int paymentType=(int) payment.getPaymentType();
             if(paymentType <=0)
-                paymentType = paymentTypeFromCheckNum(payment.getCheckNumber());
+                paymentType = paymentTypeFromCheckNum(payment.getNumber());
 
             if(paymentType == 2 || paymentType == 3 || paymentType == 4 || paymentType == 8 ){
                 payment.setPaymentType(paymentType);
                 String number = inv.getCreditCardNumber();
                 if(number != null && number.length() > 0){
                     number = FinancialInfo.removeCardNumberDashes(number);
-                    payment.setCheckNumber(number);
+                    payment.setNumber(number);
                     ErrorLogger.getInstance().logMessage(this.getClass().getName() + payment);
                 }
                 
@@ -79,7 +79,7 @@ public class Cleanup {
                 payment.setPaymentType(paymentType);
                 
             } else{
-                badCheckNumbers.add(payment.getCheckNumber());
+                badCheckNumbers.add(payment.getNumber());
 //                System.out.print("\nUnknown CheckNumber: " + payment.getCheckNumber());
             }
         }

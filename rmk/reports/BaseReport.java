@@ -174,7 +174,7 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
     //----------------------------------------------------------------
     //----------------------------------------------------------------
     void drawFormatted(Graphics2D g2, String txt, int x, int y) {
-        ArrayList parsedText = parseFormattedText(txt);
+        ArrayList<FormattedText> parsedText = parseFormattedText(txt);
         
         Font originalFont = g2.getFont();
         for(int i=0; i< parsedText.size(); i++){
@@ -311,7 +311,7 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
                 
             } else if(printDestination == ReportInterface.PRINT_TO_PRINTER){
                 ErrorLogger.getInstance().logMessage(this.getClass().getName() + "Print To Printer...");
-                MediaPrintableArea area = Printing.getPrintArea();
+//                MediaPrintableArea area = Printing.getPrintArea();
                 double convRate = 1.0/72.0;
                 paper.setImageableArea(0.5*convRate, 0.5*convRate,
                         8.0*convRate, 11.0*convRate);
@@ -369,7 +369,7 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
     //===================================================================
     void hangingIndent(Graphics2D g2, String label, String txt[]) {
         FontMetrics metrics = g2.getFontMetrics();
-        int incr = (int) metrics.getHeight();
+//        int incr = (int) metrics.getHeight();
         int space = metrics.charsWidth(label.toCharArray(), 0, label.length());
         printLeft(g2, label, 0, 0);
         g2.translate(space, 0); // translate
@@ -423,8 +423,8 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
     void addressInfo(Graphics2D g2, double width, double height, Point pt, String addressInfo[], String shippingInstructions[]) {
         g2.setFont(listFont);
         //  	g2.setFont(infoFont);
-        FontMetrics metrics = g2.getFontMetrics();
-        int incr = (int) metrics.getHeight();
+//        FontMetrics metrics = g2.getFontMetrics();
+//        int incr = (int) metrics.getHeight();
         Rectangle billingRegion = new Rectangle(40, 0, 200, 40);
         //  	Rectangle shippingRegion = new Rectangle (260,0, 200, 40);
         Rectangle shippingRegion = new Rectangle(320, 0, 200, 40);
@@ -544,8 +544,8 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
     //  	}
     //      }
     
-    static ArrayList parseFormattedText(String text){
-    	ArrayList results = new ArrayList();
+    static ArrayList<FormattedText> parseFormattedText(String text){
+    	ArrayList<FormattedText> results = new ArrayList<FormattedText>();
     	if(text.indexOf("<") < 0){
     		FormattedText txt = new FormattedText(text);
     		results.add(txt);
@@ -598,11 +598,11 @@ public abstract class BaseReport extends JPanel implements Printable, Pageable, 
     	return txt;
     }
 	
-    public static void main(String args[]) throws Exception {
-        String txt = "<B><U>test</U>item</B>message";
-        BaseReport tst = new rmk.reports.BladeList();
-        ErrorLogger.getInstance().logMessage(""+BaseReport.parseFormattedText(txt));
-    }
+//    public static void main(String args[]) throws Exception {
+//        String txt = "<B><U>test</U>item</B>message";
+//        BaseReport tst = new rmk.reports.BladeList();
+//        ErrorLogger.getInstance().logMessage(""+BaseReport.parseFormattedText(txt));
+//    }
 }
 
 class FormattedText{

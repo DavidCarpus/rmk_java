@@ -10,7 +10,7 @@ public class Payments extends DBObject{
 				       Fixed.CURRENCY_SIZE, 16, Fixed.DATE_SIZE, Fixed.LONG_SIZE,
 				       6, Fixed.DATE_SIZE};
     public static final String[] fields={"PaymentID","CustomerID","Invoice",
-					 "Payment","CheckNumber","PaymentDate", "PaymentType",
+					 "Payment","Number","PaymentDate", "PaymentType",
 					 "VCODE", "ExpirationDate" };
 
     public static int[] getFieldLengths_txt(){	return 	lengths;    }
@@ -36,7 +36,7 @@ public void setPaymentID(long value){values[0] = new Long(value);edited=true;}
 public void setCustomerID(long value){values[1] = new Long(value);edited=true;}
 public void setInvoice(double value){values[2] = new Double(value);edited=true;}
 public void setPayment(double value){values[3] = new Double(value);edited=true;}
-public void setCheckNumber(String value){values[4] = value;edited=true;}
+public void setNumber(String value){values[4] = value;edited=true;}
 public void setPaymentDate(java.util.GregorianCalendar value){values[5] = value;edited=true;}
 public void setPaymentType(long value){values[6] = new Long(value);edited=true;}
 public void setVCODE(String value){values[7] = value;edited=true;}
@@ -46,7 +46,7 @@ public long getPaymentID(){ return ((Long)values[0]).longValue();}
 public long getCustomerID(){ return ((Long)values[1]).longValue();}
 public double getInvoice(){ return ((Double)values[2]).doubleValue();}
 public double getPayment(){ return ((Double)values[3]).doubleValue();}
-public String getCheckNumber(){ return (String)values[4];}
+public String getNumber(){ return (String)values[4];}
 public java.util.GregorianCalendar getPaymentDate(){ return (java.util.GregorianCalendar)values[5];}
 public long getPaymentType(){ return ((Long)values[6]).longValue();}
 public String getVCODE(){ return (String)values[7];}
@@ -59,7 +59,7 @@ setPaymentID(Long.parseLong((String)data[i++]));
 setCustomerID(Long.parseLong((String)data[i++]));
 setInvoice(Double.parseDouble((String)data[i++]));
 setPayment(Double.parseDouble((String)data[i++]));
-setCheckNumber((String)data[i++]);
+setNumber((String)data[i++]);
 setPaymentDate(carpus.util.DateFunctions.gregorianFromString((String)data[i++]));
 setPaymentType(Long.parseLong((String)data[i++]));
 setVCODE((String)data[i++]);
@@ -103,7 +103,7 @@ setExpirationDate(carpus.util.DateFunctions.gregorianFromString((String)data[i++
 setCustomerID(recordSet.getInt("CustomerID"));
 setInvoice(recordSet.getFloat("Invoice"));
 setPayment(recordSet.getFloat("Payment"));
-setCheckNumber(recordSet.getString("CheckNumber"));
+setNumber(recordSet.getString("Number"));
 setPaymentDate(carpus.util.DateFunctions.gregorianFromJavaDate(recordSet.getDate("PaymentDate")));
 setPaymentType(recordSet.getInt("PaymentType"));
 setVCODE(recordSet.getString("VCODE"));

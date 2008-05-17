@@ -36,8 +36,8 @@ public class FinancialInfo {
         return db.getItems("Payments", "Invoice = " + invoice);
     }
 
-    public Vector getInvoiceEntries(Invoice invoice) {
-        Vector entries = invoice.getItems();
+    public Vector<InvoiceEntries> getInvoiceEntries(Invoice invoice) {
+        Vector<InvoiceEntries> entries = invoice.getItems();
         if (entries == null || entries.size() == 0) {
             InvoiceInfo invoiceInfo = new InvoiceInfo(db);
             entries = invoiceInfo.getInvoiceEntries(invoice.getInvoice());
@@ -56,9 +56,9 @@ public class FinancialInfo {
         int invPrice = 0;
         //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":year:"+ year);
 
-        Vector entries = getInvoiceEntries(invoice);
+        Vector<InvoiceEntries> entries = getInvoiceEntries(invoice);
 
-        for (java.util.Iterator iter = entries.iterator(); iter.hasNext();) {
+        for (java.util.Iterator<InvoiceEntries> iter = entries.iterator(); iter.hasNext();) {
             InvoiceEntries entry = (InvoiceEntries) iter.next();
             if (recomputeInvoiceEntryRetail(entry, year, true)) changed = true;
         }
@@ -177,12 +177,12 @@ public class FinancialInfo {
 
         double total = 0;
 
-        Vector items = getInvoiceEntries(invoice);
+        Vector<InvoiceEntries> items = getInvoiceEntries(invoice);
         if (items == null) return 0;
 
         PartInfo partInfo = new PartInfo(db);
 
-        for (Iterator iter = items.iterator(); iter.hasNext();) {
+        for (Iterator<InvoiceEntries> iter = items.iterator(); iter.hasNext();) {
             InvoiceEntries item = (InvoiceEntries) iter.next();
             boolean discounted = false;
             
@@ -274,20 +274,31 @@ public class FinancialInfo {
     		)
     			return 0;
     	}
-    			
-		double totalPayments = getTotalInvoicePayments(invoice);
-		double discount = getTotalInvoiceDiscount(invoice);
-		double retail = getTotalRetail(invoice);
-		double shipping = invoice.getShippingAmount();
-		double due = retail;
-
+    	
 		double discPercent = invoice.getDiscountPercentage();
-		due -= discount;
-		due += shipping;
+		double totalPayments = getTotalInvoicePayments(invoice);
 
-		double taxesDue = getInvoiceTaxes(invoice);
-		due += taxesDue;
-		due -= totalPayments;
+		Vector<InvoiceEntries> items = getInvoiceEntries(invoice);
+
+		double totalCost = 0;
+        double nonDiscountable=0;
+        double taxes=0;
+        for (Iterator<InvoiceEntries> iterator = items.iterator(); iterator.hasNext();) {
+			InvoiceEntries invoiceEntries = (InvoiceEntries) iterator.next();
+			totalCost += invoiceEntries.getTotalRetail();
+			nonDiscountable += invoiceEntries.getNonDiscountable();
+			if(invoiceEntries.isTaxable())
+			{
+				double discountedRetail = (invoiceEntries.getTotalRetail() - invoiceEntries.getNonDiscountable())
+									* (1-discPercent)
+									+ invoiceEntries.getNonDiscountable();
+				taxes += discountedRetail * invoice.getTaxPercentage();
+			}
+		}
+        double due=0;
+        double subtotal = ( totalCost - nonDiscountable ) * (1-discPercent) + nonDiscountable;
+        due = subtotal + taxes + invoice.getShippingAmount() - totalPayments;
+
 		return roundDollarAmt(due);
     }
 
@@ -363,7 +374,7 @@ public class FinancialInfo {
                 + invoiceNum
                 + " order by PaymentDate desc");
         if(dbPayments != null && dbPayments.size() > 0){            
-            return ((Payments) dbPayments.get(0)).getCheckNumber();
+            return ((Payments) dbPayments.get(0)).getNumber();
         }
         InvoiceInfo invDB = new InvoiceInfo(db);
         Invoice invoice = invDB.getInvoice(invoiceNum);
@@ -375,7 +386,7 @@ public class FinancialInfo {
         }
         lastCCPayment = getLastCCPayment(customerID);
         if(lastCCPayment == null) return null;
-        return lastCCPayment.getCheckNumber();
+        return lastCCPayment.getNumber();
     }
     
     public String getLastCreditCard(long customerID) {
@@ -391,7 +402,7 @@ public class FinancialInfo {
                 Payments payment = getLastCCPayment(customerID);
 
                 if (payment != null)
-                        number = "" + payment.getCheckNumber() + "*"
+                        number = "" + payment.getNumber() + "*"
                                 + payment.getVCODE();
             }
             return number;
@@ -460,7 +471,7 @@ public class FinancialInfo {
                     .getCreditCardSearchMonths());
 
             payment = (Payments) payments.next();
-            String number = "" + payment.getCheckNumber();
+            String number = "" + payment.getNumber();
             GregorianCalendar paymentDate = payment.getPaymentDate();
             GregorianCalendar expirationDate = payment.getExpirationDate();
 
@@ -488,7 +499,7 @@ public class FinancialInfo {
     public String getPaymentTypeCode(Payments payment) {
         if (payment == null) return "";
 
-        String number = payment.getCheckNumber();
+        String number = payment.getNumber();
         if (number == null || number.trim().length() == 0) return "CA";
         number = number.toUpperCase();
         //  	ErrorLogger.getInstance().logMessage(this.getClass().getName() + ":"+ number);

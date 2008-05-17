@@ -46,7 +46,7 @@ public class MergeFiles{
 
 	String[] lastRow=null;
 	Invoice lastInv=null;
-	for (Iterator iterator = data.iterator(); iterator.hasNext();) {
+	for (Iterator<Invoice> iterator = data.iterator(); iterator.hasNext();) {
 		Invoice invoice = (Invoice) iterator.next();
 	    boolean dupe = false;
 //  	    ErrorLogger.getInstance().logMessage(invoice.getInvoice());

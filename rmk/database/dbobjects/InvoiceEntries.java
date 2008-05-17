@@ -9,9 +9,12 @@ public class InvoiceEntries extends DBObject{
     Invoice parent=null;
 
     public static final int[] lengths={Fixed.LONG_SIZE, Fixed.FLOAT_SIZE, Fixed.LONG_SIZE, 10, 
-				       Fixed.INT_SIZE, Fixed.CURRENCY_SIZE, Fixed.MEMO_SIZE, Fixed.BOOLEAN_SIZE};
+				       Fixed.INT_SIZE, Fixed.CURRENCY_SIZE, Fixed.MEMO_SIZE, Fixed.BOOLEAN_SIZE, 
+				       Fixed.CURRENCY_SIZE, Fixed.CURRENCY_SIZE, Fixed.BOOLEAN_SIZE};
     public static final String[] fields={"InvoiceEntryID","Invoice","PartID","PartDescription",
-					 "Quantity","Price","Comment", "Discounted" };
+					 "Quantity","Price","Comment", "Discounted", 
+					 "NonDiscountable", "TotalRetail", "Taxable" };
+    
     public static int[] getFieldLengths_txt(){	return 	lengths;    }
     public static int getTotalFieldLengths_txt(){	
 	int ct=0;
@@ -22,19 +25,19 @@ public class InvoiceEntries extends DBObject{
     }
 
     public InvoiceEntries(Object[]  data){
-	super(fields);
-	setDefaults();
-	setValues(data);
-	transfering=true;
+		super(fields);
+		setDefaults();
+		setValues(data);
+		transfering=true;
     }
     public InvoiceEntries(int ID){
-	super(fields);
-	setID(new Long(ID));
-	setDefaults();
-	setInvoice(0);
-	setPartID(0);
-	setPrice(0);
-	setQuantity(0);
+		super(fields);
+		setID(new Long(ID));
+		setDefaults();
+		setInvoice(0);
+		setPartID(0);
+		setPrice(0);
+		setQuantity(0);
 //  	transfering = false;
     }
     private void setDefaults(){
@@ -50,6 +53,11 @@ public class InvoiceEntries extends DBObject{
     public boolean isDiscounted(){
     	if(values[7]==null) return false;
     	return ((Boolean)values[7]).booleanValue();}
+    public double getNonDiscountable(){ return (Double)values[8];}
+    public double getTotalRetail(){ return (Double)values[9];}
+    public boolean isTaxable(){
+    	if(values[10]==null) return false;
+    	return ((Boolean)values[10]).booleanValue();}
 
     public Vector getFeatures(){return items;}
 
@@ -83,17 +91,20 @@ public class InvoiceEntries extends DBObject{
     public void setPrice(double value){values[5] = new Double(value);edited=true;}
     public void setComment(String value){values[6] = value;edited=true;}
     public void setDiscounted(boolean value){values[7] = new Boolean(value);edited=true;}
+    public void setNonDiscountable(double value){values[8] = new Double(value);edited=true;}
+    public void setTotalRetail(double value){values[9] = new Double(value);edited=true;}
+    public void setTaxable(boolean value){values[10] = new Boolean(value);edited=true;}
 
     public void setFeatures(Vector lst){
 //  	(new Exception("e")).printStackTrace();
-	if(lst == null) {
-	    items = null;
-	    return;
-	}
-	items = new Vector();
-	for(int item=0; item < lst.size(); item++){
-	    addFeature((InvoiceEntryAdditions)lst.get(item));
-	}
+		if(lst == null) {
+		    items = null;
+		    return;
+		}
+		items = new Vector();
+		for(int item=0; item < lst.size(); item++){
+		    addFeature((InvoiceEntryAdditions)lst.get(item));
+		}
     }
 
 //      public void setValues(ResultSet  recordSet) throws Exception;
@@ -158,6 +169,9 @@ public class InvoiceEntries extends DBObject{
 	setPrice(recordSet.getFloat("Price"));
 	setComment(recordSet.getString("Comment"));
 	setDiscounted(recordSet.getBoolean("Discounted"));
+	setNonDiscountable(recordSet.getFloat("NonDiscountable"));
+	setTotalRetail(recordSet.getFloat("TotalRetail"));
+	setTaxable(recordSet.getBoolean("Taxable"));
 
 	transfering = false;
     }

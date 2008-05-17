@@ -684,7 +684,7 @@ public class Dialogs {
         results.setPayment(amt);
         results.setInvoice(invoice);
         results.setCustomerID(customerID);
-        results.setCheckNumber(cardNumber);
+        results.setNumber(cardNumber);
         results.setPaymentDate(paymentDate);
         results.setExpirationDate(expirationDate);
         results.setVCODE(vcode);

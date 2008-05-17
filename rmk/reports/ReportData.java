@@ -749,7 +749,7 @@ public class ReportData {
         int width = 40;
         int maxLines = 2;
 //        if (comment != null) lines = comment.length() / width + 1;
-        ArrayList comments = new ArrayList();
+        ArrayList<String> comments = new ArrayList<String>();
 
         if(comment == null){
             for (int i = 0; i < maxLines; i++)

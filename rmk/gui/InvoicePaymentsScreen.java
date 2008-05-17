@@ -199,8 +199,8 @@ public class InvoicePaymentsScreen extends Screen {
             paymentList = sys.invoiceInfo.savePayments(paymentList); 
             // update cust CC# info IF it's a CC
             if (rmk.database.FinancialInfo.isValidCCNumber(payment
-                    .getCheckNumber())) {
-            	String ccNum = payment.getCheckNumber() + "*" + payment.getVCODE();
+                    .getNumber())) {
+            	String ccNum = payment.getNumber() + "*" + payment.getVCODE();
                 sys.customerInfo
                         .setCustCCNumber(customerID, ccNum , payment
                                 .getExpirationDate());
